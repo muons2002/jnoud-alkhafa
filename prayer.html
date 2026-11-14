@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>مواقيت الصلاة — جنود الخفاء</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Amiri:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f6f1e3;
+        --bg-deep: #efe6cf;
+        --card: #fffdf6;
+        --card-border: #ddd0a8;
+        --ink: #241d0c;
+        --muted: #7a6c44;
+        --gold: #a97f14;
+        --gold-bright: #8a6408;
+        --gold-soft: #f3e8c8;
+        --row: #faf5e7;
+        --row-border: #e7dcbb;
+        --danger-bg: #fbe9e7;
+        --danger-border: #d98a7e;
+        --danger-ink: #8c2f22;
+        --shadow: 0 10px 26px rgba(90, 70, 10, 0.12);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0d0d0d;
+          --bg-deep: #0d0d0d;
+          --card: #1a1a1a;
+          --card-border: #3a2f14;
+          --ink: #f5f0e1;
+          --muted: #b8a86a;
+          --gold: #d4af37;
+          --gold-bright: #ffd700;
+          --gold-soft: #3a2f14;
+          --row: #141414;
+          --row-border: #2a2a2a;
+          --danger-bg: #3d1414;
+          --danger-border: #ef4444;
+          --danger-ink: #fca5a5;
+          --shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Almarai", "Segoe UI", Tahoma, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 22px 16px 30px;
+      }
+      .container { width: 100%; max-width: 520px; }
+
+      .brand { text-align: center; margin-bottom: 18px; }
+      .brand .shield { display: inline-block; line-height: 0; }
+      .brand h1 {
+        font-family: "Amiri", serif;
+        font-size: 1.9rem;
+        color: var(--gold);
+        margin: 6px 0 2px;
+      }
+      .brand p { font-size: 0.92rem; color: var(--muted); margin: 0; }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--card-border);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 14px;
+        box-shadow: var(--shadow);
+      }
+
+      .clock { text-align: center; }
+      .clock #time {
+        font-size: clamp(2.6rem, 13vw, 3.4rem);
+        font-weight: 800;
+        color: var(--gold);
+        letter-spacing: 2px;
+        font-variant-numeric: tabular-nums;
+        direction: ltr;
+        line-height: 1.1;
+      }
+      .clock .date-line { font-size: 0.95rem; color: var(--muted); margin-top: 8px; }
+      .clock .hijri-line { font-size: 1.05rem; margin-top: 4px; font-weight: 700; }
+
+      .next-box { text-align: center; }
+      .next-box .label { font-size: 0.9rem; color: var(--muted); }
+      .next-box .prayer-name {
+        font-size: 1.7rem;
+        color: var(--gold);
+        font-weight: 800;
+        margin: 4px 0 2px;
+      }
+      .next-box .at-time { font-size: 0.95rem; color: var(--muted); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+      .next-box .countdown {
+        font-size: clamp(2rem, 10vw, 2.5rem);
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 2px;
+        direction: ltr;
+        line-height: 1.15;
+      }
+      .next-box .countdown-label { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+
+      .prayer-list { list-style: none; margin: 0; padding: 0; }
+      .prayer-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: var(--row);
+        border: 1px solid var(--row-border);
+        border-radius: 10px;
+        margin-bottom: 8px;
+        font-size: 1.05rem;
+      }
+      .prayer-list li:last-child { margin-bottom: 0; }
+      .prayer-list li .p-time { font-weight: 700; font-variant-numeric: tabular-nums; direction: ltr; }
+      .prayer-list li.passed { opacity: 0.55; }
+      .prayer-list li.next {
+        background: var(--gold-soft);
+        border-color: var(--gold);
+        color: var(--gold-bright);
+        font-weight: 800;
+      }
+      .prayer-list li .tag {
+        font-size: 0.72rem;
+        background: var(--gold);
+        color: #141005;
+        border-radius: 20px;
+        padding: 2px 10px;
+        margin-inline-start: 8px;
+        font-weight: 700;
+        vertical-align: middle;
+      }
+
+      .error {
+        display: none;
+        background: var(--danger-bg);
+        border: 1px solid var(--danger-border);
+        color: var(--danger-ink);
+        border-radius: 10px;
+        padding: 14px;
+        text-align: center;
+        font-size: 0.95rem;
+        margin-bottom: 14px;
+      }
+      .error button {
+        display: block;
+        margin: 10px auto 0;
+        background: var(--gold);
+        color: #141005;
+        border: none;
+        border-radius: 10px;
+        padding: 9px 26px;
+        font-family: inherit;
+        font-size: 0.95rem;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .error button:active { transform: scale(0.97); }
+
+      .loading { text-align: center; color: var(--muted); padding: 18px 6px; font-size: 0.95rem; }
+      .loading .dots::after {
+        content: "";
+        animation: dots 1.4s steps(4) infinite;
+      }
+      @keyframes dots {
+        0% { content: ""; }
+        25% { content: "."; }
+        50% { content: ".."; }
+        75% { content: "..."; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .loading .dots::after { animation: none; content: "..."; }
+      }
+
+      .footer { text-align: center; font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="brand">
+        <span class="shield" aria-hidden="true">
+          <svg width="44" height="52" viewBox="0 0 44 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 2 L40 8 V24 C40 37 32 45.5 22 50 C12 45.5 4 37 4 24 V8 Z" fill="#b3312a" stroke="#d4af37" stroke-width="2.5"/>
+            <path d="M22 2 L40 8 V24 C40 37 32 45.5 22 50 Z" fill="#f5f0e1" opacity="0.92"/>
+            <path d="M22 8 L34 12 V24 C34 33 28.5 39.5 22 43 Z" fill="#b3312a" opacity="0.22"/>
+          </svg>
+        </span>
+        <h1>جنود الخفاء</h1>
+        <p>مواقيت الصلاة — القاهرة • حب الخير للغير</p>
+      </div>
+
+      <div class="card clock">
+        <div id="time">--:--:--</div>
+        <div class="date-line" id="greg-date">—</div>
+        <div class="hijri-line" id="hijri-date">—</div>
+      </div>
+
+      <div class="error" id="error-box">
+        تعذر تحميل مواقيت الصلاة، تحقق من الاتصال بالإنترنت وحاول مرة أخرى.
+        <button type="button" id="retry-btn">إعادة المحاولة</button>
+      </div>
+
+      <div class="card next-box" id="next-box" style="display: none">
+        <div class="label">الصلاة القادمة</div>
+        <div class="prayer-name" id="next-name">—</div>
+        <div class="at-time" id="next-at"></div>
+        <div class="countdown" id="countdown">--:--:--</div>
+        <div class="countdown-label">المتبقي على الأذان</div>
+      </div>
+
+      <div class="card">
+        <div class="loading" id="loading">جاري تحميل مواقيت الصلاة<span class="dots"></span></div>
+        <ul class="prayer-list" id="prayer-list"></ul>
+      </div>
+
+      <div class="footer">مواقيت الصلاة بتوقيت القاهرة — المصدر: Aladhan API</div>
+    </div>
+
+    <script>
+      var API_BASE = "https://api.aladhan.com/v1/timingsByCity";
+      var CITY = "Cairo";
+      var COUNTRY = "Egypt";
+      var METHOD = 5; // الهيئة المصرية العامة للمساحة
+
+      var PRAYERS = [
+        { key: "Fajr", name: "الفجر" },
+        { key: "Sunrise", name: "الشروق" },
+        { key: "Dhuhr", name: "الظهر" },
+        { key: "Asr", name: "العصر" },
+        { key: "Maghrib", name: "المغرب" },
+        { key: "Isha", name: "العشاء" }
+      ];
+      // الصلوات التي يُحسب العدّاد لها (الشروق نهاية وقت الفجر)
+      var COUNTDOWN_KEYS = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
+
+      var timingsToday = null;
+      var timingsTomorrow = null;
+      var currentCairoDateKey = "";
+      var loadingNow = false;
+
+      function cairoParts() {
+        var fmt = new Intl.DateTimeFormat("en-GB", {
+          timeZone: "Africa/Cairo",
+          hour12: false,
+          year: "numeric", month: "2-digit", day: "2-digit",
+          hour: "2-digit", minute: "2-digit", second: "2-digit"
+        });
+        var parts = {};
+        fmt.formatToParts(new Date()).forEach(function (p) { parts[p.type] = p.value; });
+        return {
+          year: parseInt(parts.year, 10),
+          month: parseInt(parts.month, 10),
+          day: parseInt(parts.day, 10),
+          hour: parseInt(parts.hour, 10) % 24,
+          minute: parseInt(parts.minute, 10),
+          second: parseInt(parts.second, 10)
+        };
+      }
+
+      function wallDate(y, m, d, hh, mm) {
+        return new Date(y, m - 1, d, hh, mm, 0, 0);
+      }
+      function cairoDateKey(p) { return p.year + "-" + p.month + "-" + p.day; }
+      function parseTimeHM(s) {
+        var t = String(s).split(":");
+        return { h: parseInt(t[0], 10), m: parseInt(t[1], 10) };
+      }
+      function pad(n) { return (n < 10 ? "0" : "") + n; }
+      function fmtDuration(ms) {
+        if (ms < 0) ms = 0;
+        var total = Math.floor(ms / 1000);
+        var h = Math.floor(total / 3600);
+        var m = Math.floor((total % 3600) / 60);
+        var s = total % 60;
+        return pad(h) + ":" + pad(m) + ":" + pad(s);
+      }
+      function apiUrl(dateStr) {
+        return API_BASE + (dateStr ? "/" + dateStr : "") +
+          "?city=" + encodeURIComponent(CITY) +
+          "&country=" + encodeURIComponent(COUNTRY) +
+          "&method=" + METHOD;
+      }
+      function validate(data) {
+        if (!data || data.code !== 200 || !data.data || !data.data.timings) {
+          throw new Error("Bad API response");
+        }
+        return data.data;
+      }
+
+      // الطريقة 1: fetch مباشر
+      function fetchDirect(url) {
+        var ctrl = ("AbortController" in window) ? new AbortController() : null;
+        var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 9000) : null;
+        return fetch(url, ctrl ? { signal: ctrl.signal } : {})
+          .then(function (res) {
+            if (timer) clearTimeout(timer);
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json();
+          })
+          .then(validate);
+      }
+
+      // الطريقة 2: JSONP — تتجاوز قيود CORS تماماً
+      var jsonpCounter = 0;
+      function fetchJsonp(url) {
+        return new Promise(function (resolve, reject) {
+          var cbName = "__prayerCb" + (++jsonpCounter);
+          var script = document.createElement("script");
+          var done = false;
+          var timer = setTimeout(function () {
+            if (done) return;
+            done = true;
+            cleanup();
+            reject(new Error("JSONP timeout"));
+          }, 9000);
+          function cleanup() {
+            clearTimeout(timer);
+            try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+            if (script.parentNode) script.parentNode.removeChild(script);
+          }
+          window[cbName] = function (data) {
+            if (done) return;
+            done = true;
+            cleanup();
+            try { resolve(validate(data)); } catch (e) { reject(e); }
+          };
+          script.onerror = function () {
+            if (done) return;
+            done = true;
+            cleanup();
+            reject(new Error("JSONP load error"));
+          };
+          script.src = url + "&callback=" + cbName;
+          document.head.appendChild(script);
+        });
+      }
+
+      // الطريقة 3: بروكسي CORS عام (احتياطي أخير)
+      function fetchViaProxy(url) {
+        var proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
+        var ctrl = ("AbortController" in window) ? new AbortController() : null;
+        var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 9000) : null;
+        return fetch(proxyUrl, ctrl ? { signal: ctrl.signal } : {})
+          .then(function (res) {
+            if (timer) clearTimeout(timer);
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json();
+          })
+          .then(validate);
+      }
+
+      // جرّب الطرق بالترتيب حتى تنجح واحدة
+      function fetchTimings(dateStr) {
+        var url = apiUrl(dateStr);
+        return fetchDirect(url)
+          .catch(function () { return fetchViaProxy(url); })
+          .catch(function () { return fetchJsonp(url); });
+      }
+
+      function loadToday() {
+        if (loadingNow) return Promise.resolve();
+        loadingNow = true;
+        return fetchTimings(null).then(function (data) {
+          timingsToday = data.timings;
+          var h = data.date.hijri;
+          document.getElementById("hijri-date").textContent =
+            h.day + " " + h.month.ar + " " + h.year + " هـ";
+          var g = data.date.gregorian;
+          document.getElementById("greg-date").textContent =
+            g.weekday.ar + " " + g.day + " " + g.month.ar + " " + g.year + " م";
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("error-box").style.display = "none";
+          renderList();
+          tick();
+        }).catch(function () {
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("error-box").style.display = "block";
+        }).then(function () { loadingNow = false; });
+      }
+
+      function renderList() {
+        var ul = document.getElementById("prayer-list");
+        ul.innerHTML = "";
+        PRAYERS.forEach(function (p) {
+          var li = document.createElement("li");
+          li.id = "row-" + p.key;
+          var nameSpan = document.createElement("span");
+          nameSpan.className = "p-name";
+          nameSpan.textContent = p.name;
+          var timeSpan = document.createElement("span");
+          timeSpan.className = "p-time";
+          timeSpan.textContent = timingsToday[p.key] ? String(timingsToday[p.key]).slice(0, 5) : "--:--";
+          li.appendChild(nameSpan);
+          li.appendChild(timeSpan);
+          ul.appendChild(li);
+        });
+      }
+
+      function nextPrayerInfo() {
+        if (!timingsToday) return null;
+        var now = cairoParts();
+        var nowDate = wallDate(now.year, now.month, now.day, now.hour, now.minute);
+        nowDate.setSeconds(now.second);
+        for (var i = 0; i < COUNTDOWN_KEYS.length; i++) {
+          var key = COUNTDOWN_KEYS[i];
+          var t = parseTimeHM(timingsToday[key]);
+          var pDate = wallDate(now.year, now.month, now.day, t.h, t.m);
+          if (pDate.getTime() > nowDate.getTime()) {
+            var prayer = null;
+            PRAYERS.forEach(function (p) { if (p.key === key) prayer = p; });
+            return { prayer: prayer, date: pDate, timeText: String(timingsToday[key]).slice(0, 5) };
+          }
+        }
+        // بعد العشاء: الصلاة القادمة هي فجر الغد
+        var tomorrow = new Date(now.year, now.month - 1, now.day + 1);
+        var ty = tomorrow.getFullYear(), tm = tomorrow.getMonth() + 1, td = tomorrow.getDate();
+        if (timingsTomorrow && timingsTomorrow.Fajr) {
+          var ft = parseTimeHM(timingsTomorrow.Fajr);
+          return {
+            prayer: PRAYERS[0],
+            date: wallDate(ty, tm, td, ft.h, ft.m),
+            timeText: String(timingsTomorrow.Fajr).slice(0, 5)
+          };
+        }
+        var ft2 = parseTimeHM(timingsToday.Fajr);
+        var fDate = wallDate(now.year, now.month, now.day, ft2.h, ft2.m);
+        return {
+          prayer: PRAYERS[0],
+          date: new Date(fDate.getTime() + 24 * 60 * 60 * 1000),
+          timeText: String(timingsToday.Fajr).slice(0, 5)
+        };
+      }
+
+      function ensureTomorrowTimings() {
+        if (timingsTomorrow) return;
+        var now = cairoParts();
+        var t = new Date(now.year, now.month - 1, now.day + 1);
+        var ds = pad(t.getDate()) + "-" + pad(t.getMonth() + 1) + "-" + t.getFullYear();
+        fetchTimings(ds).then(function (data) {
+          timingsTomorrow = data.timings;
+        }).catch(function () { /* يبقى التقدير الاحتياطي */ });
+      }
+
+      function tick() {
+        var now = cairoParts();
+        document.getElementById("time").textContent =
+          pad(now.hour) + ":" + pad(now.minute) + ":" + pad(now.second);
+
+        var key = cairoDateKey(now);
+        if (!currentCairoDateKey) currentCairoDateKey = key;
+        if (timingsToday && key !== currentCairoDateKey) {
+          currentCairoDateKey = key;
+          timingsTomorrow = null;
+          timingsToday = null;
+          document.getElementById("loading").style.display = "block";
+          document.getElementById("prayer-list").innerHTML = "";
+          document.getElementById("next-box").style.display = "none";
+          loadToday();
+          return;
+        }
+
+        if (!timingsToday) return;
+
+        var info = nextPrayerInfo();
+        if (!info) return;
+
+        var nowDate = wallDate(now.year, now.month, now.day, now.hour, now.minute);
+        nowDate.setSeconds(now.second);
+        var diff = info.date.getTime() - nowDate.getTime();
+        if (diff > 12 * 60 * 60 * 1000) ensureTomorrowTimings();
+
+        document.getElementById("next-box").style.display = "block";
+        document.getElementById("next-name").textContent = info.prayer.name;
+        document.getElementById("next-at").textContent = "الساعة " + info.timeText;
+        document.getElementById("countdown").textContent = fmtDuration(diff);
+
+        PRAYERS.forEach(function (p) {
+          var li = document.getElementById("row-" + p.key);
+          if (!li) return;
+          var nameSpan = li.querySelector(".p-name");
+          var oldTag = li.querySelector(".tag");
+          if (oldTag) oldTag.remove();
+          li.classList.remove("next");
+          li.classList.remove("passed");
+          if (p.key === info.prayer.key) {
+            li.classList.add("next");
+            var tag = document.createElement("span");
+            tag.className = "tag";
+            tag.textContent = "القادمة";
+            nameSpan.appendChild(tag);
+          } else {
+            var t = parseTimeHM(timingsToday[p.key]);
+            var pDate = wallDate(now.year, now.month, now.day, t.h, t.m);
+            if (pDate.getTime() <= nowDate.getTime()) li.classList.add("passed");
+          }
+        });
+      }
+
+      document.getElementById("retry-btn").addEventListener("click", function () {
+        document.getElementById("error-box").style.display = "none";
+        document.getElementById("loading").style.display = "block";
+        loadToday();
+      });
+
+      loadToday();
+      setInterval(tick, 1000);
+      tick();
+    </script>
+  </body>
+</html>

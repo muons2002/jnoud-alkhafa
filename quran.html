@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:,">
+<title>جنود الخفاء - مشغل القرآن الكريم</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; }
+  body { background: #0d0d0d; color: #f5f5f5; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 18px 12px; }
+  .container { width: 100%; max-width: 560px; background: #1a1a1a; border: 1px solid #3a2f14; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,.6); padding: 22px; }
+  .header { text-align: center; margin-bottom: 18px; }
+  .header .logo { font-size: 2.4rem; }
+  .header h1 { font-size: 1.5rem; color: #d4af37; margin: 4px 0; }
+  .header p { font-size: .9rem; color: #b8a05a; }
+  .label { font-size: .85rem; color: #c9a227; margin: 12px 0 6px; }
+  select, input[type="search"] {
+    width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid #3a2f14;
+    background: #0d0d0d; color: #f5f5f5; font-size: 1rem; outline: none;
+  }
+  select:focus, input[type="search"]:focus { border-color: #d4af37; }
+  .track-info { background: #0d0d0d; border: 1px solid #3a2f14; padding: 16px; border-radius: 14px; text-align: center; margin: 16px 0 14px; }
+  .track-num { font-size: .85rem; color: #b8a05a; }
+  .track-title { font-size: 1.4rem; font-weight: bold; color: #d4af37; margin: 4px 0; }
+  .track-reciter { font-size: .85rem; color: #999; }
+  .progress-box { margin-bottom: 14px; }
+  input[type="range"] { width: 100%; accent-color: #d4af37; cursor: pointer; }
+  .time-info { display: flex; justify-content: space-between; font-size: .8rem; color: #999; margin-top: 4px; direction: ltr; font-variant-numeric: tabular-nums; }
+  .controls { display: flex; justify-content: center; align-items: center; gap: 14px; margin-bottom: 8px; flex-wrap: wrap; }
+  .btn { background: #2a2a2a; border: 1px solid #3a2f14; color: #d4af37; border-radius: 50%; width: 46px; height: 46px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; font-family: inherit; flex: none; padding: 0; }
+  .btn:hover { background: #3a2f14; transform: scale(1.05); }
+  .btn:active { transform: scale(.95); }
+  .btn-play { width: 64px; height: 64px; background: #d4af37; color: #0d0d0d; font-size: 1.6rem; border: none; }
+  .btn-play:hover { background: #e5c15a; }
+  .btn-small { font-size: .72rem; font-weight: bold; }
+  .btn-toggle[aria-pressed="true"] { background: #d4af37; color: #0d0d0d; border-color: #d4af37; }
+  .btn-toggle svg { width: 20px; height: 20px; fill: currentColor; display: block; }
+  .sub-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 4px 0 2px; flex-wrap: wrap; }
+  .speed-wrap { display: flex; align-items: center; gap: 8px; font-size: .85rem; color: #999; }
+  .speed-wrap select { width: auto; padding: 7px 9px; font-size: .85rem; direction: ltr; }
+  .status-msg { text-align: center; font-size: .85rem; color: #888; margin: 6px 0 4px; min-height: 1.2em; }
+  .resume { display: none; margin-top: 10px; background: #0d0d0d; border: 1px dashed #d4af37; border-radius: 10px; padding: 12px 14px; font-size: .9rem; }
+  .resume.show { display: block; }
+  .resume p { margin: 0 0 10px; color: #f5f5f5; }
+  .resume .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .rbtn { appearance: none; font: inherit; font-size: .88rem; font-weight: bold; border-radius: 9px; padding: 8px 14px; cursor: pointer; border: 1px solid #d4af37; }
+  .rbtn.go { background: #d4af37; color: #0d0d0d; }
+  .rbtn.ghost { background: transparent; color: #d4af37; }
+  .error { display: none; margin-top: 10px; background: #2a1210; border: 1px solid #7a2b20; color: #f0927f; border-radius: 10px; padding: 12px 14px; font-size: .9rem; }
+  .error.show { display: block; }
+  .error button { appearance: none; font: inherit; font-weight: bold; font-size: .88rem; margin-top: 8px; background: transparent; color: inherit; border: 1px solid currentColor; border-radius: 8px; padding: 6px 14px; cursor: pointer; }
+  .playlist-section h3 { font-size: 1rem; color: #c9a227; margin: 14px 0 10px; border-bottom: 1px solid #3a2f14; padding-bottom: 6px; display: flex; justify-content: space-between; align-items: baseline; }
+  .playlist-section h3 .count { font-size: .8rem; color: #888; font-weight: normal; }
+  .playlist { max-height: 320px; overflow-y: auto; list-style: none; border-radius: 10px; }
+  .playlist::-webkit-scrollbar { width: 6px; }
+  .playlist::-webkit-scrollbar-thumb { background: #3a2f14; border-radius: 3px; }
+  .playlist li { padding: 11px 14px; background: #0d0d0d; margin-bottom: 6px; border-radius: 9px; cursor: pointer; font-size: .95rem; display: flex; align-items: center; justify-content: space-between; transition: background .2s; }
+  .playlist li:hover { background: #2a2410; }
+  .playlist li.active { background: #d4af37; color: #0d0d0d; font-weight: bold; }
+  .playlist li .num { color: #b8a05a; font-size: .85rem; margin-left: 8px; white-space: nowrap; }
+  .playlist li.active .num { color: #0d0d0d; }
+  .empty { text-align: center; color: #888; padding: 16px; }
+  .footer { text-align: center; font-size: .8rem; color: #666; margin-top: 14px; }
+  .footer .src { display: block; margin-top: 4px; font-size: .75rem; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">🕌</div>
+      <h1>جنود الخفاء</h1>
+      <p>مشغل القرآن الكريم • حب الخير للغير</p>
+    </div>
+
+    <div class="label">🎙️ القارئ</div>
+    <select id="reciter-select" aria-label="اختيار القارئ"></select>
+
+    <div class="track-info">
+      <div class="track-num" id="current-num">سورة 1 من 114</div>
+      <div class="track-title" id="current-title">الفاتحة</div>
+      <div class="track-reciter" id="current-reciter">7 آيات • مشاري العفاسي</div>
+    </div>
+
+    <audio id="audio-player" preload="metadata"></audio>
+
+    <div class="progress-box">
+      <input type="range" id="seek-slider" value="0" min="0" max="0" step="1" aria-label="موضع التشغيل">
+      <div class="time-info"><span id="current-time">00:00</span><span id="duration-time">00:00</span></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="prev-btn" title="السورة السابقة" aria-label="السورة السابقة">⏮</button>
+      <button class="btn btn-small" id="back-btn" title="رجوع 10 ثوانٍ" aria-label="رجوع 10 ثوانٍ">-10</button>
+      <button class="btn btn-play" id="play-btn" title="تشغيل / إيقاف" aria-label="تشغيل أو إيقاف">▶</button>
+      <button class="btn btn-small" id="fwd-btn" title="تقديم 10 ثوانٍ" aria-label="تقديم 10 ثوانٍ">+10</button>
+      <button class="btn" id="next-btn" title="السورة التالية" aria-label="السورة التالية">⏭</button>
+    </div>
+
+    <div class="sub-controls">
+      <div class="speed-wrap">
+        <label for="speed-select">سرعة التشغيل</label>
+        <select id="speed-select">
+          <option value="0.75">0.75×</option>
+          <option value="1" selected>1×</option>
+          <option value="1.25">1.25×</option>
+          <option value="1.5">1.5×</option>
+          <option value="2">2×</option>
+        </select>
+      </div>
+      <button class="btn btn-toggle" id="repeat-btn" title="تكرار السورة" aria-label="تكرار السورة" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2l4 4-4 4V7H8a3 3 0 0 0-3 3v1H3v-1a5 5 0 0 1 5-5h9V2zM7 22l-4-4 4-4v3h9a3 3 0 0 0 3-3v-1h2v1a5 5 0 0 1-5 5H7v3z"/></svg>
+      </button>
+    </div>
+
+    <div class="status-msg" id="status">جاهز للتشغيل</div>
+
+    <div class="resume" id="resume">
+      <p id="resume-text"></p>
+      <div class="row">
+        <button class="rbtn go" id="resume-go">متابعة الاستماع</button>
+        <button class="rbtn ghost" id="resume-restart">البدء من أول السورة</button>
+      </div>
+    </div>
+
+    <div class="error" id="error-box">
+      <span id="error-text">تعذر تشغيل الصوت. تحقق من اتصالك بالإنترنت ثم حاول مرة أخرى.</span>
+      <br>
+      <button id="error-retry">إعادة المحاولة</button>
+    </div>
+
+    <div class="label">🔍 ابحث عن سورة</div>
+    <input type="search" id="search-box" placeholder="اكتب اسم السورة أو رقمها..." aria-label="بحث عن سورة">
+
+    <div class="playlist-section">
+      <h3><span>📖 قائمة السور</span><span class="count" id="list-count">114 سورة</span></h3>
+      <ul class="playlist" id="playlist"></ul>
+    </div>
+
+    <div class="footer">جنود الخفاء • صدقة جارية<span class="src">التلاوات من مكتبة mp3quran الصوتية</span></div>
+  </div>
+
+<script>
+var RECITERS = [
+  { id: "alafasy",  name: "مشاري العفاسي",         base: "https://cdn.mp3quran.net/audio/mishary-alafasy/r1/" },
+  { id: "basit",    name: "عبد الباسط عبد الصمد",   base: "https://cdn.mp3quran.net/audio/abdulbasit-abdulsamad/r3/" },
+  { id: "husary",   name: "محمود خليل الحصري",     base: "https://cdn.mp3quran.net/audio/mahmoud-husary/r1/" },
+  { id: "muaiqly",  name: "ماهر المعيقلي",         base: "https://cdn.mp3quran.net/audio/maher-muaiqly/r1/" },
+  { id: "ajmi",     name: "أحمد بن علي العجمي",    base: "https://cdn.mp3quran.net/audio/ahmad-ajmi/r1/" },
+  { id: "ghamdi",   name: "سعد الغامدي",           base: "https://cdn.mp3quran.net/audio/saad-ghamdi/r1/" },
+  { id: "shuraim",  name: "سعود الشريم",           base: "https://cdn.mp3quran.net/audio/saud-shuraim/r1/" },
+  { id: "sudais",   name: "عبد الرحمن السديس",     base: "https://cdn.mp3quran.net/audio/abdulrahman-sudais/r1/" },
+  { id: "minshawi", name: "محمد صديق المنشاوي",    base: "https://cdn.mp3quran.net/audio/muhammad-minshawi/r4/" },
+  { id: "dosari",   name: "ياسر الدوسري",          base: "https://cdn.mp3quran.net/audio/yasser-dosari/r1/" }
+];
+
+var SURAHS = [
+  ["الفاتحة",7],["البقرة",286],["آل عمران",200],["النساء",176],["المائدة",120],["الأنعام",165],
+  ["الأعراف",206],["الأنفال",75],["التوبة",129],["يونس",109],["هود",123],["يوسف",111],
+  ["الرعد",43],["إبراهيم",52],["الحجر",99],["النحل",128],["الإسراء",111],["الكهف",110],
+  ["مريم",98],["طه",135],["الأنبياء",112],["الحج",78],["المؤمنون",118],["النور",64],
+  ["الفرقان",77],["الشعراء",227],["النمل",93],["القصص",88],["العنكبوت",69],["الروم",60],
+  ["لقمان",34],["السجدة",30],["الأحزاب",73],["سبأ",54],["فاطر",45],["يس",83],
+  ["الصافات",182],["ص",88],["الزمر",75],["غافر",85],["فصلت",54],["الشورى",53],
+  ["الزخرف",89],["الدخان",59],["الجاثية",37],["الأحقاف",35],["محمد",38],["الفتح",29],
+  ["الحجرات",18],["ق",45],["الذاريات",60],["الطور",49],["النجم",62],["القمر",55],
+  ["الرحمن",78],["الواقعة",96],["الحديد",29],["المجادلة",22],["الحشر",24],["الممتحنة",13],
+  ["الصف",14],["الجمعة",11],["المنافقون",11],["التغابن",18],["الطلاق",12],["التحريم",12],
+  ["الملك",30],["القلم",52],["الحاقة",52],["المعارج",44],["نوح",28],["الجن",28],
+  ["المزمل",20],["المدثر",56],["القيامة",40],["الإنسان",31],["المرسلات",50],["النبأ",40],
+  ["النازعات",46],["عبس",42],["التكوير",29],["الانفطار",19],["المطففين",36],["الانشقاق",25],
+  ["البروج",22],["الطارق",17],["الأعلى",19],["الغاشية",26],["الفجر",30],["البلد",20],
+  ["الشمس",15],["الليل",21],["الضحى",11],["الشرح",8],["التين",8],["العلق",19],
+  ["القدر",5],["البينة",8],["الزلزلة",8],["العاديات",11],["القارعة",11],["التكاثر",8],
+  ["العصر",3],["الهمزة",9],["الفيل",5],["قريش",4],["الماعون",7],["الكوثر",3],
+  ["الكافرون",6],["النصر",3],["المسد",5],["الإخلاص",4],["الفلق",5],["الناس",6]
+];
+
+var LS_KEY = "jnoud_quran_player_v2";
+var audio       = document.getElementById("audio-player");
+var playBtn     = document.getElementById("play-btn");
+var prevBtn     = document.getElementById("prev-btn");
+var nextBtn     = document.getElementById("next-btn");
+var backBtn     = document.getElementById("back-btn");
+var fwdBtn      = document.getElementById("fwd-btn");
+var repeatBtn   = document.getElementById("repeat-btn");
+var speedSel    = document.getElementById("speed-select");
+var seek        = document.getElementById("seek-slider");
+var tCur        = document.getElementById("current-time");
+var tDur        = document.getElementById("duration-time");
+var numEl       = document.getElementById("current-num");
+var titleEl     = document.getElementById("current-title");
+var reciterEl   = document.getElementById("current-reciter");
+var statusEl    = document.getElementById("status");
+var reciterSel  = document.getElementById("reciter-select");
+var playlistEl  = document.getElementById("playlist");
+var searchEl    = document.getElementById("search-box");
+var listCount   = document.getElementById("list-count");
+var resumeBox   = document.getElementById("resume");
+var resumeText  = document.getElementById("resume-text");
+var resumeGo    = document.getElementById("resume-go");
+var resumeRestart = document.getElementById("resume-restart");
+var errorBox    = document.getElementById("error-box");
+var errorRetry  = document.getElementById("error-retry");
+
+var current = 0;          // فهرس السورة الحالية
+var reciterId = RECITERS[0].id;
+var pendingSeek = 0;      // موضع يُستأنف بعد تحميل البيانات
+var repeatOne = false;
+var seeking = false;
+var lastSave = 0;
+var retryCount = 0;
+
+function pad3(n) { return ("00" + n).slice(-3); }
+function reciter() {
+  for (var i = 0; i < RECITERS.length; i++) if (RECITERS[i].id === reciterId) return RECITERS[i];
+  return RECITERS[0];
+}
+function surahUrl(idx) { return reciter().base + pad3(idx + 1) + ".mp3"; }
+function fmt(sec) {
+  sec = Math.max(0, Math.floor(sec || 0));
+  var h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
+  var mm = (m < 10 ? "0" : "") + m, ss = (s < 10 ? "0" : "") + s;
+  return h > 0 ? h + ":" + mm + ":" + ss : mm + ":" + ss;
+}
+
+/* ---------- حفظ واستعادة موضع الاستماع ---------- */
+var memState = null;
+function saveState() {
+  var st = { surah: current, reciter: reciterId, time: audio.currentTime || 0, speed: parseFloat(speedSel.value) || 1 };
+  memState = st;
+  try { localStorage.setItem(LS_KEY, JSON.stringify(st)); } catch (e) { /* التخزين محجوب: يبقى الحفظ في الذاكرة فقط */ }
+}
+function loadState() {
+  var st = null;
+  try { st = JSON.parse(localStorage.getItem(LS_KEY) || "null"); } catch (e) { st = null; }
+  if (!st) st = memState;
+  if (st) {
+    if (typeof st.surah === "number" && st.surah >= 0 && st.surah < SURAHS.length) current = st.surah;
+    if (typeof st.reciter === "string") {
+      for (var i = 0; i < RECITERS.length; i++) if (RECITERS[i].id === st.reciter) { reciterId = st.reciter; break; }
+    }
+    if (typeof st.time === "number" && st.time > 3) pendingSeek = st.time;
+    if (typeof st.speed === "number" && st.speed >= 0.5 && st.speed <= 2) speedSel.value = String(st.speed);
+  }
+}
+
+/* ---------- الواجهة ---------- */
+function renderReciters() {
+  reciterSel.innerHTML = "";
+  RECITERS.forEach(function (r) {
+    var opt = document.createElement("option");
+    opt.value = r.id;
+    opt.textContent = r.name;
+    if (r.id === reciterId) opt.selected = true;
+    reciterSel.appendChild(opt);
+  });
+}
+
+function renderPlaylist() {
+  var q = searchEl.value.trim();
+  playlistEl.innerHTML = "";
+  var shown = 0;
+  SURAHS.forEach(function (s, idx) {
+    if (q && s[0].indexOf(q) === -1 && String(idx + 1) !== q && pad3(idx + 1) !== q) return;
+    shown++;
+    var li = document.createElement("li");
+    if (idx === current) li.className = "active";
+    var nameSpan = document.createElement("span");
+    nameSpan.textContent = s[0];
+    var numSpan = document.createElement("span");
+    numSpan.className = "num";
+    numSpan.textContent = "سورة " + (idx + 1);
+    li.appendChild(nameSpan);
+    li.appendChild(numSpan);
+    li.addEventListener("click", function () {
+      pendingSeek = 0;
+      resumeBox.classList.remove("show");
+      loadSurah(idx, true);
+      saveState();
+    });
+    playlistEl.appendChild(li);
+  });
+  listCount.textContent = shown + " سورة";
+  if (shown === 0) {
+    var li = document.createElement("li");
+    li.className = "empty";
+    li.textContent = "لا توجد سورة بهذا الاسم";
+    playlistEl.appendChild(li);
+  }
+}
+
+function scrollToActive() {
+  var active = playlistEl.querySelector("li.active");
+  if (active) active.scrollIntoView({ block: "nearest" });
+}
+
+function setPlayIcon() {
+  var playing = !audio.paused && !audio.ended;
+  playBtn.textContent = playing ? "⏸" : "▶";
+}
+
+/* ---------- التشغيل ---------- */
+function loadSurah(idx, autoplay) {
+  current = idx;
+  retryCount = 0;
+  errorBox.classList.remove("show");
+  audio.src = surahUrl(idx);
+  audio.playbackRate = parseFloat(speedSel.value) || 1;
+  numEl.textContent = "سورة " + (idx + 1) + " من 114";
+  titleEl.textContent = SURAHS[idx][0];
+  reciterEl.textContent = SURAHS[idx][1] + " آيات • " + reciter().name;
+  seek.value = 0; seek.max = 0;
+  tCur.textContent = "00:00"; tDur.textContent = "00:00";
+  renderPlaylist();
+  scrollToActive();
+  updateMediaSession();
+  setPlayIcon();
+  if (autoplay) playAudio();
+  else statusEl.textContent = "جاهز للتشغيل";
+}
+
+function playAudio() {
+  errorBox.classList.remove("show");
+  var p = audio.play();
+  if (p && p.catch) {
+    p.catch(function () {
+      setPlayIcon();
+      statusEl.textContent = "اضغط زر التشغيل للبدء";
+    });
+  }
+}
+
+function pauseAudio() {
+  audio.pause();
+  saveState();
+}
+
+function goTo(idx, autoplay) {
+  pendingSeek = 0;
+  resumeBox.classList.remove("show");
+  loadSurah((idx + SURAHS.length) % SURAHS.length, autoplay);
+  saveState();
+}
+
+playBtn.addEventListener("click", function () {
+  if (audio.paused || audio.ended) { resumeBox.classList.remove("show"); playAudio(); }
+  else pauseAudio();
+});
+nextBtn.addEventListener("click", function () { goTo(current + 1, true); });
+prevBtn.addEventListener("click", function () {
+  if (audio.currentTime > 5) { audio.currentTime = 0; return; }
+  goTo(current - 1, true);
+});
+backBtn.addEventListener("click", function () { audio.currentTime = Math.max(0, (audio.currentTime || 0) - 10); });
+fwdBtn.addEventListener("click", function () {
+  if (!isNaN(audio.duration)) audio.currentTime = Math.min(audio.duration, (audio.currentTime || 0) + 10);
+});
+repeatBtn.addEventListener("click", function () {
+  repeatOne = !repeatOne;
+  repeatBtn.setAttribute("aria-pressed", repeatOne ? "true" : "false");
+  statusEl.textContent = repeatOne ? "تكرار السورة الحالية مفعّل" : "تكرار السورة متوقف";
+});
+speedSel.addEventListener("change", function () {
+  audio.playbackRate = parseFloat(speedSel.value) || 1;
+  saveState();
+});
+reciterSel.addEventListener("change", function () {
+  if (reciterId === reciterSel.value) return;
+  reciterId = reciterSel.value;
+  var keepTime = audio.currentTime || pendingSeek || 0;
+  var wasPlaying = !audio.paused && !audio.ended;
+  pendingSeek = keepTime;
+  loadSurah(current, wasPlaying);
+  saveState();
+});
+searchEl.addEventListener("input", renderPlaylist);
+
+seek.addEventListener("input", function () { seeking = true; tCur.textContent = fmt(parseFloat(seek.value)); });
+seek.addEventListener("change", function () {
+  audio.currentTime = parseFloat(seek.value) || 0;
+  seeking = false;
+  saveState();
+});
+
+audio.addEventListener("loadedmetadata", function () {
+  seek.max = Math.floor(audio.duration) || 0;
+  tDur.textContent = fmt(audio.duration);
+  if (pendingSeek > 0 && pendingSeek < audio.duration - 2) {
+    audio.currentTime = pendingSeek;
+    statusEl.textContent = "تم الاستئناف من " + fmt(pendingSeek);
+  }
+  pendingSeek = 0;
+  audio.playbackRate = parseFloat(speedSel.value) || 1;
+});
+audio.addEventListener("timeupdate", function () {
+  if (!seeking && !isNaN(audio.duration)) {
+    seek.max = Math.floor(audio.duration);
+    seek.value = Math.floor(audio.currentTime);
+    tCur.textContent = fmt(audio.currentTime);
+    tDur.textContent = fmt(audio.duration);
+  }
+  var now = Date.now();
+  if (now - lastSave > 5000) { lastSave = now; saveState(); }
+});
+audio.addEventListener("play", function () {
+  setPlayIcon();
+  statusEl.textContent = "جارٍ التشغيل — سورة " + SURAHS[current][0];
+  renderPlaylist();
+  scrollToActive();
+});
+audio.addEventListener("pause", function () {
+  setPlayIcon();
+  statusEl.textContent = "متوقف مؤقتاً عند " + fmt(audio.currentTime);
+  saveState();
+});
+audio.addEventListener("waiting", function () { statusEl.textContent = "جارٍ التحميل…"; });
+audio.addEventListener("ended", function () {
+  if (repeatOne) { audio.currentTime = 0; playAudio(); return; }
+  goTo(current + 1, true);
+});
+audio.addEventListener("error", function () {
+  if (!audio.src) return;
+  if (retryCount < 2) {
+    retryCount++;
+    statusEl.textContent = "انقطع التحميل، إعادة المحاولة " + retryCount + "…";
+    var t = audio.currentTime || pendingSeek || 0;
+    setTimeout(function () {
+      pendingSeek = t;
+      audio.src = surahUrl(current);
+      audio.load();
+      playAudio();
+    }, 1500);
+    return;
+  }
+  setPlayIcon();
+  errorBox.classList.add("show");
+  statusEl.textContent = "";
+});
+errorRetry.addEventListener("click", function () {
+  retryCount = 0;
+  errorBox.classList.remove("show");
+  pendingSeek = audio.currentTime || 0;
+  audio.src = surahUrl(current);
+  audio.load();
+  playAudio();
+});
+
+/* ---------- أزرار الاستئناف ---------- */
+resumeGo.addEventListener("click", function () {
+  resumeBox.classList.remove("show");
+  playAudio();
+});
+resumeRestart.addEventListener("click", function () {
+  pendingSeek = 0;
+  resumeBox.classList.remove("show");
+  try { audio.currentTime = 0; } catch (e) {}
+  playAudio();
+  saveState();
+});
+
+/* ---------- Media Session (التحكم من شاشة القفل) ---------- */
+function updateMediaSession() {
+  if (!("mediaSession" in navigator)) return;
+  try {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: "سورة " + SURAHS[current][0],
+      artist: reciter().name,
+      album: "القرآن الكريم — جنود الخفاء"
+    });
+    navigator.mediaSession.setActionHandler("play", playAudio);
+    navigator.mediaSession.setActionHandler("pause", pauseAudio);
+    navigator.mediaSession.setActionHandler("previoustrack", function () { goTo(current - 1, true); });
+    navigator.mediaSession.setActionHandler("nexttrack", function () { goTo(current + 1, true); });
+    navigator.mediaSession.setActionHandler("seekbackward", function () { audio.currentTime = Math.max(0, audio.currentTime - 10); });
+    navigator.mediaSession.setActionHandler("seekforward", function () { audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 10); });
+  } catch (e) { /* غير مدعوم */ }
+}
+
+window.addEventListener("pagehide", saveState);
+document.addEventListener("visibilitychange", function () { if (document.hidden) saveState(); });
+
+/* ---------- البدء ---------- */
+loadState();
+audio.playbackRate = parseFloat(speedSel.value) || 1;
+renderReciters();
+loadSurah(current, false);
+if (pendingSeek > 3) {
+  resumeText.textContent = "توقفت عند سورة " + SURAHS[current][0] + " بصوت " + reciter().name + " عند " + fmt(pendingSeek) + ".";
+  resumeBox.classList.add("show");
+  statusEl.textContent = "يمكنك المتابعة من حيث توقفت";
+}
+setPlayIcon();
+</script>
+</body>
+</html>
