@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مكتبة الشيخ الشعراوي — جنود الخفاء</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { font-family:'Segoe UI', Tahoma, Arial, sans-serif; background:#0a1120; color:#eef2f7; min-height:100vh; padding-bottom:132px; }
+  header { background:linear-gradient(160deg,#0d1b33 0%,#12294d 55%,#0d1b33 100%); border-bottom:2px solid #c9a227; padding:26px 16px 20px; text-align:center; }
+  header .bismillah { color:#c9a227; font-size:20px; margin-bottom:8px; }
+  header h1 { font-size:27px; color:#f3d97b; margin-bottom:6px; }
+  header p { color:#aebdd2; font-size:14px; }
+  header .brand { margin-top:10px; color:#7fd4ea; font-size:13px; }
+  .wrap { max-width:860px; margin:0 auto; padding:16px 12px; }
+  .sections { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+  .sec-btn { border:2px solid #22365a; background:#101d36; border-radius:14px; padding:14px 10px; cursor:pointer; text-align:center; color:#eef2f7; transition:.15s; }
+  .sec-btn .ico { font-size:30px; display:block; margin-bottom:6px; }
+  .sec-btn .nm { font-size:17px; font-weight:700; display:block; }
+  .sec-btn .ct { font-size:12.5px; color:#9fb2cc; display:block; margin-top:3px; }
+  .sec-btn.active { border-color:#c9a227; background:linear-gradient(160deg,#1a2c4e,#14264a); box-shadow:0 0 0 1px #c9a227 inset; }
+  .sec-btn.soon { opacity:.75; cursor:default; grid-column:1 / -1; }
+  .sec-btn.soon .ct { color:#c9a227; }
+  .search { width:100%; padding:12px 14px; border-radius:12px; border:1.5px solid #22365a; background:#0e1930; color:#fff; font-size:15.5px; margin-bottom:12px; }
+  .search:focus { outline:none; border-color:#c9a227; }
+  .ep { display:flex; align-items:center; gap:11px; background:#101d36; border:1.5px solid #1d2f52; border-radius:12px; padding:11px 13px; margin-bottom:8px; cursor:pointer; transition:.12s; }
+  .ep:hover { border-color:#35507f; }
+  .ep .num { flex:0 0 38px; height:38px; border-radius:50%; background:linear-gradient(145deg,#c9a227,#8f7114); color:#131313; font-weight:800; font-size:15px; display:flex; align-items:center; justify-content:center; }
+  .ep .tt { flex:1; font-size:15.5px; line-height:1.5; }
+  .ep .du { color:#8fa5c4; font-size:12.5px; white-space:nowrap; }
+  .ep.playing { border-color:#c9a227; background:#16294d; }
+  .ep.playing .num { background:linear-gradient(145deg,#39c2dd,#1d7e99); color:#fff; }
+  .eq { display:none; gap:2.5px; align-items:flex-end; height:16px; }
+  .ep.playing .eq { display:flex; }
+  .eq span { width:3.5px; background:#7fd4ea; border-radius:2px; animation:eq 0.9s ease-in-out infinite; }
+  .eq span:nth-child(2){ animation-delay:.25s } .eq span:nth-child(3){ animation-delay:.5s }
+  @keyframes eq { 0%,100%{height:5px} 50%{height:16px} }
+  .empty { text-align:center; color:#8fa5c4; padding:26px 0; font-size:15px; }
+  footer { text-align:center; color:#66788f; font-size:12.5px; padding:14px 10px 4px; }
+  /* player */
+  .player { position:fixed; bottom:0; right:0; left:0; background:rgba(10,18,36,.97); border-top:2px solid #c9a227; padding:10px 14px 12px; z-index:50; backdrop-filter:blur(6px); }
+  .player .ttl { font-size:14.5px; color:#f3d97b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:8px; text-align:center; }
+  .player .row { display:flex; align-items:center; gap:10px; max-width:860px; margin:0 auto; }
+  .pbtn { flex:0 0 auto; width:44px; height:44px; border-radius:50%; border:none; cursor:pointer; font-size:18px; background:#1a2c4e; color:#eef2f7; }
+  .pbtn.main { width:54px; height:54px; font-size:23px; background:linear-gradient(145deg,#c9a227,#8f7114); color:#131313; }
+  .seek { flex:1; accent-color:#c9a227; height:6px; cursor:pointer; }
+  .tm { font-size:12px; color:#9fb2cc; white-space:nowrap; min-width:78px; text-align:center; }
+  .vol { width:74px; accent-color:#39c2dd; cursor:pointer; }
+  @media (max-width:560px){ .vol{display:none} header h1{font-size:23px} .ep .tt{font-size:14.5px} }
+</style>
+</head>
+<body>
+<header>
+  <div class="bismillah">۞ بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ۞</div>
+  <h1>🕌 مكتبة الشيخ محمد متولي الشعراوي</h1>
+  <p>خواطر ولقاءات الإمام — رحمه الله — بصوته، استمع أينما كنت</p>
+  <div class="brand">🛡️ جنود الخفاء — حب الخير للغير</div>
+</header>
+
+<div class="wrap">
+  <div class="sections">
+    <button class="sec-btn active" id="btn-liqaa" onclick="showSec('liqaa')">
+      <span class="ico">📺</span><span class="nm">لقاء الإيمان</span><span class="ct">29 حلقة كاملة</span>
+    </button>
+    <button class="sec-btn" id="btn-khawatir" onclick="showSec('khawatir')">
+      <span class="ico">🌙</span><span class="nm">خواطر إيمانية</span><span class="ct">25 حلقة كاملة</span>
+    </button>
+    <div class="sec-btn soon">
+      <span class="ico">📖</span><span class="nm">خواطر تفسير القرآن الكريم</span><span class="ct">قريباً — 1,117 درساً في الطريق إليكم</span>
+    </div>
+  </div>
+
+  <input class="search" id="search" type="text" placeholder="🔍 ابحث عن حلقة… (مثال: الرزق، الصلاة، الزواج)">
+  <div id="list"></div>
+  <div class="empty" id="empty" style="display:none">لا توجد حلقات مطابقة لبحثك</div>
+</div>
+
+<footer>مكتبة جنود الخفاء الصوتية — رحم الله الإمام الشعراوي وجزاه عنا خيراً</footer>
+
+<div class="player">
+  <div class="ttl" id="ptitle">اختر حلقة للبدء 🎧</div>
+  <div class="row">
+    <button class="pbtn" id="prev" title="السابق">⏮</button>
+    <button class="pbtn main" id="play">▶</button>
+    <button class="pbtn" id="next" title="التالي">⏭</button>
+    <input class="seek" id="seek" type="range" min="0" max="1000" value="0">
+    <span class="tm" id="time">0:00 / 0:00</span>
+    <input class="vol" id="vol" type="range" min="0" max="100" value="90" title="الصوت">
+  </div>
+</div>
+
+<audio id="audio" preload="none"></audio>
+<script>
+const DATA = {
+  liqaa:    { id: "the-faith-meeting-program-by-sheikh-muhammad-metwally-al-shaarawi-mp3",    label: "لقاء الإيمان",   tracks: [
+    {n:1,t:"الاضطرار للسفر والكسب الحرام",f:"برنامج لقاء الإيمان الحلقة الأولى الاضطرار للسفر والكسب الحرام تم التحميل من WevFro.mp3",d:"10:21"},
+    {n:2,t:"العلاج بالقرآن",f:"برنامج لقاء الإيمان الحلقة الثانية العلاج بالقرأن تم التحميل من WevFro.mp3",d:"9:22"},
+    {n:3,t:"حديث الافك",f:"برنامج لقاء الإيمان الحلقة الثالثة حديث الافك تم التحميل من WevFro.mp3",d:"8:21"},
+    {n:4,t:"الاستعانة بالجن",f:"برنامج لقاء الإيمان الحلقة الرابعة الاستعانة بالجن تم التحميل من WevFro.mp3",d:"10:28"},
+    {n:5,t:"السيدة نفيسة",f:"برنامج لقاء الإيمان الحلقة الخامسة السيدة نفيسة تم التحميل من WevFro.mp3",d:"12:06"},
+    {n:6,t:"الربا",f:"برنامج لقاء الإيمان الحلقة السادسة الربا تم التحميل من WevFro.mp3",d:"11:03"},
+    {n:7,t:"سيدنا شعيب",f:"برنامج لقاء الإيمان الحلقة السابعة سيدنا شعيب تم التحميل من WevFro.mp3",d:"11:22"},
+    {n:8,t:"الروح",f:"برنامج لقاء الإيمان الحلقة الثامنة الروح تم التحميل من WevFro.mp3",d:"9:59"},
+    {n:9,t:"ترك الصلاة",f:"برنامج لقاء الإيمان الحلقة التاسعة ترك الصلاة تم التحميل من WevFro.mp3",d:"9:59"},
+    {n:10,t:"صلاة الجمعة",f:"برنامج لقاء الإيمان الحلقة العاشرة صلاة الجمعة تم التحميل من WevFro.mp3",d:"9:09"},
+    {n:11,t:"السيرة الذاتية للشيخ الشعراوى",f:"برنامج لقاء الإيمان الحلقة الحادية عشرة السيرة الذاتية للشيخ الشعراوى تم التحميل من WevFro.mp3",d:"9:14"},
+    {n:12,t:"الطلاق",f:"برنامج لقاء الإيمان الحلقة الثانية عشرة الطلاق تم التحميل من WevFro.mp3",d:"8:17"},
+    {n:13,t:"الابتلاء",f:"برنامج لقاء الإيمان الحلقة الثالثة عشر الابتلاء تم التحميل من WevFro.mp3",d:"8:18"},
+    {n:14,t:"طاعة الوالدين",f:"برنامج لقاء الإيمان الحلقة الرابعة عشر طاعة الوالدين تم التحميل من WevFro.mp3",d:"7:01"},
+    {n:15,t:"عذاب القبر",f:"برنامج لقاء الإيمان الحلقة الخامسة عشر عذاب القبر تم التحميل من WevFro.mp3",d:"8:04"},
+    {n:16,t:"العلمانية",f:"برنامج لقاء الإيمان الحلقة السادسة عشر العلمانية تم التحميل من WevFro.mp3",d:"11:15"},
+    {n:17,t:"الرزق",f:"برنامج لقاء الإيمان الحلقة السابعة عشر الرزق تم التحميل من WevFro.mp3",d:"8:09"},
+    {n:18,t:"الصوم",f:"برنامج لقاء الإيمان الحلقة الثامنة عشر الصوم تم التحميل من WevFro.mp3",d:"8:39"},
+    {n:19,t:"الزكاة",f:"برنامج لقاء الإيمان الحلقة التاسعة عشر الزكاة‬ تم التحميل من WevFro.mp3",d:"7:25"},
+    {n:20,t:"الذبائح",f:"برنامج لقاء الإيمان الحلقة العشرون الذبائح‬ تم التحميل من WevFro.mp3",d:"8:19"},
+    {n:21,t:"عمل المرأة",f:"برنامج لقاء الإيمان الحلقة الواحد والعشرون عمل المرأة تم التحميل من WevFro.mp3",d:"8:21"},
+    {n:22,t:"مهنة المحاماة",f:"برنامج لقاء الإيمان الحلقة الثانية والعشرون مهنة المحاماة‬ تم التحميل من WevFro.mp3",d:"9:34"},
+    {n:23,t:"فوازير رمضان",f:"برنامج لقاء الإيمان الحلقة الثالثة والعشرون فوازير رمضان‬ تم التحميل من WevFro.mp3",d:"9:28"},
+    {n:24,t:"التعارف قبل الزواج",f:"برنامج لقاء الإيمان الحلقة الرابعة والعشرون التعارف قبل الزواج تم التحميل من WevFro.mp3",d:"6:14"},
+    {n:25,t:"العلاج بالحرام",f:"برنامج لقاء الإيمان الحلقة الخامسة والعشرون العلاج بالحرام تم التحميل من WevFro.mp3",d:"8:28"},
+    {n:26,t:"ضرب الزوجة",f:"برنامج لقاء الإيمان الحلقة السادسة والعشرون ضرب الزوجة‬ تم التحميل من WevFro.mp3",d:"9:17"},
+    {n:27,t:"طول العمر",f:"برنامج لقاء الإيمان الحلقة السابعة والعشرون طول العمر تم التحميل من WevFro.mp3",d:"8:23"},
+    {n:28,t:"أولياء الله",f:"برنامج لقاء الإيمان الحلقة الثامنة والعشرون أولياء الله تم التحميل من WevFro.mp3",d:"8:05"},
+    {n:29,t:"الزواج العرفي",f:"برنامج لقاء الإيمان الحلقة التاسعة والعشرون الزواج العرفي‬ تم التحميل من WevFro.mp3",d:"8:04"}
+  ] },
+  khawatir: { id: "Islamic_Tape-248_uP_bY_mUSLEm",    label: "خواطر إيمانية", tracks: [
+    {n:1,t:"الحساب",f:"accountability.mp3",d:"9:18"},
+    {n:2,t:"الحرابة  الردة  القذف",f:"agression.mp3",d:"12:26"},
+    {n:3,t:"البغى - الدية",f:"baghi.mp3",d:"12:39"},
+    {n:4,t:"النهى عن البدع  الحداد  النياح على الميت",f:"bid3a.mp3",d:"8:56"},
+    {n:5,t:"التعاون على البر و التقوى",f:"cooperation.mp3",d:"11:43"},
+    {n:6,t:"عيد الفطر",f:"eidfitr.mp3",d:"5:59"},
+    {n:7,t:"الهداية و الضلال - زيارة القبور - عذاب القبر",f:"guidance.mp3",d:"11:18"},
+    {n:8,t:"السعادة و الشقاء - عيد الفطر",f:"happiness.mp3",d:"15:15"},
+    {n:9,t:"الوجود",f:"khwaterwujud.mp3",d:"10:38"},
+    {n:10,t:"العلم والمعرفة",f:"knowledge.mp3",d:"9:09"},
+    {n:11,t:"الزواج",f:"marriage.mp3",d:"12:12"},
+    {n:12,t:"الإيمان بالرسل - ليلة القدر",f:"messengers.mp3",d:"11:28"},
+    {n:13,t:"الاقتصاد في العبادة  طه  اليوم الاخر",f:"moderationinworship.mp3",d:"11:35"},
+    {n:14,t:"الصبر و الصيام",f:"patience.mp3",d:"15:48"},
+    {n:15,t:"الوعد - التعاون على البر والتقوى - جنتان",f:"promise.mp3",d:"12:12"},
+    {n:16,t:"دليل الايمان - وتربية اليتيم",f:"proofoffaith.mp3",d:"8:26"},
+    {n:17,t:"الخصومة  وعمرة رمضان",f:"quarel.mp3",d:"11:52"},
+    {n:18,t:"التوبة  وتشييع الفاحشة",f:"repentance.mp3",d:"12:20"},
+    {n:19,t:"الوحي",f:"revelation.mp3",d:"12:36"},
+    {n:20,t:"مجاهدة النفس",f:"selfstruggle.mp3",d:"11:10"},
+    {n:21,t:"الزهد - وفدينه بذبح عظيم",f:"sincerety.mp3",d:"11:53"},
+    {n:22,t:"اتباع السنة - وماينطق عن الهوى  الشفاعة",f:"sunna.mp3",d:"15:18"},
+    {n:23,t:"التكليف  وبالولدين أحسانا",f:"takleef.mp3",d:"12:59"},
+    {n:24,t:"التوحيد  النفخة الاولى",f:"tawheed.mp3",d:"13:41"},
+    {n:25,t:"الأمانة - عقوبة السارق",f:"trust.mp3",d:"12:10"}
+  ] }
+};
+let curSec = 'liqaa', curIdx = -1;
+const audio = document.getElementById('audio');
+const listEl = document.getElementById('list');
+
+function url(sec, f){ return 'https://archive.org/download/' + DATA[sec].id + '/' + encodeURIComponent(f); }
+
+function render(){
+  const q = document.getElementById('search').value.trim();
+  const tracks = DATA[curSec].tracks;
+  listEl.innerHTML = '';
+  let shown = 0;
+  tracks.forEach((tr, i) => {
+    if (q && tr.t.indexOf(q) === -1) return;
+    shown++;
+    const div = document.createElement('div');
+    div.className = 'ep' + (i === curIdx ? ' playing' : '');
+    div.innerHTML = '<div class="num">' + tr.n + '</div><div class="tt">' + tr.t +
+      '</div><div class="eq"><span></span><span></span><span></span></div><div class="du">' + tr.d + '</div>';
+    div.onclick = () => play(i, true);
+    listEl.appendChild(div);
+  });
+  document.getElementById('empty').style.display = shown ? 'none' : 'block';
+}
+
+function showSec(sec){
+  curSec = sec; curIdx = -1;
+  document.getElementById('btn-liqaa').classList.toggle('active', sec === 'liqaa');
+  document.getElementById('btn-khawatir').classList.toggle('active', sec === 'khawatir');
+  render();
+}
+
+function play(i, start){
+  curIdx = i;
+  const tr = DATA[curSec].tracks[i];
+  audio.src = url(curSec, tr.f);
+  document.getElementById('ptitle').textContent = '🎧 ' + DATA[curSec].label + ' — الحلقة ' + tr.n + ': ' + tr.t;
+  if (start) audio.play();
+  render();
+}
+
+const playBtn = document.getElementById('play');
+playBtn.onclick = () => {
+  if (curIdx === -1) { play(0, true); return; }
+  if (audio.paused) audio.play(); else audio.pause();
+};
+audio.onplay  = () => playBtn.textContent = '⏸';
+audio.onpause = () => playBtn.textContent = '▶';
+audio.onended = () => { if (curIdx < DATA[curSec].tracks.length - 1) play(curIdx + 1, true); };
+document.getElementById('next').onclick = () => { if (curIdx < DATA[curSec].tracks.length - 1) play(curIdx + 1, true); };
+document.getElementById('prev').onclick = () => { if (curIdx > 0) play(curIdx - 1, true); };
+
+const seek = document.getElementById('seek'), timeEl = document.getElementById('time');
+function fm(s){ if(!isFinite(s)) s = 0; s = Math.floor(s); return Math.floor(s/60) + ':' + ('0' + (s%60)).slice(-2); }
+audio.ontimeupdate = () => {
+  if (audio.duration) seek.value = Math.floor(audio.currentTime / audio.duration * 1000);
+  timeEl.textContent = fm(audio.currentTime) + ' / ' + fm(audio.duration);
+};
+seek.oninput = () => { if (audio.duration) audio.currentTime = seek.value / 1000 * audio.duration; };
+const vol = document.getElementById('vol');
+audio.volume = 0.9;
+vol.oninput = () => audio.volume = vol.value / 100;
+document.getElementById('search').oninput = render;
+render();
+</script>
+</body>
+</html>
