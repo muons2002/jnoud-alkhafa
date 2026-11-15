@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="dark" />
 <link rel="icon" href="data:," />
-<title>رادار المباريات - جنود الخفاء</title>
+<title>جدول مباريات جنود الخفاء</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
@@ -303,7 +303,7 @@
           <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="#e8c766" stroke-width="2.5" opacity=".45"/><circle cx="24" cy="24" r="12.5" stroke="#e8c766" stroke-width="2.5" opacity=".7"/><path d="M24 24 L38 10" stroke="#e8c766" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="24" r="3.4" fill="#e8c766"/><circle cx="31" cy="29" r="2.6" fill="#37d67a"/><circle cx="17" cy="15" r="2.2" fill="#fff" opacity=".85"/></svg>
         </div>
         <div>
-          <h1>رادار <span class="gold">المباريات</span></h1>
+          <h1>جدول مباريات <span class="gold">جنود الخفاء</span></h1>
           <p class="tagline"><b>جنود الخفاء</b> — مواعيد المباريات · القنوات الناقلة · ترددات الشيرنج</p>
         </div>
       </div>
@@ -397,7 +397,7 @@
 
 <script>
 /* =====================================================================
-   رادار المباريات — جنود الخفاء · تغذية حية من ESPN
+   جدول مباريات جنود الخفاء · تغذية حية من ESPN
    ---------------------------------------------------------------------
    المباريات تُجلب تلقائياً من واجهة ESPN العامة للنتائج
    (scoreboard لكل بطولة + باراميتر dates=YYYYMMDD) — لا توجد أي
@@ -854,7 +854,7 @@ function checkReminders() {
     if (diff <= 15 * 60 * 1000 && diff > -5 * 60 * 1000) {
       r.fired = true; changed = true;
       beep(4);
-      notify("رادار المباريات — جنود الخفاء",
+      notify("جدول مباريات جنود الخفاء",
         "مباراة " + r.home + " × " + r.away + " تبدأ " + (diff > 0 ? "بعد أقل من 15 دقيقة" : "الآن"));
       toast("تنبيه: " + r.home + " × " + r.away + " قربت تبدأ!");
     }
@@ -901,7 +901,7 @@ function render() {
     grid.innerHTML = "";
     emptyState.hidden = false;
     emptyState.textContent = currentMatches.length === 0
-      ? "لا توجد مباريات في هذا اليوم ضمن البطولات التي يتابعها الرادار — جرّب يوماً آخر من الشريط اللي فوق."
+      ? "لا توجد مباريات في هذا اليوم ضمن البطولات التي يتابعها الجدول — جرّب يوماً آخر من الشريط اللي فوق."
       : "لا توجد مباريات مطابقة لبحثك أو للتصفية المختارة — جرّب اسم فريق آخر أو اختر «الكل».";
     return;
   }
@@ -1018,7 +1018,7 @@ grid.addEventListener("click", e => {
       if ("Notification" in window && Notification.permission === "default") {
         try { Notification.requestPermission(); } catch (err) {}
       }
-      notify("رادار المباريات", "تم تفعيل التذكير: " + m.home + " × " + m.away + " — " + m.time + " بتوقيت القاهرة");
+      notify("جدول مباريات جنود الخفاء", "تم تفعيل التذكير: " + m.home + " × " + m.away + " — " + m.time + " بتوقيت القاهرة");
       toast("تم تفعيل التذكير قبل مباراة " + m.home + " × " + m.away + " — هننبّهك قبلها بـ 15 دقيقة");
     }
     render();
