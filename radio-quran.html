@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>راديو قرآن كريم — جنود الخفاء</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Cairo',sans-serif; background:#12100b; color:#f3e9d2; min-height:100vh;
+         display:flex; flex-direction:column; align-items:center; padding:28px 16px 120px; }
+  .brand { color:#c9a227; font-weight:700; font-size:15px; margin-bottom:10px; }
+  .basmala { font-size:26px; color:#e6c25a; font-weight:800; margin:6px 0 2px; text-align:center; }
+  h1 { font-size:34px; font-weight:900; color:#e6c25a; text-align:center; margin:8px 0 4px; }
+  .sub { color:#b8a888; font-size:15px; text-align:center; margin-bottom:26px; }
+  .card { width:100%; max-width:520px; background:linear-gradient(160deg,#1d1810,#171208);
+          border:1px solid #4a3a14; border-radius:20px; padding:30px 22px; text-align:center;
+          box-shadow:0 10px 30px rgba(0,0,0,.45); }
+  .disc { width:110px; height:110px; margin:0 auto 16px; border-radius:50%;
+          background:radial-gradient(circle at 35% 30%, #f9d976, #c9a227 60%, #8d6e00);
+          display:flex; align-items:center; justify-content:center; font-size:52px;
+          box-shadow:0 0 0 6px rgba(201,162,39,.15), 0 8px 20px rgba(0,0,0,.5); }
+  .st-name { font-size:22px; font-weight:800; color:#fff; }
+  .st-note { color:#b8a888; font-size:14px; margin-top:4px; }
+  .live-dot { display:inline-block; width:9px; height:9px; border-radius:50%; background:#e53935;
+              margin-inline-start:6px; animation:blink 1.2s infinite; vertical-align:middle; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+  #playBtn { margin:24px auto 6px; width:84px; height:84px; border-radius:50%; border:none; cursor:pointer;
+             background:radial-gradient(circle at 35% 30%, #f9d976, #c9a227 65%, #a07d10);
+             color:#231a02; font-size:36px; display:flex; align-items:center; justify-content:center;
+             box-shadow:0 8px 22px rgba(0,0,0,.55); transition:transform .15s; }
+  #playBtn:active { transform:scale(.94); }
+  #status { min-height:24px; font-size:15px; color:#e6c25a; font-weight:700; margin-top:8px; }
+  .vol { display:flex; align-items:center; gap:10px; justify-content:center; margin-top:16px; color:#b8a888; }
+  input[type=range] { width:180px; accent-color:#c9a227; }
+  .foot { margin-top:30px; text-align:center; color:#8a7c5c; font-size:13px; line-height:2; }
+  .foot a { color:#c9a227; text-decoration:none; font-weight:700; }
+</style>
+</head>
+<body>
+  <div class="brand">🛡️ جنود الخفاء — حب الخير للغير</div>
+  <div class="basmala">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+  <h1>راديو قرآن كريم</h1>
+  <div class="sub">صفحة خاصة بإذاعة القرآن الكريم — بعيداً عن محطات الأغاني</div>
+
+  <div class="card">
+    <div class="disc">📻</div>
+    <div class="st-name">إذاعة القرآن الكريم من القاهرة<span class="live-dot"></span></div>
+    <div class="st-note">تلاوات على مدار الساعة — بث مباشر</div>
+    <button id="playBtn" aria-label="تشغيل">▶</button>
+    <div id="status">اضغط زر التشغيل للاستماع</div>
+    <div class="vol">🔊 <input type="range" id="vol" min="0" max="100" value="90"></div>
+  </div>
+
+  <div class="foot">
+    كل مشاريع جنود الخفاء في صفحة واحدة<br>
+    <a href="https://heylink.me/InvisibleSoldiers">heylink.me/InvisibleSoldiers</a>
+  </div>
+
+  <audio id="au" preload="none" src="https://radio.xecod.com/station/quran-cairo"></audio>
+<script>
+  var au = document.getElementById('au');
+  var btn = document.getElementById('playBtn');
+  var status = document.getElementById('status');
+  var vol = document.getElementById('vol');
+  au.volume = vol.value / 100;
+  vol.addEventListener('input', function(){ au.volume = vol.value / 100; });
+  btn.addEventListener('click', function(){
+    if (au.paused) { au.play(); } else { au.pause(); }
+  });
+  au.addEventListener('playing', function(){ btn.textContent = '⏸'; status.textContent = 'يبث الآن — إذاعة القرآن الكريم من القاهرة'; });
+  au.addEventListener('pause', function(){ btn.textContent = '▶'; status.textContent = 'متوقف مؤقتاً'; });
+  au.addEventListener('waiting', function(){ status.textContent = 'جاري التحميل...'; });
+  au.addEventListener('error', function(){ btn.textContent = '▶'; status.textContent = 'حدثت مشكلة في البث — اضغط التشغيل للمحاولة مرة أخرى'; });
+</script>
+</body>
+</html>

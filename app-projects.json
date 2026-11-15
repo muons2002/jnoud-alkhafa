@@ -160,6 +160,16 @@
   "file": "shaarawy.html"
  },
  {
+  "key": "quranradio",
+  "title": "راديو قرآن كريم",
+  "emoji": "📻",
+  "category": "religion",
+  "color1": "#1E5631",
+  "color2": "#2E7D32",
+  "url": "https://muons2002.github.io/radio-station/radio-quran.html",
+  "file": "radio-quran.html"
+ },
+ {
   "key": "alf-leila",
   "title": "ألف ليلة وليلة",
   "emoji": "🌙",
