@@ -142,7 +142,7 @@
    no CSS variables, no arrow functions / template literals.
    Data: live manifest (same as the apps) -> localStorage cache -> baked-in.
    ============================================================ */
-var MANIFEST_URL = 'https://muons2002.github.io/radio-station/app-projects-v3.json';
+var MANIFEST_URL = 'https://muons2002.github.io/radio-station/app-projects-tvweb.json';
 var ALADHAN_URL  = 'https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5';
 
 var CATS = [
@@ -152,18 +152,14 @@ var CATS = [
   { id:'tools',    name:'الأدوات',          emoji:'🧰', c1:'#283593', c2:'#5C6BC0' }
 ];
 
-var SPORTSLIVE = { key:'sportslive', title:'قنوات رياضية مباشر', emoji:'📺', category:'sport',
-                   color1:'#E65100', color2:'#FF9100',
-                   url:'https://muons2002.github.io/radio-station/sports-live.html' };
-
-/* Baked-in fallback: mirrors the apps' 19-project registry (manifest order,
-   sportslive right after radar). Used only if live fetch AND cache both fail. */
+/* Baked-in fallback: the web hub's own 18-project registry (no streaming —
+   live channels stay inside the apps only, by the owner's decision).
+   Used only if live fetch AND cache both fail. */
 var BAKED = [
   { key:'codes',       title:'بوابة جنود الخفاء التقنية',        emoji:'💻', category:'tech',     color1:'#1E3C72', color2:'#2A5298', url:'https://muons2002.github.io/radio-station/jnoud-codes.html' },
   { key:'player',      title:'مشغل جنود الخفاء العام',           emoji:'▶️', category:'tech',     color1:'#8E2DE2', color2:'#4A00E0', url:'https://muons2002.github.io/radio-station/jnoud-player.html' },
   { key:'heritage',    title:'كنوز التراث المصري الأصيل',        emoji:'🏺', category:'audio',    color1:'#8A5A00', color2:'#C9962E', url:'https://muons2002.github.io/radio-station/konouz-elturath.html' },
   { key:'radar',       title:'جدول مباريات جنود الخفاء',         emoji:'📡', category:'sport',    color1:'#00695C', color2:'#26A69A', url:'https://muons2002.github.io/radio-station/matches-radar.html' },
-  { key:'sportslive',  title:'قنوات رياضية مباشر',               emoji:'📺', category:'sport',    color1:'#E65100', color2:'#FF9100', url:'https://muons2002.github.io/radio-station/sports-live.html' },
   { key:'checker',     title:'فاحص وفلترة ملفات القنوات',       emoji:'🧪', category:'tech',     color1:'#4527A0', color2:'#7E57C2', url:'https://muons2002.github.io/radio-station/m3u-checker.html' },
   { key:'studio',      title:'استوديو قوائم البث',               emoji:'🎬', category:'tech',     color1:'#AD1457', color2:'#EC407A', url:'https://muons2002.github.io/radio-station/playlist-studio.html' },
   { key:'gold',        title:'أسعار الذهب في مصر',               emoji:'🪙', category:'tech',     color1:'#9C7A00', color2:'#D4A017', url:'https://muons2002.github.io/radio-station/gold-prices.html' },
@@ -239,18 +235,13 @@ function categoryOf(p){
   return null;                                       /* unknown: skip entry */
 }
 function normalize(list){
-  var out = [], i, hasLive = false;
+  var out = [], i;
   if (!list) return out;
   for (i = 0; i < list.length; i++){
     var p = list[i];
     if (!p || !p.key || !p.title || !p.url) continue;
+    if (p.key === 'sportslive') continue;   /* streaming stays inside the apps only */
     out.push(p);
-    if (p.key === 'sportslive') hasLive = true;
-  }
-  if (!hasLive){
-    var idx = -1;
-    for (i = 0; i < out.length; i++) if (out[i].key === 'radar') idx = i;
-    if (idx >= 0) out.splice(idx + 1, 0, SPORTSLIVE); else out.push(SPORTSLIVE);
   }
   return out;
 }
@@ -273,12 +264,12 @@ function loadManifest(){
   xhrGet(MANIFEST_URL, function(txt){
     var parsed = null;
     try { parsed = JSON.parse(txt); } catch(e){}
-    if (parsed && parsed.length){ lsSet('tvhub_manifest', txt); applyData(parsed); }
+    if (parsed && parsed.length){ lsSet('tvhub_manifest_tvweb', txt); applyData(parsed); }
     else manifestFallback();
   }, manifestFallback);
 }
 function manifestFallback(){
-  var cached = lsGet('tvhub_manifest'), parsed = null;
+  var cached = lsGet('tvhub_manifest_tvweb'), parsed = null;
   if (cached){ try { parsed = JSON.parse(cached); } catch(e){} }
   if (parsed && parsed.length) applyData(parsed);
   /* else: keep the baked-in render already on screen */
