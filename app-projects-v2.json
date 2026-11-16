@@ -1,5 +1,15 @@
 [
  {
+  "key": "appupdate",
+  "title": "تحديث جديد: شيلنا كود الدخول",
+  "emoji": "🔄",
+  "category": "tech",
+  "color1": "#0D7A99",
+  "color2": "#2FB9D8",
+  "url": "https://muons2002.github.io/radio-station/app-update.html",
+  "file": "app-update.html"
+ },
+ {
   "key": "codes",
   "title": "بوابة جنود الخفاء التقنية",
   "emoji": "💻",

@@ -136,7 +136,7 @@
   <div class="view" id="view-evening">
     <div class="azkar-head">
       <h2>🌙 أذكار المساء</h2>
-      <button class="btn btn-dark" style="flex:none;padding:8px 14px" onclick="resetAzkar('evening')">🔄 إعادة الكل</button>
+      <button class="btn btn-dark" style="flex:none;padding:8px 14px" onclick="resetAzkar('evening'); notifyEveningAzkar();">🔄 إعادة الكل</button>
     </div>
     <div id="list-evening"></div>
   </div>
@@ -288,6 +288,13 @@ function notifyMorningAzkar() {
   } catch (e) {}
 }
 
+/* تنبيه مرئي على الموبايل عند بدء أذكار المساء (داخل التطبيق فقط) */
+function notifyEveningAzkar() {
+  try {
+    if (window.JnoudAzkar && JnoudAzkar.azkarStarted) JnoudAzkar.azkarStarted("evening");
+  } catch (e) {}
+}
+
 /* التبويبات */
 document.querySelectorAll(".tab").forEach(tab => {
   tab.addEventListener("click", () => {
@@ -297,6 +304,7 @@ document.querySelectorAll(".tab").forEach(tab => {
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + tab.dataset.view).classList.add("active");
     if (tab.dataset.view === "morning" && !wasActive) notifyMorningAzkar();
+    if (tab.dataset.view === "evening" && !wasActive) notifyEveningAzkar();
   });
 });
 
