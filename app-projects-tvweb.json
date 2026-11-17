@@ -110,6 +110,16 @@
     "file": "radio-jnoud.html"
   },
   {
+    "key": "aghani",
+    "title": "أغاني الزمن الجميل",
+    "emoji": "🎵",
+    "category": "audio",
+    "color1": "#AD1457",
+    "color2": "#EC407A",
+    "url": "https://muons2002.github.io/radio-station/aghani-zaman.html",
+    "file": "aghani-zaman.html"
+  },
+  {
     "key": "hikayat",
     "title": "حكايات عبد العزيز العروي",
     "emoji": "🪔",
