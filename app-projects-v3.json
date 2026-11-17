@@ -150,6 +150,16 @@
     "file": "hikayat-elaroui.html"
   },
   {
+    "key": "oldradio",
+    "title": "البرامج الإذاعية القديمة",
+    "emoji": "📻",
+    "category": "audio",
+    "color1": "#5D4037",
+    "color2": "#8D6E63",
+    "url": "https://muons2002.github.io/radio-station/old-radio.html",
+    "file": "old-radio.html"
+  },
+  {
     "key": "quran",
     "title": "القرآن الكريم",
     "emoji": "📖",
