@@ -381,8 +381,12 @@
           document.getElementById("hijri-date").textContent =
             h.day + " " + h.month.ar + " " + h.year + " هـ";
           var g = data.date.gregorian;
+          var GDAYS = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+          var GMONTHS = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+          var gNum = (g.month && g.month.number) ? g.month.number : 0;
+          var gWd = wallDate(parseInt(g.year, 10), gNum, parseInt(g.day, 10), 12, 0).getDay();
           document.getElementById("greg-date").textContent =
-            g.weekday.ar + " " + g.day + " " + g.month.ar + " " + g.year + " م";
+            GDAYS[gWd] + " " + g.day + " " + GMONTHS[gNum - 1] + " " + g.year + " م";
           document.getElementById("loading").style.display = "none";
           document.getElementById("error-box").style.display = "none";
           renderList();
