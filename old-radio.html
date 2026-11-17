@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>البرامج الإذاعية القديمة — جنود الخفاء</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { font-family:'Segoe UI', Tahoma, Arial, sans-serif; color:#eef2f7; min-height:100vh; padding-bottom:132px;
+    background:linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%); background-attachment:fixed; }
+  header { border-bottom:2px solid #2FB9D8; padding:26px 16px 20px; text-align:center; }
+  header h1 { font-size:27px; color:#aee6f5; margin-bottom:6px; }
+  header p { color:#aebdd2; font-size:14px; }
+  header .brand { margin-top:10px; color:#7fd4ea; font-size:13px; }
+  .wrap { max-width:860px; margin:0 auto; padding:16px 12px; }
+  .sections { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+  .sec-btn { border:2px solid #1d3a56; background:rgba(13,32,56,.85); border-radius:14px; padding:14px 10px; cursor:pointer; text-align:center; color:#eef2f7; transition:.15s; font-family:inherit; }
+  .sec-btn .ico { font-size:30px; display:block; margin-bottom:6px; }
+  .sec-btn .nm { font-size:17px; font-weight:700; display:block; }
+  .sec-btn .ct { font-size:12.5px; color:#9fb2cc; display:block; margin-top:3px; }
+  .sec-btn.active { border-color:#2FB9D8; background:linear-gradient(160deg,#10314e,#0d2b45); box-shadow:0 0 0 1px #2FB9D8 inset; }
+  .sec-btn.soon { opacity:.8; cursor:default; grid-column:1 / -1; }
+  .sec-btn.soon .ct { color:#f3d97b; }
+  .search { width:100%; padding:12px 14px; border-radius:12px; border:1.5px solid #1d3a56; background:rgba(10,24,44,.9); color:#fff; font-size:15.5px; margin-bottom:12px; font-family:inherit; }
+  .search:focus { outline:none; border-color:#2FB9D8; }
+  .ep { display:flex; align-items:center; gap:11px; background:rgba(13,32,56,.85); border:1.5px solid #1d3a56; border-radius:12px; padding:11px 13px; margin-bottom:8px; cursor:pointer; transition:.12s; }
+  .ep:hover { border-color:#2FB9D8; }
+  .ep .num { flex:0 0 38px; height:38px; border-radius:50%; background:linear-gradient(145deg,#2FB9D8,#15748f); color:#06222f; font-weight:800; font-size:15px; display:flex; align-items:center; justify-content:center; }
+  .ep .tt { flex:1; font-size:15.5px; line-height:1.5; }
+  .ep .du { color:#8fa5c4; font-size:12.5px; white-space:nowrap; }
+  .ep.playing { border-color:#2FB9D8; background:#10314e; }
+  .eq { display:none; gap:2.5px; align-items:flex-end; height:16px; }
+  .ep.playing .eq { display:flex; }
+  .eq span { width:3.5px; background:#7fd4ea; border-radius:2px; animation:eq 0.9s ease-in-out infinite; }
+  .eq span:nth-child(2){ animation-delay:.25s } .eq span:nth-child(3){ animation-delay:.5s }
+  @keyframes eq { 0%,100%{height:5px} 50%{height:16px} }
+  .empty { text-align:center; color:#8fa5c4; padding:26px 0; font-size:15px; }
+  footer { text-align:center; color:#66788f; font-size:12.5px; padding:14px 10px 4px; }
+  .player { position:fixed; bottom:0; right:0; left:0; background:rgba(6,17,32,.97); border-top:2px solid #2FB9D8; padding:10px 14px 12px; z-index:50; }
+  .player .ttl { font-size:14.5px; color:#aee6f5; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:8px; text-align:center; }
+  .player .row { display:flex; align-items:center; gap:10px; max-width:860px; margin:0 auto; }
+  .pbtn { flex:0 0 auto; width:44px; height:44px; border-radius:50%; border:none; cursor:pointer; font-size:18px; background:#10314e; color:#eef2f7; font-family:inherit; }
+  .pbtn.main { width:54px; height:54px; font-size:23px; background:linear-gradient(145deg,#2FB9D8,#15748f); color:#06222f; }
+  .seek { flex:1; accent-color:#2FB9D8; height:6px; cursor:pointer; }
+  .tm { font-size:12px; color:#9fb2cc; white-space:nowrap; min-width:78px; text-align:center; }
+  .vol { width:74px; accent-color:#2FB9D8; cursor:pointer; }
+  @media (max-width:560px){ .vol{display:none} header h1{font-size:23px} .ep .tt{font-size:14.5px} }
+</style>
+</head>
+<body>
+<header>
+  <h1>📻 البرامج الإذاعية القديمة</h1>
+  <p>برامج أطفال الزمن الجميل من الإذاعة المصرية — «غنوة وحدوتة» بصوت أبلة فضيلة</p>
+  <div class="brand">🛡️ جنود الخفاء — حب الخير للغير</div>
+</header>
+
+<div class="wrap">
+  <div class="sections">
+    <button class="sec-btn active" id="btn-fadila" onclick="showSec('fadila')">
+      <span class="ico">🎶</span><span class="nm">أبلة فضيلة</span><span class="ct">غنوة وحدوتة — 70 حلقة كاملة + المقدمة وتتر النهاية</span>
+    </button>
+    <button class="sec-btn" id="btn-extra" onclick="showSec('extra')">
+      <span class="ico">📅</span><span class="nm">حلقات 2025</span><span class="ct">من إعادة إذاعة «غنوة وحدوتة» — 7 حلقات</span>
+    </button>
+    <div class="sec-btn soon">
+      <span class="ico">🌸</span><span class="nm">ماما نجوى وبقلظ</span><span class="ct">قريباً — بنجمع حلقاتها ونضيفها هنا أول ما تجهز</span>
+    </div>
+  </div>
+
+  <input class="search" id="search" type="text" placeholder="🔍 ابحث عن حلقة… (مثال: التاجر، الأرنب، الملك)">
+  <div id="list"></div>
+  <div class="empty" id="empty" style="display:none">لا توجد حلقات مطابقة لبحثك</div>
+</div>
+
+<footer>أرشيف جنود الخفاء الصوتي — رحم الله أبلة فضيلة (فضيلة توفيق) وجزاها عن أطفالنا خيراً<br>المصدر: أرشيف الإنترنت archive.org</footer>
+
+<div class="player">
+  <div class="ttl" id="ptitle">اختر حلقة للبدء 🎧</div>
+  <div class="row">
+    <button class="pbtn" id="prev" title="السابق">⏮</button>
+    <button class="pbtn main" id="play">▶</button>
+    <button class="pbtn" id="next" title="التالي">⏭</button>
+    <input class="seek" id="seek" type="range" min="0" max="100" value="0">
+    <div class="tm" id="time">0:00 / 0:00</div>
+    <input class="vol" id="vol" type="range" min="0" max="100" value="100">
+  </div>
+</div>
+
+<audio id="audio" preload="metadata"></audio>
+
+<script>
+var DATA = {"fadila": [{"t": "المقدمة الغنائية - يا ولاد يا ولاد", "u": "https://archive.org/download/26_20210130/01-%20%D8%A7%D9%84%D9%85%D9%82%D8%AF%D9%85%D8%A9%20%D8%A7%D9%84%D8%BA%D9%86%D8%A7%D8%A6%D9%8A%D8%A9%20-%20%D9%8A%D8%A7%20%D9%88%D9%84%D8%A7%D8%AF%20%D9%8A%D8%A7%20%D9%88%D9%84%D8%A7%D8%AF.mp3", "d": "1:19"}, {"t": "التاجر وعجوز المدينة", "u": "https://archive.org/download/26_20210130/02-%20%D8%A7%D9%84%D8%AA%D8%A7%D8%AC%D8%B1%20%D9%88%D8%B9%D8%AC%D9%88%D8%B2%20%D8%A7%D9%84%D9%85%D8%AF%D9%8A%D9%86%D8%A9.mp3", "d": "8:45"}, {"t": "الحب بين الإخوات", "u": "https://archive.org/download/26_20210130/03-%20%D8%A7%D9%84%D8%AD%D8%A8%20%D8%A8%D9%8A%D9%86%20%D8%A7%D9%84%D8%A5%D8%AE%D9%88%D8%A7%D8%AA.mp3", "d": "9:34"}, {"t": "الأميرة والبرد", "u": "https://archive.org/download/26_20210130/04-%20%D8%A7%D9%84%D8%A3%D9%85%D9%8A%D8%B1%D8%A9%20%D9%88%D8%A7%D9%84%D8%A8%D8%B1%D8%AF.mp3", "d": "9:09"}, {"t": "الحطاب الفقير", "u": "https://archive.org/download/26_20210130/05-%20%D8%A7%D9%84%D8%AD%D8%B7%D8%A7%D8%A8%20%D8%A7%D9%84%D9%81%D9%82%D9%8A%D8%B1.mp3", "d": "6:12"}, {"t": "الكلب الصغير", "u": "https://archive.org/download/26_20210130/06-%20%D8%A7%D9%84%D9%83%D9%84%D8%A8%20%D8%A7%D9%84%D8%B5%D8%BA%D9%8A%D8%B1.mp3", "d": "9:18"}, {"t": "البنت الصغيرة والحروف", "u": "https://archive.org/download/26_20210130/07-%20%D8%A7%D9%84%D8%A8%D9%86%D8%AA%20%D8%A7%D9%84%D8%B5%D8%BA%D9%8A%D8%B1%D8%A9%20%D9%88%D8%A7%D9%84%D8%AD%D8%B1%D9%88%D9%81.mp3", "d": "10:11"}, {"t": "حسن وكوباية اللبن", "u": "https://archive.org/download/26_20210130/08-%20%D8%AD%D8%B3%D9%86%20%D9%88%D9%83%D9%88%D8%A8%D8%A7%D9%8A%D8%A9%20%D8%A7%D9%84%D9%84%D8%A8%D9%86.mp3", "d": "9:56"}, {"t": "الولد الصغير والغراب", "u": "https://archive.org/download/26_20210130/09-%20%D8%A7%D9%84%D9%88%D9%84%D8%AF%20%D8%A7%D9%84%D8%B5%D8%BA%D9%8A%D8%B1%20%D9%88%D8%A7%D9%84%D8%BA%D8%B1%D8%A7%D8%A8.mp3", "d": "9:32"}, {"t": "العصفورة الفتانة", "u": "https://archive.org/download/26_20210130/10-%20%D8%A7%D9%84%D8%B9%D8%B5%D9%81%D9%88%D8%B1%D8%A9%20%D8%A7%D9%84%D9%81%D8%AA%D8%A7%D9%86%D8%A9.mp3", "d": "9:46"}, {"t": "التاجر والشحات", "u": "https://archive.org/download/26_20210130/11-%20%D8%A7%D9%84%D8%AA%D8%A7%D8%AC%D8%B1%20%D9%88%D8%A7%D9%84%D8%B4%D8%AD%D8%A7%D8%AA.mp3", "d": "9:25"}, {"t": "العقل والتفكير", "u": "https://archive.org/download/26_20210130/12-%20%D8%A7%D9%84%D8%B9%D9%82%D9%84%20%D9%88%D8%A7%D9%84%D8%AA%D9%81%D9%83%D9%8A%D8%B1.mp3", "d": "9:23"}, {"t": "الأرنب والحمار", "u": "https://archive.org/download/26_20210130/13-%20%D8%A7%D9%84%D8%A3%D8%B1%D9%86%D8%A8%20%D9%88%D8%A7%D9%84%D8%AD%D9%85%D8%A7%D8%B1.mp3", "d": "7:05"}, {"t": "اتنين من الشبان", "u": "https://archive.org/download/26_20210130/14-%20%D8%A7%D8%AA%D9%86%D9%8A%D9%86%20%D9%85%D9%86%20%D8%A7%D9%84%D8%B4%D8%A8%D8%A7%D9%86.mp3", "d": "8:40"}, {"t": "الفيل وشجرة الموز", "u": "https://archive.org/download/26_20210130/15-%20%D8%A7%D9%84%D9%81%D9%8A%D9%84%20%D9%88%D8%B4%D8%AC%D8%B1%D8%A9%20%D8%A7%D9%84%D9%85%D9%88%D8%B2.mp3", "d": "9:48"}, {"t": "الصديقتان", "u": "https://archive.org/download/26_20210130/16-%20%D8%A7%D9%84%D8%B5%D8%AF%D9%8A%D9%82%D8%AA%D8%A7%D9%86.mp3", "d": "7:38"}, {"t": "التاجر والرجل الغني", "u": "https://archive.org/download/26_20210130/17-%20%D8%A7%D9%84%D8%AA%D8%A7%D8%AC%D8%B1%20%D9%88%D8%A7%D9%84%D8%B1%D8%AC%D9%84%20%D8%A7%D9%84%D8%BA%D9%86%D9%8A.mp3", "d": "8:52"}, {"t": "الفار والساعة", "u": "https://archive.org/download/26_20210130/18-%20%D8%A7%D9%84%D9%81%D8%A7%D8%B1%20%D9%88%D8%A7%D9%84%D8%B3%D8%A7%D8%B9%D8%A9.mp3", "d": "7:54"}, {"t": "الفرخة الشقية", "u": "https://archive.org/download/26_20210130/19-%20%D8%A7%D9%84%D9%81%D8%B1%D8%AE%D8%A9%20%D8%A7%D9%84%D8%B4%D9%82%D9%8A%D8%A9.mp3", "d": "7:50"}, {"t": "تاجر حرير المدينة", "u": "https://archive.org/download/26_20210130/20-%20%D8%AA%D8%A7%D8%AC%D8%B1%20%D8%AD%D8%B1%D9%8A%D8%B1%20%D8%A7%D9%84%D9%85%D8%AF%D9%8A%D9%86%D8%A9.mp3", "d": "9:43"}, {"t": "يالا نسمع كلام ماما", "u": "https://archive.org/download/26_20210130/21-%20%D9%8A%D8%A7%D9%84%D8%A7%20%D9%86%D8%B3%D9%85%D8%B9%20%D9%83%D9%84%D8%A7%D9%85%20%D9%85%D8%A7%D9%85%D8%A7.mp3", "d": "8:48"}, {"t": "مولد محمد رسول الله", "u": "https://archive.org/download/26_20210130/22-%20%D9%85%D9%88%D9%84%D8%AF%20%D9%85%D8%AD%D9%85%D8%AF%20%D8%B1%D8%B3%D9%88%D9%84%20%D8%A7%D9%84%D9%84%D9%87.mp3", "d": "8:36"}, {"t": "حب الوطن", "u": "https://archive.org/download/26_20210130/23-%20%D8%AD%D8%A8%20%D8%A7%D9%84%D9%88%D8%B7%D9%86.mp3", "d": "9:00"}, {"t": "أشطر التجار", "u": "https://archive.org/download/26_20210130/24-%20%D8%A3%D8%B4%D8%B7%D8%B1%20%D8%A7%D9%84%D8%AA%D8%AC%D8%A7%D8%B1.mp3", "d": "8:18"}, {"t": "أمنية الأمير", "u": "https://archive.org/download/26_20210130/25-%20%D8%A3%D9%85%D9%86%D9%8A%D8%A9%20%D8%A7%D9%84%D8%A3%D9%85%D9%8A%D8%B1.mp3", "d": "7:58"}, {"t": "العقل والمال", "u": "https://archive.org/download/26_20210130/26-%20%D8%A7%D9%84%D8%B9%D9%82%D9%84%20%D9%88%D8%A7%D9%84%D9%85%D8%A7%D9%84.mp3", "d": "10:40"}, {"t": "بياع العسل", "u": "https://archive.org/download/26_20210130/27-%20%D8%A8%D9%8A%D8%A7%D8%B9%20%D8%A7%D9%84%D8%B9%D8%B3%D9%84.mp3", "d": "10:12"}, {"t": "كلب وقطة وفار", "u": "https://archive.org/download/26_20210130/28-%20%D9%83%D9%84%D8%A8%20%D9%88%D9%82%D8%B7%D8%A9%20%D9%88%D9%81%D8%A7%D8%B1.mp3", "d": "9:28"}, {"t": "السلطان والفران", "u": "https://archive.org/download/26_20210130/29-%20%D8%A7%D9%84%D8%B3%D9%84%D8%B7%D8%A7%D9%86%20%D9%88%D8%A7%D9%84%D9%81%D8%B1%D8%A7%D9%86.mp3", "d": "9:00"}, {"t": "الملك وعجوز المدينة", "u": "https://archive.org/download/26_20210130/30-%20%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D9%88%D8%B9%D8%AC%D9%88%D8%B2%20%D8%A7%D9%84%D9%85%D8%AF%D9%8A%D9%86%D8%A9.mp3", "d": "6:05"}, {"t": "القنفد الكداب", "u": "https://archive.org/download/26_20210130/31-%20%D8%A7%D9%84%D9%82%D9%86%D9%81%D8%AF%20%D8%A7%D9%84%D9%83%D8%AF%D8%A7%D8%A8.mp3", "d": "8:22"}, {"t": "ابن الخياط", "u": "https://archive.org/download/26_20210130/32-%20%D8%A7%D8%A8%D9%86%20%D8%A7%D9%84%D8%AE%D9%8A%D8%A7%D8%B7.mp3", "d": "10:04"}, {"t": "الملك والحكيم", "u": "https://archive.org/download/26_20210130/33-%20%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D9%88%D8%A7%D9%84%D8%AD%D9%83%D9%8A%D9%85.mp3", "d": "7:28"}, {"t": "الكلمة الطيبة", "u": "https://archive.org/download/26_20210130/34-%20%D8%A7%D9%84%D9%83%D9%84%D9%85%D8%A9%20%D8%A7%D9%84%D8%B7%D9%8A%D8%A8%D8%A9.mp3", "d": "9:12"}, {"t": "التعاون", "u": "https://archive.org/download/26_20210130/35-%20%D8%A7%D9%84%D8%AA%D8%B9%D8%A7%D9%88%D9%86.mp3", "d": "8:53"}, {"t": "الأب وابنه تاجر التجار", "u": "https://archive.org/download/26_20210130/36-%20%D8%A7%D9%84%D8%A3%D8%A8%20%D9%88%D8%A7%D8%A8%D9%86%D9%87%20%D8%AA%D8%A7%D8%AC%D8%B1%20%D8%A7%D9%84%D8%AA%D8%AC%D8%A7%D8%B1.mp3", "d": "9:00"}, {"t": "الأمير المغرور", "u": "https://archive.org/download/26_20210130/37-%20%D8%A7%D9%84%D8%A3%D9%85%D9%8A%D8%B1%20%D8%A7%D9%84%D9%85%D8%BA%D8%B1%D9%88%D8%B1.mp3", "d": "8:12"}, {"t": "النحلة الذكية والديك", "u": "https://archive.org/download/26_20210130/38-%20%D8%A7%D9%84%D9%86%D8%AD%D9%84%D8%A9%20%D8%A7%D9%84%D8%B0%D9%83%D9%8A%D8%A9%20%D9%88%D8%A7%D9%84%D8%AF%D9%8A%D9%83.mp3", "d": "7:46"}, {"t": "القطة والولد الصغير", "u": "https://archive.org/download/26_20210130/39-%20%D8%A7%D9%84%D9%82%D8%B7%D8%A9%20%D9%88%D8%A7%D9%84%D9%88%D9%84%D8%AF%20%D8%A7%D9%84%D8%B5%D8%BA%D9%8A%D8%B1.mp3", "d": "8:20"}, {"t": "الفيل والكلب", "u": "https://archive.org/download/26_20210130/40-%20%D8%A7%D9%84%D9%81%D9%8A%D9%84%20%D9%88%D8%A7%D9%84%D9%83%D9%84%D8%A8.mp3", "d": "8:28"}, {"t": "يعمل العملة ويقول مش أنا", "u": "https://archive.org/download/26_20210130/41-%20%D9%8A%D8%B9%D9%85%D9%84%20%D8%A7%D9%84%D8%B9%D9%85%D9%84%D8%A9%20%D9%88%D9%8A%D9%82%D9%88%D9%84%20%D9%85%D8%B4%20%D8%A3%D9%86%D8%A7.mp3", "d": "8:32"}, {"t": "المعزة الصغيرة", "u": "https://archive.org/download/26_20210130/42-%20%D8%A7%D9%84%D9%85%D8%B9%D8%B2%D8%A9%20%D8%A7%D9%84%D8%B5%D8%BA%D9%8A%D8%B1%D8%A9.mp3", "d": "7:58"}, {"t": "الكتكوت الفتان", "u": "https://archive.org/download/26_20210130/43-%20%D8%A7%D9%84%D9%83%D8%AA%D9%83%D9%88%D8%AA%20%D8%A7%D9%84%D9%81%D8%AA%D8%A7%D9%86.mp3", "d": "9:04"}, {"t": "الملك وسر السعادة", "u": "https://archive.org/download/26_20210130/44-%20%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D9%88%D8%B3%D8%B1%20%D8%A7%D9%84%D8%B3%D8%B9%D8%A7%D8%AF%D8%A9.mp3", "d": "8:44"}, {"t": "المعزة والبطاطا", "u": "https://archive.org/download/26_20210130/45-%20%D8%A7%D9%84%D9%85%D8%B9%D8%B2%D8%A9%20%D9%88%D8%A7%D9%84%D8%A8%D8%B7%D8%A7%D8%B7%D8%A7.mp3", "d": "9:40"}, {"t": "الغلباوي", "u": "https://archive.org/download/26_20210130/46-%20%D8%A7%D9%84%D8%BA%D9%84%D8%A8%D8%A7%D9%88%D9%8A.mp3", "d": "8:20"}, {"t": "كلب وقطة وفرخة", "u": "https://archive.org/download/26_20210130/47-%20%D9%83%D9%84%D8%A8%20%D9%88%D9%82%D8%B7%D8%A9%20%D9%88%D9%81%D8%B1%D8%AE%D8%A9.mp3", "d": "7:26"}, {"t": "الولد الشقي", "u": "https://archive.org/download/26_20210130/48-%20%D8%A7%D9%84%D9%88%D9%84%D8%AF%20%D8%A7%D9%84%D8%B4%D9%82%D9%8A.mp3", "d": "9:40"}, {"t": "المقص", "u": "https://archive.org/download/26_20210130/49-%20%D8%A7%D9%84%D9%85%D9%82%D8%B5.mp3", "d": "6:05"}, {"t": "عيد الأم", "u": "https://archive.org/download/26_20210130/50-%20%D8%B9%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A3%D9%85.mp3", "d": "10:12"}, {"t": "السلطان والشمعة", "u": "https://archive.org/download/26_20210130/51-%20%D8%A7%D9%84%D8%B3%D9%84%D8%B7%D8%A7%D9%86%20%D9%88%D8%A7%D9%84%D8%B4%D9%85%D8%B9%D8%A9.mp3", "d": "9:48"}, {"t": "شنب القطة", "u": "https://archive.org/download/26_20210130/52-%20%D8%B4%D9%86%D8%A8%20%D8%A7%D9%84%D9%82%D8%B7%D8%A9.mp3", "d": "9:28"}, {"t": "الكلب الصغير والنونوة", "u": "https://archive.org/download/26_20210130/53-%20%D8%A7%D9%84%D9%83%D9%84%D8%A8%20%D8%A7%D9%84%D8%B5%D8%BA%D9%8A%D8%B1%20%D9%88%D8%A7%D9%84%D9%86%D9%88%D9%86%D9%88%D8%A9.mp3", "d": "9:54"}, {"t": "الولد الصغير والكلب الصغير والقطة الصغيرة", "u": "https://archive.org/download/26_20210130/54-%20%D8%A7%D9%84%D9%88%D9%84%D8%AF%20%D8%A7%D9%84%D8%B5%D8%BA%D9%8A%D8%B1%20%D9%88%D8%A7%D9%84%D9%83%D9%84%D8%A8%20%D8%A7%D9%84%D8%B5%D8%BA%D9%8A%D8%B1%20%D9%88%D8%A7%D9%84%D9%82%D8%B7%D8%A9%20%D8%A7%D9%84%D8%B5%D8%BA%D9%8A%D8%B1%D8%A9.mp3", "d": "9:24"}, {"t": "الحظ والتعب", "u": "https://archive.org/download/26_20210130/55-%20%D8%A7%D9%84%D8%AD%D8%B8%20%D9%88%D8%A7%D9%84%D8%AA%D8%B9%D8%A8.mp3", "d": "9:48"}, {"t": "الفار فرفور المغرور", "u": "https://archive.org/download/26_20210130/56-%20%D8%A7%D9%84%D9%81%D8%A7%D8%B1%20%D9%81%D8%B1%D9%81%D9%88%D8%B1%20%D8%A7%D9%84%D9%85%D8%BA%D8%B1%D9%88%D8%B1.mp3", "d": "9:16"}, {"t": "الست عقلة الصباع", "u": "https://archive.org/download/26_20210130/57-%20%D8%A7%D9%84%D8%B3%D8%AA%20%D8%B9%D9%82%D9%84%D8%A9%20%D8%A7%D9%84%D8%B5%D8%A8%D8%A7%D8%B9.mp3", "d": "10:04"}, {"t": "الأعداد", "u": "https://archive.org/download/26_20210130/58-%20%D8%A7%D9%84%D8%A3%D8%B9%D8%AF%D8%A7%D8%AF.mp3", "d": "10:36"}, {"t": "البنت الصغيرة الفشارة", "u": "https://archive.org/download/26_20210130/59-%20%D8%A7%D9%84%D8%A8%D9%86%D8%AA%20%D8%A7%D9%84%D8%B5%D8%BA%D9%8A%D8%B1%D8%A9%20%D8%A7%D9%84%D9%81%D8%B4%D8%A7%D8%B1%D8%A9.mp3", "d": "8:52"}, {"t": "أرنب وأرنوبة", "u": "https://archive.org/download/26_20210130/60-%20%D8%A3%D8%B1%D9%86%D8%A8%20%D9%88%D8%A3%D8%B1%D9%86%D9%88%D8%A8%D8%A9.mp3", "d": "8:48"}, {"t": "الدبة الدبدوبة", "u": "https://archive.org/download/26_20210130/61-%20%D8%A7%D9%84%D8%AF%D8%A8%D8%A9%20%D8%A7%D9%84%D8%AF%D8%A8%D8%AF%D9%88%D8%A8%D8%A9.mp3", "d": "9:04"}, {"t": "الحصان القصير", "u": "https://archive.org/download/26_20210130/62-%20%D8%A7%D9%84%D8%AD%D8%B5%D8%A7%D9%86%20%D8%A7%D9%84%D9%82%D8%B5%D9%8A%D8%B1.mp3", "d": "9:32"}, {"t": "الشاب الفقير", "u": "https://archive.org/download/26_20210130/63-%20%D8%A7%D9%84%D8%B4%D8%A7%D8%A8%20%D8%A7%D9%84%D9%81%D9%82%D9%8A%D8%B1.mp3", "d": "9:16"}, {"t": "أرنب الشقاوة والكلب الطيب", "u": "https://archive.org/download/26_20210130/64-%20%D8%A3%D8%B1%D9%86%D8%A8%20%D8%A7%D9%84%D8%B4%D9%82%D8%A7%D9%88%D8%A9%20%D9%88%D8%A7%D9%84%D9%83%D9%84%D8%A8%20%D8%A7%D9%84%D8%B7%D9%8A%D8%A8.mp3", "d": "8:18"}, {"t": "شم النسيم", "u": "https://archive.org/download/26_20210130/65-%20%D8%B4%D9%85%20%D8%A7%D9%84%D9%86%D8%B3%D9%8A%D9%85.mp3", "d": "8:35"}, {"t": "الغني وغلطته", "u": "https://archive.org/download/26_20210130/66-%20%D8%A7%D9%84%D8%BA%D9%86%D9%8A%20%D9%88%D8%BA%D9%84%D8%B7%D8%AA%D9%87.mp3", "d": "8:40"}, {"t": "الصلاة والدعاء", "u": "https://archive.org/download/26_20210130/67-%20%D8%A7%D9%84%D8%B5%D9%84%D8%A7%D8%A9%20%D9%88%D8%A7%D9%84%D8%AF%D8%B9%D8%A7%D8%A1.mp3", "d": "7:56"}, {"t": "نقطة المياة", "u": "https://archive.org/download/26_20210130/68-%20%D9%86%D9%82%D8%B7%D8%A9%20%D8%A7%D9%84%D9%85%D9%8A%D8%A7%D8%A9.mp3", "d": "8:28"}, {"t": "الدب المدبدب", "u": "https://archive.org/download/26_20210130/69-%20%D8%A7%D9%84%D8%AF%D8%A8%20%D8%A7%D9%84%D9%85%D8%AF%D8%A8%D8%AF%D8%A8.mp3", "d": "8:22"}, {"t": "البنت الفقيرة", "u": "https://archive.org/download/26_20210130/70-%20%D8%A7%D9%84%D8%A8%D9%86%D8%AA%20%D8%A7%D9%84%D9%81%D9%82%D9%8A%D8%B1%D8%A9.mp3", "d": "9:40"}, {"t": "اتنين شبان", "u": "https://archive.org/download/26_20210130/71-%20%D8%A7%D8%AA%D9%86%D9%8A%D9%86%20%D8%B4%D8%A8%D8%A7%D9%86.mp3", "d": "9:57"}, {"t": "تتر النهاية - توتة توتة", "u": "https://archive.org/download/26_20210130/72-%20%D8%AA%D8%AA%D8%B1%20%D8%A7%D9%84%D9%86%D9%87%D8%A7%D9%8A%D8%A9%20-%20%D8%AA%D9%88%D8%AA%D8%A9%20%D8%AA%D9%88%D8%AA%D8%A9.mp3", "d": "0:52"}], "extra": [{"t": "حلقة 17 مايو 2025", "u": "https://archive.org/download/2025-05-17/%F0%9F%93%BB%F0%9F%8E%A7%D8%BA%D9%86%D9%88%D8%A9%20%D9%88%D8%AD%D8%AF%D9%88%D8%AA%D8%A9%20%F0%9F%8E%A72025-05-17%F0%9F%8E%A7%20%D8%A7%D8%A8%D9%84%D8%A9%20%D9%81%D8%B6%D9%8A%D9%84%D8%A9%20.mp3", "d": "8:05"}, {"t": "حلقة 22 مايو 2025", "u": "https://archive.org/download/2025-05-17/%D8%BA%D9%86%D9%88%D8%A9%20%D9%88%D8%AD%D8%AF%D9%88%D8%AA%D8%A9%20_%202025-05-22_%20%D8%A3%D8%A8%D9%84%D8%A9%20%D9%81%D8%B6%D9%8A%D9%84%D8%A9.mp3", "d": "8:45"}, {"t": "حلقة 23 مايو 2025", "u": "https://archive.org/download/2025-05-17/%F0%9F%93%BB%F0%9F%8E%A7%D8%BA%D9%86%D9%88%D8%A9%20%D9%88%D8%AD%D8%AF%D9%88%D8%AA%D8%A9_2025-05-23%F0%9F%8E%A7%20%D8%A3%D8%A8%D9%84%D8%A9%20%D9%81%D8%B6%D9%8A%D9%84%D8%A9%20.mp3", "d": "8:21"}, {"t": "حلقة 24 مايو 2025", "u": "https://archive.org/download/2025-05-17/%F0%9F%93%BB%F0%9F%8E%99%F0%9F%94%8A%D8%BA%D9%86%D9%88%D8%A9%20%D9%88%D8%AD%D8%AF%D9%88%D8%AA%D8%A9%2024_05_202%F0%9F%92%BD%F0%9F%94%8A%D8%A7%D8%A8%D9%84%D8%A9%20%D9%81%D8%B6%D9%8A%D9%84%D8%A9.mp3", "d": "7:19"}, {"t": "حلقة 26 مايو 2025", "u": "https://archive.org/download/2025-05-17/%F0%9F%93%BB%F0%9F%94%8A%D8%BA%D9%86%D9%88%D8%A9%20%D9%88%D8%AD%D8%AF%D9%88%D8%AA%D8%A9%20%F0%9F%8E%A72025-05-26_%F0%9F%8E%99%D8%A3%D8%A8%D9%84%D8%A9%20%D9%81%D8%B6%D9%8A%D9%84%D8%A9%20%F0%9F%8E%99.mp3", "d": "8:37"}, {"t": "حلقة 27 مايو 2025", "u": "https://archive.org/download/2025-05-17/%F0%9F%93%BB%F0%9F%8E%A7%D8%BA%D9%86%D9%88%D8%A9%20%D9%88%D8%AD%D8%AF%D9%88%D8%AA%D8%A9%20%F0%9F%8E%9927_05_2025%F0%9F%8E%99%D8%A3%D8%A8%D9%84%D8%A9%20%D9%81%D8%B6%D9%8A%D9%84%D8%A9.mp3", "d": "7:32"}, {"t": "حلقة 28 مايو 2025", "u": "https://archive.org/download/2025-05-17/%F0%9F%93%BB%F0%9F%8E%A7%D8%BA%D9%86%D9%88%D8%A9%20%D9%88%D8%AD%D8%AF%D9%88%D8%AA%D8%A9%20%F0%9F%8E%992025-05-28_%F0%9F%8E%99%D8%A3%D8%A8%D9%84%D8%A9%20%D9%81%D8%B6%D9%8A%D9%84%D8%A9%20.mp3", "d": "8:24"}]};
+var curSec = 'fadila';
+var curIdx = -1;
+var audio = document.getElementById('audio');
+var listEl = document.getElementById('list');
+var searchEl = document.getElementById('search');
+var emptyEl = document.getElementById('empty');
+var ptitle = document.getElementById('ptitle');
+var playBtn = document.getElementById('play');
+var seekEl = document.getElementById('seek');
+var timeEl = document.getElementById('time');
+var volEl = document.getElementById('vol');
+var seeking = false;
+
+function fmt(s) {
+  if (!isFinite(s) || s < 0) s = 0;
+  s = Math.floor(s);
+  return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
+}
+
+function showSec(sec) {
+  curSec = sec;
+  document.getElementById('btn-fadila').className = 'sec-btn' + (sec === 'fadila' ? ' active' : '');
+  document.getElementById('btn-extra').className = 'sec-btn' + (sec === 'extra' ? ' active' : '');
+  render();
+}
+
+function render() {
+  var q = searchEl.value.replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '');
+  var items = DATA[curSec];
+  var html = '';
+  var shown = 0;
+  for (var i = 0; i < items.length; i++) {
+    if (q && items[i].t.indexOf(q) === -1) continue;
+    shown++;
+    html += '<div class="ep' + (i === curIdx && curSec === playSec ? ' playing' : '') + '" data-i="' + i + '" onclick="playEp(' + i + ')">'
+      + '<div class="num">' + (i + 1) + '</div>'
+      + '<div class="tt">' + items[i].t + '</div>'
+      + '<div class="eq"><span></span><span></span><span></span></div>'
+      + '<div class="du">' + items[i].d + '</div></div>';
+  }
+  listEl.innerHTML = html;
+  emptyEl.style.display = shown ? 'none' : 'block';
+}
+
+var playSec = 'fadila';
+function playEp(i) {
+  if (playSec === curSec && i === curIdx) {
+    if (audio.paused) { audio.play(); } else { audio.pause(); }
+    return;
+  }
+  playSec = curSec;
+  curIdx = i;
+  var ep = DATA[playSec][i];
+  audio.src = ep.u;
+  audio.play();
+  ptitle.textContent = '🎧 ' + ep.t;
+  render();
+}
+
+function step(dir) {
+  if (curIdx < 0) return;
+  var n = curIdx + dir;
+  if (n < 0 || n >= DATA[playSec].length) return;
+  var keepSec = curSec;
+  curSec = playSec;
+  playEp(n);
+  curSec = keepSec;
+  render();
+}
+
+playBtn.onclick = function () {
+  if (curIdx < 0) { playEp(0); return; }
+  if (audio.paused) { audio.play(); } else { audio.pause(); }
+};
+document.getElementById('prev').onclick = function () { step(-1); };
+document.getElementById('next').onclick = function () { step(1); };
+audio.onplay = function () { playBtn.textContent = '⏸'; render(); };
+audio.onpause = function () { playBtn.textContent = '▶'; };
+audio.ontimeupdate = function () {
+  if (!seeking && audio.duration) seekEl.value = Math.floor(audio.currentTime / audio.duration * 100);
+  timeEl.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+};
+audio.onended = function () { step(1); };
+seekEl.oninput = function () { seeking = true; };
+seekEl.onchange = function () {
+  if (audio.duration) audio.currentTime = seekEl.value / 100 * audio.duration;
+  seeking = false;
+};
+volEl.oninput = function () { audio.volume = volEl.value / 100; };
+searchEl.oninput = render;
+render();
+</script>
+</body>
+</html>
