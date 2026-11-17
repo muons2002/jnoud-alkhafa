@@ -50,6 +50,16 @@
     "file": "sports-live.html"
   },
   {
+    "key": "artlive",
+    "title": "قنوات ART",
+    "emoji": "🎬",
+    "category": "sport",
+    "color1": "#7A1030",
+    "color2": "#C2185B",
+    "url": "https://muons2002.github.io/radio-station/art-live.html",
+    "file": "art-live.html"
+  },
+  {
     "key": "checker",
     "title": "فاحص وفلترة ملفات القنوات",
     "emoji": "🧪",
