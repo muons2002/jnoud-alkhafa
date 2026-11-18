@@ -279,6 +279,31 @@
         font-weight: 800;
       }
       .diff-state { margin: 12px 0 0; font-weight: 700; color: var(--gold-strong); font-size: 0.95rem; }
+
+      /* ---------- World prices (secondary reference) ---------- */
+      .world-panel {
+        margin-top: 16px;
+        background: var(--surface-2);
+        border: 1px dashed var(--line);
+        border-radius: var(--radius);
+        padding: 14px 18px;
+      }
+      .world-panel h2 { font-family: "Cairo", sans-serif; font-size: 1.02rem; font-weight: 800; margin: 0 0 4px; color: var(--ink-soft); }
+      .world-panel h2 small { font-weight: 700; font-size: 0.82rem; }
+      .world-desc { color: var(--ink-soft); margin: 0 0 10px; font-size: 0.88rem; }
+      .world-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+      .world-grid > div {
+        flex: 1 1 130px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 8px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .world-grid span { font-size: 0.82rem; color: var(--ink-soft); font-weight: 700; }
+      .world-grid b { font-size: 1.15rem; font-weight: 800; }
       .calc-adj {
         display: none;
         background: var(--gold-soft);
@@ -512,6 +537,16 @@
 
       <p class="context-line" id="contextLine"></p>
 
+      <section class="world-panel" aria-labelledby="worldTitle">
+        <h2 id="worldTitle">🌍 الأسعار العالمية <small>(قسم فرعي — للمرجع والمقارنة)</small></h2>
+        <p class="world-desc">دي الأسعار العالمية النظرية، محسوبة من سعر الأونصة × سعر الدولار قبل علاوة السوق المصري — تفيد اللي بره مصر أو اللي عاوز يقارن. الأسعار الرئيسية اللي فوق هي أسعار السوق المصري.</p>
+        <div class="world-grid">
+          <div><span>جرام عيار ٢٤ عالمياً</span><b class="num"><span id="world24">—</span> جنيه</b></div>
+          <div><span>جرام عيار ٢١ عالمياً</span><b class="num"><span id="world21">—</span> جنيه</b></div>
+          <div><span>جرام عيار ١٨ عالمياً</span><b class="num"><span id="world18">—</span> جنيه</b></div>
+        </div>
+      </section>
+
       <section class="history" aria-labelledby="historyTitle">
         <h2 id="historyTitle">📈 سجل أسعار الذهب</h2>
         <p class="lead">سعر عيار ٢١ يوم بيوم — السجل بيتبني من التنبيهات اليومية، وأول يوم مسجل ١٤ نوفمبر ٢٠٢٦.</p>
@@ -525,8 +560,8 @@
 
       <section class="diff-panel" aria-labelledby="diffTitle">
         <h2 id="diffTitle">فرق السوق المحلي</h2>
-        <p class="diff-desc">الأسعار اللي فوق محسوبة من سعر الأونصة العالمي × سعر الدولار، وسعر محلات الصاغة اللي بتتابعه يومياً بيختلف عنها حبة. اكتب الفرق هنا بالجنيه لكل جرام — موجب لو المحلي أعلى من المحسوب عالمياً، وسالب لو أقل — وكل الأسعار والحاسبة هتتظبط عليه فوراً. الفرق ده معايرة يدوية منك انت، وبيتحفظ على جهازك عشان تلاقيه زي ما سبته لما تفتح الصفحة تاني.</p>
-        <label class="field-label" for="diffInput">فرق السوق المحلي (جنيه/جرام)</label>
+        <p class="diff-desc">الأسعار اللي فوق هي أسعار السوق المصري: المحسوبة عالمياً + علاوة السوق المحلي (١٣٧ جنيه على جرام عيار ٢٤ وبتتوزع على باقي العيارات بنسبتها). لو محلات بلدك بتختلف عنها حبة، اكتب فرق إضافي هنا بالجنيه لكل جرام — موجب لو أعلى وسالب لو أقل — وكل الأسعار والحاسبة هتتظبط عليه فوراً. الفرق ده معايرة يدوية منك انت، وبيتحفظ على جهازك عشان تلاقيه زي ما سبته لما تفتح الصفحة تاني.</p>
+        <label class="field-label" for="diffInput">فرق إضافي فوق سعر السوق (جنيه/جرام)</label>
         <div class="diff-row">
           <button class="step-btn" id="diffMinus" type="button" aria-label="إنقاص الفرق بمقدار ٥ جنيه">−</button>
           <input type="number" id="diffInput" inputmode="decimal" step="any" value="0" aria-label="فرق السوق المحلي بالجنيه لكل جرام" />
@@ -610,6 +645,13 @@
           asOf: "2026-11-12T14:35:32Z"
         };
 
+        /* Egyptian market premium on the pure gram (عيار 24), measured
+           against iSagha market prices on 2026-11-18 and identical to the
+           daily alerts' calibration (24: +137, 21: +120, 18: +103 once
+           scaled by karat). Main prices = market; world prices are shown
+           in their own secondary section. */
+        var MARKET_PREMIUM = 137;
+
         var GOLD_API = "https://api.gold-api.com/price/XAU";
         var FX_API = "https://open.er-api.com/v6/latest/USD";
         var SOURCE_LABEL = "Gold API (سعر الأونصة العالمي) + ExchangeRate-API (سعر الدولار)";
@@ -638,6 +680,9 @@
           price18: document.getElementById("price18"),
           pricePound: document.getElementById("pricePound"),
           priceBar: document.getElementById("priceBar"),
+          world24: document.getElementById("world24"),
+          world21: document.getElementById("world21"),
+          world18: document.getElementById("world18"),
           contextLine: document.getElementById("contextLine"),
           manualPanel: document.getElementById("manualPanel"),
           manualToggle: document.getElementById("manualToggle"),
@@ -685,16 +730,23 @@
           return state.gram24 * karat / 24;
         }
 
-        // The diff applies on top of the world-computed base. The manual
-        // gram-24 entry overrides everything, diff included.
+        // The diff applies on top of the market base. The manual
+        // gram-24 entry overrides everything, premium and diff included
+        // (a typed gram-24 price is already a market price).
         function diffActive() {
           return state.mode !== "manual" && state.gram24 != null && state.diff !== 0;
         }
 
+        function marketGram24() {
+          if (state.gram24 == null) return null;
+          return state.mode === "manual" ? state.gram24 : state.gram24 + MARKET_PREMIUM;
+        }
+
         function karatPrice(karat) {
-          var w = worldKaratPrice(karat);
-          if (w == null) return null;
-          return diffActive() ? w + state.diff : w;
+          var g = marketGram24();
+          if (g == null) return null;
+          var p = g * karat / 24;
+          return diffActive() ? p + state.diff : p;
         }
 
         function fmtDiff(v) {
@@ -704,16 +756,16 @@
 
         function renderDiffState() {
           if (state.diff === 0) {
-            els.diffState.textContent = "الفرق صفر دلوقتي — الأسعار المعروضة هي المحسوبة عالمياً من غير أي تعديل.";
+            els.diffState.textContent = "الفرق الإضافي صفر دلوقتي — الأسعار المعروضة هي أسعار السوق المصري (العالمية + علاوة السوق).";
           } else if (state.mode === "manual") {
             els.diffState.textContent = "الفرق محفوظ (" + fmtDiff(state.diff) + " جنيه/جرام) بس مش مطبق دلوقتي، لأن سعر الجرام اليدوي بيغطي على الكل — هيتطبق تاني مع أول تحديث ناجح للأسعار الحية.";
           } else {
-            els.diffState.textContent = "مُطبق دلوقتي: " + fmtDiff(state.diff) + " جنيه على كل جرام، في الأسعار والحاسبة.";
+            els.diffState.textContent = "مُطبق دلوقتي: " + fmtDiff(state.diff) + " جنيه إضافي على كل جرام فوق أسعار السوق، في الأسعار والحاسبة.";
           }
           var active = diffActive();
           els.calcAdjNote.classList.toggle("show", active);
           if (active) {
-            els.calcAdjNote.textContent = "الحاسبة شغالة بالأسعار بعد تعديل السوق المحلي (" + fmtDiff(state.diff) + " جنيه/جرام).";
+            els.calcAdjNote.textContent = "الحاسبة شغالة بأسعار السوق بعد الفرق الإضافي (" + fmtDiff(state.diff) + " جنيه/جرام).";
           }
         }
 
@@ -729,6 +781,9 @@
             els.price18.textContent = "—";
             els.pricePound.textContent = "—";
             els.priceBar.textContent = "—";
+            els.world24.textContent = "—";
+            els.world21.textContent = "—";
+            els.world18.textContent = "—";
             els.contextLine.textContent = "";
             hideAdj();
             renderDiffState();
@@ -745,18 +800,29 @@
           els.price18.textContent = fmtInt.format(Math.round(p18));
           els.pricePound.textContent = fmtInt.format(Math.round(p21 * 8));
           els.priceBar.textContent = fmtInt.format(Math.round(p24));
+          els.world24.textContent = fmtInt.format(Math.round(w24));
+          els.world21.textContent = fmtInt.format(Math.round(w21));
+          els.world18.textContent = fmtInt.format(Math.round(w18));
 
-          if (diffActive()) {
+          if (state.mode === "manual") {
+            hideAdj();
+          } else if (diffActive()) {
             var d = state.diff;
+            var m24 = marketGram24();
+            var m21 = m24 * 21 / 24;
+            var m18 = m24 * 18 / 24;
+            els.adjBadge.textContent = "أسعار السوق المصري + فرق إضافي";
             els.adjBadge.classList.add("show");
-            els.adjHero.textContent = "المحسوب عالمياً: " + fmtInt.format(Math.round(w21)) + " جنيه • الفرق المطبق: " + fmtDiff(d) + " جنيه/جرام";
-            els.adj24.textContent = "المحسوب عالمياً: " + fmtInt.format(Math.round(w24)) + " جنيه • الفرق المطبق: " + fmtDiff(d) + " جنيه/جرام";
-            els.adj18.textContent = "المحسوب عالمياً: " + fmtInt.format(Math.round(w18)) + " جنيه • الفرق المطبق: " + fmtDiff(d) + " جنيه/جرام";
-            els.adjPound.textContent = "المحسوب عالمياً: " + fmtInt.format(Math.round(w21 * 8)) + " جنيه • الفرق المطبق: " + fmtDiff(d * 8) + " جنيه على الجنيه كله";
-            els.adjBar.textContent = "المحسوب عالمياً: " + fmtInt.format(Math.round(w24)) + " جنيه • الفرق المطبق: " + fmtDiff(d) + " جنيه/جرام";
+            els.adjHero.textContent = "سعر السوق قبل الفرق الإضافي: " + fmtInt.format(Math.round(m21)) + " جنيه • الفرق المطبق: " + fmtDiff(d) + " جنيه/جرام";
+            els.adj24.textContent = "سعر السوق قبل الفرق الإضافي: " + fmtInt.format(Math.round(m24)) + " جنيه • الفرق المطبق: " + fmtDiff(d) + " جنيه/جرام";
+            els.adj18.textContent = "سعر السوق قبل الفرق الإضافي: " + fmtInt.format(Math.round(m18)) + " جنيه • الفرق المطبق: " + fmtDiff(d) + " جنيه/جرام";
+            els.adjPound.textContent = "سعر السوق قبل الفرق الإضافي: " + fmtInt.format(Math.round(m21 * 8)) + " جنيه • الفرق المطبق: " + fmtDiff(d * 8) + " جنيه على الجنيه كله";
+            els.adjBar.textContent = "سعر السوق قبل الفرق الإضافي: " + fmtInt.format(Math.round(m24)) + " جنيه • الفرق المطبق: " + fmtDiff(d) + " جنيه/جرام";
             adjLines.forEach(function (el) { el.classList.add("show"); });
           } else {
-            hideAdj();
+            els.adjBadge.textContent = "أسعار السوق المصري 🇪🇬";
+            els.adjBadge.classList.add("show");
+            adjLines.forEach(function (el) { el.classList.remove("show"); el.textContent = ""; });
           }
           renderDiffState();
         }
