@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة متابعة طلبات كانفا — جنود الخفاء</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800;900&family=Changa:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Cairo','Segoe UI',Tahoma,Arial,sans-serif; }
+  body { background:linear-gradient(170deg,#081426,#0D2B45 60%,#0A3A56); color:#F5F7FA; min-height:100vh; padding:20px 14px 40px; }
+  .wrap { max-width:900px; margin:0 auto; }
+  .head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .title { font-family:"Changa","Cairo",sans-serif; font-size:28px; font-weight:800; }
+  .title small { display:block; font-size:15px; color:#2FB9D8; font-weight:800; margin-top:2px; }
+  .cycle { font-size:15px; font-weight:900; color:#081426; background:linear-gradient(90deg,#FFD257,#F5C542); padding:8px 18px; border-radius:999px; }
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:18px; }
+  .stat { border-radius:16px; padding:14px 8px 11px; text-align:center; box-shadow:inset 0 0 0 2px rgba(255,255,255,.22), 0 10px 24px rgba(0,0,0,.35); }
+  .stat .n { font-size:36px; font-weight:900; line-height:1; }
+  .stat .l { font-size:15px; font-weight:800; margin-top:6px; }
+  .s1 { background:linear-gradient(160deg,#FFB340,#E36414); } .s2 { background:linear-gradient(160deg,#4FD2F2,#1668A0); }
+  .s3 { background:linear-gradient(160deg,#A55EEA,#5F27CD); } .s4 { background:linear-gradient(160deg,#2ED573,#12805C); }
+  .toolbar { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+  .toolbar button { flex:1; min-width:170px; border:none; cursor:pointer; font-family:inherit; font-size:17px; font-weight:900; color:#fff; padding:12px; border-radius:12px; background:linear-gradient(90deg,#00C4CC,#7B5CFF); }
+  .toolbar button.ghost { background:#0D2742; border:2px solid #274B63; color:#9FC6D8; }
+  .toolbar button.danger { background:#0D2742; border:2px solid rgba(255,71,87,.6); color:#FFC9CE; }
+  table { width:100%; border-collapse:separate; border-spacing:0 8px; margin-top:14px; }
+  th { font-size:15px; color:#2FB9D8; text-align:right; padding:0 12px 2px; }
+  td { background:rgba(13,43,69,.92); font-size:16px; font-weight:700; padding:11px 12px; vertical-align:middle; }
+  td:first-child { border-radius:0 12px 12px 0; } td:last-child { border-radius:12px 0 0 12px; }
+  .mail { color:#9FC6D8; font-size:14px; direction:ltr; text-align:right; font-weight:600; word-break:break-all; }
+  .date { color:#9FC6D8; font-size:14px; font-weight:600; white-space:nowrap; }
+  .chip { display:inline-block; font-size:14px; font-weight:900; padding:4px 13px; border-radius:999px; color:#081426; white-space:nowrap; }
+  .c-new { background:#FFB340; } .c-sent { background:#4FD2F2; } .c-cred { background:#C39BFF; } .c-done { background:#2ED573; color:#fff; }
+  .act { display:flex; gap:6px; flex-wrap:wrap; }
+  .act button { border:none; cursor:pointer; font-family:inherit; font-size:13px; font-weight:900; padding:6px 11px; border-radius:8px; background:#1668A0; color:#fff; }
+  .act button.green { background:#12805C; } .act button.red { background:rgba(255,71,87,.25); color:#FFC9CE; }
+  .empty { text-align:center; padding:34px 10px; color:#9FC6D8; font-size:18px; font-weight:800; }
+  #gate { max-width:420px; margin:60px auto 0; background:#0A1C30; border:2px solid rgba(47,185,216,.45); border-radius:16px; padding:22px; text-align:center; }
+  #gate input { width:100%; background:#0D2742; border:2px solid #274B63; border-radius:12px; padding:12px; font-size:17px; color:#fff; margin:12px 0; direction:ltr; text-align:center; font-family:inherit; }
+  #gate button { width:100%; border:none; cursor:pointer; font-family:inherit; font-size:18px; font-weight:900; color:#fff; background:linear-gradient(90deg,#00C4CC,#7B5CFF); padding:12px; border-radius:12px; }
+  .note { margin-top:14px; text-align:center; font-size:14px; color:#FFE9A8; font-weight:700; }
+  a.postlink { color:#4FD2F2; font-size:13px; font-weight:700; }
+  @media (max-width:640px){ .stats{grid-template-columns:repeat(2,1fr);} th:nth-child(4), td:nth-child(4){display:none;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="gate">
+    <div style="font-size:40px">🔒</div>
+    <div style="font-size:20px;font-weight:900;margin-top:6px">لوحة متابعة طلبات كانفا برو</div>
+    <div style="font-size:15px;color:#9FC6D8;font-weight:700">اللوحة دي خاصة بالإدارة — اكتب مفتاح اللوحة</div>
+    <input id="keyInput" type="password" placeholder="مفتاح اللوحة">
+    <button id="gateBtn">فتح اللوحة</button>
+    <div class="note" id="gateMsg"></div>
+  </div>
+
+  <div id="board" style="display:none">
+    <div class="head">
+      <div class="title">🛡️ لوحة متابعة طلبات كانفا برو<small>جنود الخفاء — إدارة الخدمة</small></div>
+      <div class="cycle">الدورة الحالية تنتهي 27 نوفمبر 2026</div>
+    </div>
+    <div class="stats">
+      <div class="stat s1"><div class="n" id="nNew">0</div><div class="l">🟡 طلبات جديدة منتظرة</div></div>
+      <div class="stat s2"><div class="n" id="nSent">0</div><div class="l">📩 اتبعتت دعواتهم</div></div>
+      <div class="stat s3"><div class="n" id="nCred">0</div><div class="l">📝 بانتظار تأكيد المصداقية</div></div>
+      <div class="stat s4"><div class="n" id="nDone">0</div><div class="l">✅ كاملين</div></div>
+    </div>
+    <div class="toolbar">
+      <button id="copyBtn">📋 نسخ إيميلات المنتظرين</button>
+      <button id="refreshBtn" class="ghost">🔄 تحديث القايمة</button>
+      <button id="clearBtn" class="danger">🗑️ تصفير الدورة</button>
+    </div>
+    <div id="tableWrap"></div>
+    <div class="note">🔒 القايمة دي خاصة بالإدارة — الأعضاء لا يشوفون إلا صفحة الطلب فقط</div>
+  </div>
+</div>
+<script>
+  var API = "https://jnoud-canva.m-uons2002.workers.dev";
+  var KEY = localStorage.getItem("canva_admin_key") || "";
+  var ITEMS = [];
+  var ST = {
+    "new":  { t: "جديد — منتظر", c: "c-new" },
+    "sent": { t: "اتبعتت الدعوة", c: "c-sent" },
+    "cred": { t: "أرسل رابط المصداقية", c: "c-cred" },
+    "done": { t: "كامل ✅", c: "c-done" }
+  };
+  function fmtDate(ts) {
+    var d = new Date(ts), now = new Date();
+    var sameDay = d.toDateString() === now.toDateString();
+    var y = new Date(now - 86400000);
+    if (sameDay) return "اليوم";
+    if (d.toDateString() === y.toDateString()) return "أمس";
+    return d.getDate() + "/" + (d.getMonth() + 1);
+  }
+  function load() {
+    return fetch(API + "/list?key=" + encodeURIComponent(KEY)).then(function (r) { return r.json(); }).then(function (j) {
+      if (!j.ok) throw new Error("bad");
+      ITEMS = j.items || [];
+      render();
+    });
+  }
+  function mark(email, action) {
+    fetch(API + "/mark", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: KEY, email: email, action: action }) })
+      .then(function (r) { return r.json(); }).then(function (j) { if (j.ok) load(); });
+  }
+  function render() {
+    var counts = { "new": 0, "sent": 0, "cred": 0, "done": 0 };
+    ITEMS.forEach(function (it) { if (counts[it.status] !== undefined) counts[it.status]++; });
+    document.getElementById("nNew").textContent = counts["new"];
+    document.getElementById("nSent").textContent = counts["sent"];
+    document.getElementById("nCred").textContent = counts["cred"];
+    document.getElementById("nDone").textContent = counts["done"];
+    var w = document.getElementById("tableWrap");
+    if (!ITEMS.length) { w.innerHTML = '<div class="empty">لسه مفيش طلبات — أول طلب يوصل هيظهر هنا فوراً 📭</div>'; return; }
+    var h = '<table><tr><th>العضو</th><th>الإيميل</th><th>الحالة</th><th>التاريخ</th><th>إجراء</th></tr>';
+    ITEMS.forEach(function (it) {
+      var st = ST[it.status] || ST["new"];
+      h += '<tr><td>' + esc(it.name) + (it.link ? '<br><a class="postlink" href="' + esc(it.link) + '" target="_blank" rel="noopener">رابط المنشور ↗</a>' : '') + '</td>' +
+        '<td class="mail">' + esc(it.email) + '</td>' +
+        '<td><span class="chip ' + st.c + '">' + st.t + '</span></td>' +
+        '<td class="date">' + fmtDate(it.ts) + '</td><td><div class="act">';
+      if (it.status === "new") h += '<button data-a="sent" data-e="' + esc(it.email) + '">اتبعتت ✓</button>';
+      if (it.status === "sent" || it.status === "cred") h += '<button class="green" data-a="done" data-e="' + esc(it.email) + '">كامل ✅</button>';
+      if (it.status !== "new") h += '<button data-a="new" data-e="' + esc(it.email) + '">↩ جديد</button>';
+      h += '<button class="red" data-a="delete" data-e="' + esc(it.email) + '">حذف</button>';
+      h += '</div></td></tr>';
+    });
+    h += '</table>';
+    w.innerHTML = h;
+    w.querySelectorAll("button[data-a]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (b.dataset.a === "delete" && !confirm("حذف الطلب ده نهائياً؟")) return;
+        mark(b.dataset.e, b.dataset.a);
+      });
+    });
+  }
+  function esc(s) { return (s || "").toString().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function openBoard() {
+    load().then(function () {
+      document.getElementById("gate").style.display = "none";
+      document.getElementById("board").style.display = "block";
+    }).catch(function () {
+      document.getElementById("gateMsg").textContent = "المفتاح غلط أو الوسيط لسه ما اتنشرش — راجع وحاول تاني";
+      localStorage.removeItem("canva_admin_key");
+    });
+  }
+  document.getElementById("gateBtn").addEventListener("click", function () {
+    KEY = document.getElementById("keyInput").value.trim();
+    if (!KEY) return;
+    localStorage.setItem("canva_admin_key", KEY);
+    openBoard();
+  });
+  document.getElementById("refreshBtn").addEventListener("click", load);
+  document.getElementById("copyBtn").addEventListener("click", function () {
+    var emails = ITEMS.filter(function (i) { return i.status === "new"; }).map(function (i) { return i.email; });
+    if (!emails.length) { alert("مفيش طلبات منتظرة دلوقتي"); return; }
+    var text = emails.join("\n");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { alert("اتنسخ " + emails.length + " إيميل — الصقهم في خانة الدعوات في كانفا"); });
+    } else {
+      var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+      document.execCommand("copy"); document.body.removeChild(ta);
+      alert("اتنسخ " + emails.length + " إيميل — الصقهم في خانة الدعوات في كانفا");
+    }
+  });
+  document.getElementById("clearBtn").addEventListener("click", function () {
+    if (!confirm("تصفير الدورة هيمسح كل الطلبات الحالية نهائياً. متأكد؟")) return;
+    fetch(API + "/clear", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: KEY }) })
+      .then(function (r) { return r.json(); }).then(function (j) { if (j.ok) { alert("اتصفرت الدورة — اتمسح " + j.cleared + " طلب"); load(); } });
+  });
+  if (KEY) openBoard();
+</script>
+</body>
+</html>
