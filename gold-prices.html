@@ -413,6 +413,37 @@
       }
       .calc-empty.show { display: block; }
       .fine-note { color: var(--ink-soft); font-size: 0.9rem; margin-top: 16px; }
+      /* ---------- Gold history log ---------- */
+      section.history {
+        margin-top: 26px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        box-shadow: var(--shadow);
+        padding: 22px;
+      }
+      section.history h2 {
+        font-family: "Cairo", sans-serif;
+        font-weight: 900;
+        font-size: 1.5rem;
+        margin: 0 0 4px;
+      }
+      section.history .lead { color: var(--ink-soft); margin: 0 0 14px; }
+      section.history svg { width: 100%; height: auto; display: block; }
+      section.history table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+      section.history th, section.history td {
+        padding: 10px 8px;
+        border-bottom: 1px solid var(--line);
+        text-align: start;
+      }
+      section.history th { color: var(--gold-strong); font-family: "Cairo", sans-serif; font-weight: 800; }
+      section.history td.num { direction: ltr; unicode-bidi: isolate; text-align: end; font-variant-numeric: tabular-nums; font-weight: 700; }
+      section.history td .day-note { display: block; font-size: 0.82rem; color: var(--ink-soft); font-weight: 400; }
+      section.history tr.today td { background: var(--gold-soft); }
+      section.history .up { color: var(--red); font-weight: 700; }
+      section.history .dn { color: var(--green); font-weight: 700; }
+      section.history .foot-note { color: var(--ink-soft); font-size: 0.88rem; margin: 12px 0 0; }
+
       footer { margin-top: 26px; text-align: center; color: var(--ink-soft); font-size: 0.88rem; }
     </style>
   </head>
@@ -480,6 +511,17 @@
       </div>
 
       <p class="context-line" id="contextLine"></p>
+
+      <section class="history" aria-labelledby="historyTitle">
+        <h2 id="historyTitle">📈 سجل أسعار الذهب</h2>
+        <p class="lead">سعر عيار ٢١ يوم بيوم — السجل بيتبني من التنبيهات اليومية، وأول يوم مسجل ١٤ نوفمبر ٢٠٢٦.</p>
+        <svg id="historyChart" viewBox="0 0 600 190" role="img" aria-label="رسم بياني لسعر عيار 21 في الأيام المسجلة"></svg>
+        <table>
+          <thead><tr><th>اليوم</th><th>عيار ٢١</th><th>الفرق</th></tr></thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+        <p class="foot-note">قيمة النهاردة لسه بتتحدث مع كل تنبيه لحد ٩:٣٠ مساءً، والقيمة النهائية لليوم بتتثبت بعدها. السجل بيكبر يوم بيوم من التنبيهات — مفيش أيام متخيلة قبل ١٤ نوفمبر.</p>
+      </section>
 
       <section class="diff-panel" aria-labelledby="diffTitle">
         <h2 id="diffTitle">فرق السوق المحلي</h2>
@@ -912,6 +954,89 @@
         renderDiffState();
         renderCalc();
         loadPrices();
+      })();
+    </script>
+    <script>
+      /* Gold history log — seeded ONLY from genuine daily alerts (calibrated
+         عيار 21 = world price + 120 EGP local premium). Append one entry per
+         day (last alerted price of that day); never back-fill days before
+         14 Nov 2026. Today's row stays intraday until alerts stop at 21:30. */
+      (function () {
+        "use strict";
+        var HISTORY = [
+          { d: "السبت ١٤ نوفمبر ٢٠٢٦", v: 5964, note: "أول يوم مسجل (خط الأساس)" },
+          { d: "الأحد ١٥ نوفمبر ٢٠٢٦", v: 5960, note: "" },
+          { d: "الاثنين ١٦ نوفمبر ٢٠٢٦", v: 5956, note: "آخر تنبيه في اليوم" },
+          { d: "الثلاثاء ١٧ نوفمبر ٢٠٢٦", v: 5943, note: "آخر تنبيه في اليوم" }
+        ];
+        var fmt = new Intl.NumberFormat("en-US");
+        var body = document.getElementById("historyBody");
+        var svg = document.getElementById("historyChart");
+        if (!body || !svg) return;
+
+        HISTORY.forEach(function (row, i) {
+          var tr = document.createElement("tr");
+          if (row.today) tr.className = "today";
+          var tdDay = document.createElement("td");
+          tdDay.textContent = row.d;
+          if (row.note) {
+            var span = document.createElement("span");
+            span.className = "day-note";
+            span.textContent = row.note;
+            tdDay.appendChild(span);
+          }
+          var tdVal = document.createElement("td");
+          tdVal.className = "num";
+          tdVal.textContent = fmt.format(row.v);
+          var tdDiff = document.createElement("td");
+          tdDiff.className = "num";
+          if (i === 0) {
+            tdDiff.textContent = "—";
+          } else {
+            var diff = row.v - HISTORY[i - 1].v;
+            tdDiff.textContent = (diff > 0 ? "▲ " : diff < 0 ? "▼ " : "") + fmt.format(Math.abs(diff));
+            tdDiff.className += diff > 0 ? " up" : diff < 0 ? " dn" : "";
+          }
+          tr.appendChild(tdDay);
+          tr.appendChild(tdVal);
+          tr.appendChild(tdDiff);
+          body.appendChild(tr);
+        });
+
+        var vals = HISTORY.map(function (r) { return r.v; });
+        var lo = Math.min.apply(null, vals) - 10;
+        var hi = Math.max.apply(null, vals) + 10;
+        function px(i) { return 40 + i * (520 / Math.max(HISTORY.length - 1, 1)); }
+        function py(v) { return 160 - ((v - lo) / (hi - lo)) * 130; }
+        var pts = HISTORY.map(function (r, i) { return px(i) + "," + Math.round(py(r.v)); });
+        var ns = "http://www.w3.org/2000/svg";
+        function el(name, attrs) {
+          var e = document.createElementNS(ns, name);
+          for (var k in attrs) e.setAttribute(k, attrs[k]);
+          return e;
+        }
+        svg.appendChild(el("polygon", {
+          points: "40,170 " + pts.join(" ") + " " + px(HISTORY.length - 1) + ",170",
+          fill: "rgba(217,165,33,0.13)"
+        }));
+        svg.appendChild(el("polyline", {
+          points: pts.join(" "), fill: "none", stroke: "#d9a521",
+          "stroke-width": "4", "stroke-linejoin": "round", "stroke-linecap": "round"
+        }));
+        HISTORY.forEach(function (r, i) {
+          svg.appendChild(el("circle", {
+            cx: px(i), cy: Math.round(py(r.v)), r: r.today ? "7" : "5",
+            fill: r.today ? "#2fb9d8" : "#d9a521"
+          }));
+        });
+        var hiI = vals.indexOf(Math.max.apply(null, vals));
+        var loI = vals.indexOf(Math.min.apply(null, vals));
+        var t1 = el("text", { x: Math.max(px(hiI) - 90, 8), y: "20", fill: "#b3372c", "font-size": "15", "font-weight": "700" });
+        t1.textContent = fmt.format(vals[hiI]) + " أعلى";
+        var t2 = el("text", { x: Math.max(px(loI) - 90, 8), y: "186", fill: "#1c7c43", "font-size": "15", "font-weight": "700" });
+        t2.textContent = fmt.format(vals[loI]) + " أقل";
+        svg.appendChild(t1);
+        svg.appendChild(t2);
       })();
     </script>
   </body>
