@@ -18,21 +18,22 @@ body {
 h1 { font-family:'Changa',sans-serif; text-align:center; font-size:clamp(30px,6.5vw,50px); font-weight:800; margin-top:4px; }
 h1 .cy { color:#2FB9D8; }
 .sub { text-align:center; color:#d7ecf5; font-size:clamp(15px,3.6vw,20px); margin-top:4px; }
-.toprow { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:22px; }
 .boss {
-  background:rgba(255,255,255,.07);
+  margin:22px auto 0; max-width:560px; background:rgba(255,255,255,.07);
   border:2px solid rgba(232,182,76,.8); border-radius:24px; padding:16px 18px;
   display:flex; align-items:center; gap:14px; cursor:pointer; transition:transform .15s;
 }
 .boss:active { transform:scale(.98); }
 .catcard {
-  background:rgba(255,255,255,.07);
-  border:2px solid rgba(232,182,76,.55); border-radius:24px; padding:16px 18px;
-  display:flex; align-items:center; gap:14px;
+  margin:14px auto 0; max-width:360px; background:rgba(255,255,255,.05);
+  border:1.5px solid rgba(232,182,76,.5); border-radius:20px; padding:10px 14px;
+  display:flex; align-items:center; gap:12px;
 }
-.catcard .nm { font-family:'Changa',sans-serif; font-size:25px; font-weight:800; }
-.catcard .rl { font-size:15px; color:#ffd97a; }
-.catcard .btns { margin-top:10px; }
+.catcard img.av { width:54px; height:54px; box-shadow:none; }
+.catcard .nm { font-family:'Changa',sans-serif; font-size:20px; font-weight:800; }
+.catcard .rl { font-size:13px; color:#ffd97a; }
+.catcard .btns { margin-top:6px; }
+.catcard .btn { flex:none; padding:6px 16px; font-size:14px; }
 img.av { border-radius:50%; object-fit:cover; flex-shrink:0; box-shadow:0 8px 20px rgba(0,0,0,.4); background:#0D2B45; }
 .boss img.av { width:86px; height:86px; border:2.5px solid rgba(232,182,76,.85); }
 .boss .nm { font-family:'Changa',sans-serif; font-size:27px; font-weight:800; }
@@ -46,8 +47,6 @@ img.av { border-radius:50%; object-fit:cover; flex-shrink:0; box-shadow:0 8px 20
   .btn { font-size:14px; padding:8px 4px; }
   .boss .nm { font-size:22px; }
   .boss img.av { width:70px; height:70px; }
-  .catcard .nm { font-size:20px; }
-  .catcard .rl { font-size:13px; }
 }
 .desk { background:rgba(255,255,255,.06); border:1.5px solid rgba(47,185,216,.35); border-radius:22px; padding:16px; position:relative; }
 .desk.center { grid-column:1 / -1; width:calc(50% - 8px); justify-self:center; }
@@ -95,21 +94,19 @@ img.av { border-radius:50%; object-fit:cover; flex-shrink:0; box-shadow:0 8px 20
   <h1>🏢 مكتب جنود الخفاء <span class="cy">الافتراضي</span></h1>
   <div class="sub">فريق من الذكاء الاصطناعي بيخدمك — دوس على أي موظف وكلّمه، هيجاوبك ويدلّك على مشروعه</div>
 
-  <div class="toprow">
-    <div class="boss" id="bossCard">
-      <img class="av" src="office-avatars/av-boss.jpg" alt="أبو محمود">
-      <div>
-        <div class="nm">أبو محمود</div>
-        <div class="rl">المؤسس والمدير — دوس وكلّمه بنفسك</div>
-      </div>
+  <div class="boss" id="bossCard">
+    <img class="av" src="office-avatars/av-boss.jpg" alt="أبو محمود">
+    <div>
+      <div class="nm">أبو محمود</div>
+      <div class="rl">المؤسس والمدير — دوس وكلّمه بنفسك</div>
     </div>
-    <div class="catcard">
-      <img class="av" src="office-avatars/av-cat.jpg" alt="القط الأسود" style="width:86px;height:86px;border:2.5px solid rgba(232,182,76,.85)">
-      <div>
-        <div class="nm">القط الأسود 🐾</div>
-        <div class="rl">مساعد المدير — العلامة المسجلة للجروب</div>
-        <div class="btns"><button class="btn btn-chat" id="catChatBtn">💬 كلّمه</button></div>
-      </div>
+  </div>
+  <div class="catcard">
+    <img class="av" src="office-avatars/av-cat.jpg" alt="القط الأسود">
+    <div>
+      <div class="nm">القط الأسود 🐾</div>
+      <div class="rl">مساعد المدير — العلامة المسجلة للجروب</div>
+      <div class="btns"><button class="btn btn-chat" id="catChatBtn">💬 كلّمه</button></div>
     </div>
   </div>
 
