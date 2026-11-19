@@ -100,6 +100,25 @@
     "file": "sat-db.html"
   },
   {
+    "key": "office",
+    "title": "مكتب جنود الخفاء الافتراضي",
+    "emoji": "🏢",
+    "category": "tech",
+    "color1": "#0A3A56",
+    "color2": "#2FB9D8",
+    "url": "https://muons2002.github.io/radio-station/jnoud-office.html",
+    "file": "jnoud-office.html"
+  },
+  {
+    "key": "quiz",
+    "title": "مسابقات جنود الخفاء",
+    "emoji": "🏆",
+    "category": "tech",
+    "color1": "#0A3A56",
+    "color2": "#2FB9D8",
+    "url": "https://muons2002.github.io/radio-station/jnoud-quiz.html",
+    "file": "jnoud-quiz.html"
+  },  {
     "key": "radio",
     "title": "إذاعة جنود الخفاء",
     "emoji": "📻",
@@ -124,8 +143,8 @@
     "title": "حكايات عبد العزيز العروي",
     "emoji": "🪔",
     "category": "audio",
-    "color1": "#6A1B9A",
-    "color2": "#AB47BC",
+    "color1": "#0A3A56",
+    "color2": "#2FB9D8",
     "url": "https://muons2002.github.io/radio-station/hikayat-elaroui.html",
     "file": "hikayat-elaroui.html"
   },
