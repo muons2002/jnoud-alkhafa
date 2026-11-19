@@ -24,16 +24,17 @@ h1 .cy { color:#2FB9D8; }
   display:flex; align-items:center; gap:14px; cursor:pointer; transition:transform .15s;
 }
 .boss:active { transform:scale(.98); }
-.boss .av { width:82px; height:82px; border-radius:50%; background:linear-gradient(135deg,#b8860b,#e8b64c); display:flex; align-items:center; justify-content:center; font-size:44px; flex-shrink:0; box-shadow:0 8px 20px rgba(0,0,0,.4); }
+img.av { border-radius:50%; object-fit:cover; flex-shrink:0; box-shadow:0 8px 20px rgba(0,0,0,.4); background:#0D2B45; }
+.boss img.av { width:86px; height:86px; border:2.5px solid rgba(232,182,76,.85); }
 .boss .nm { font-family:'Changa',sans-serif; font-size:27px; font-weight:800; }
 .boss .rl { font-size:16px; color:#ffd97a; }
-.boss .cat { margin-right:auto; text-align:center; flex-shrink:0; }
-.boss .cat .ce { width:64px; height:64px; border-radius:50%; background:rgba(232,182,76,.16); border:1.5px solid rgba(232,182,76,.7); display:flex; align-items:center; justify-content:center; font-size:38px; }
+.boss .cat { margin-right:auto; text-align:center; flex-shrink:0; cursor:pointer; }
+.boss .cat img { width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid rgba(232,182,76,.7); }
 .boss .cat .cl { font-size:12px; color:#ffd97a; margin-top:3px; font-weight:700; }
 .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px; margin-top:20px; }
 .desk { background:rgba(255,255,255,.06); border:1.5px solid rgba(47,185,216,.35); border-radius:22px; padding:16px; position:relative; }
 .desk .top { display:flex; align-items:center; gap:12px; }
-.desk .av { width:66px; height:66px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:36px; flex-shrink:0; box-shadow:0 8px 18px rgba(0,0,0,.35); }
+.desk img.av { width:68px; height:68px; }
 .desk .nm { font-family:'Changa',sans-serif; font-size:23px; font-weight:800; }
 .desk .rl { font-size:15px; color:#d7ecf5; }
 .badge { position:absolute; top:-12px; left:12px; background:linear-gradient(135deg,#e05260,#b03a6b); color:#fff; font-size:13.5px; font-weight:800; border-radius:999px; padding:3px 12px; box-shadow:0 6px 14px rgba(0,0,0,.35); }
@@ -52,7 +53,7 @@ h1 .cy { color:#2FB9D8; }
 }
 .sheet.open { display:flex; }
 .sheet-head { display:flex; align-items:center; gap:12px; padding:14px 16px; border-bottom:1px solid rgba(47,185,216,.25); }
-.sheet-head .av { width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:29px; flex-shrink:0; }
+.sheet-head img.av { width:54px; height:54px; box-shadow:none; }
 .sheet-head .nm { font-family:'Changa',sans-serif; font-size:21px; font-weight:800; }
 .sheet-head .rl { font-size:13.5px; color:#9fdcef; }
 .sheet-head .x { margin-right:auto; background:rgba(255,255,255,.1); border:none; color:#fff; width:38px; height:38px; border-radius:50%; font-size:18px; cursor:pointer; flex-shrink:0; }
@@ -77,12 +78,12 @@ h1 .cy { color:#2FB9D8; }
   <div class="sub">فريق من الذكاء الاصطناعي بيخدمك — دوس على أي موظف وكلّمه، هيجاوبك ويدلّك على مشروعه</div>
 
   <div class="boss" id="bossCard">
-    <div class="av">👨‍💼</div>
+    <img class="av" src="office-avatars/av-boss.jpg" alt="أبو محمود">
     <div>
       <div class="nm">أبو محمود</div>
       <div class="rl">المؤسس والمدير — دوس وكلّمه بنفسك</div>
     </div>
-    <div class="cat"><div class="ce">🐈‍⬛</div><div class="cl">القط الأسود</div></div>
+    <div class="cat" id="catBtn"><img src="office-avatars/av-cat.jpg" alt="القط الأسود"><div class="cl">القط الأسود — المساعد</div></div>
   </div>
 
   <div class="grid" id="grid"></div>
@@ -92,7 +93,7 @@ h1 .cy { color:#2FB9D8; }
 
 <div class="sheet" id="sheet">
   <div class="sheet-head">
-    <div class="av" id="shAv">🎙️</div>
+    <img class="av" id="shAv" src="office-avatars/av-joly.jpg" alt="">
     <div><div class="nm" id="shNm"></div><div class="rl" id="shRl"></div></div>
     <button class="x" id="shClose">✕</button>
   </div>
@@ -106,33 +107,42 @@ h1 .cy { color:#2FB9D8; }
 
 <script>
 var API = 'https://jnoud-office.m-uons2002.workers.dev/chat';
+var AV = 'office-avatars/';
 var STAFF = {
-  jimmy:   { nm:'جيمي', em:'🧑‍💻', gr:'linear-gradient(135deg,#14508c,#2fb9d8)', rl:'المشاريع والتطبيقات — المنفّذ العام',
-             greet:'أهلاً بيك، أنا جيمي 👋 أنا اللي بنيت المشاريع والتطبيقات هنا مع أبو محمود. اسألني عن أي تطبيق أو مشروع وهجاوبك.',
+  jimmy:   { nm:'جيمي', img:'av-jimmy.jpg', rl:'جندي أول في خدمة الجروب — المشاريع والتطبيقات',
+             greet:'أهلاً بيك، أنا جيمي 👋 جندي أول في خدمة الجروب، وأنا اللي بنيت المشاريع والتطبيقات هنا مع أبو محمود. اسألني عن أي تطبيق أو مشروع وهجاوبك.',
              chips:['ايه أحدث حاجة عملتوها؟','التطبيق بينزل منين؟','المشغل بيشتغل ازاي؟'],
              proj:'كل المشاريع', url:'https://heylink.me/InvisibleSoldiers' },
-  joly:    { nm:'جولي', em:'🎙️', gr:'linear-gradient(135deg,#b03a6b,#e88bb0)', rl:'الاستقبال والصوتيات — صوت الفويس نوت', badge:'🆕 جديدة — بالواسطة 😄',
-             greet:'أهلاً أهلاً، أنا جولي 🎙️ موظفة الاستقبال هنا وصوت الفويس نوت بتاع الجروب. اسألني وهادلّك على اللي انت عاوزه.',
+  joly:    { nm:'جولي', img:'av-joly.jpg', rl:'السكرتيرة — الاستقبال والصوتيات', badge:'🆕 جديدة — بالواسطة 😄',
+             greet:'أهلاً أهلاً، أنا جولي 🎙️ سكرتيرة المكتب وصوت الفويس نوت بتاع الجروب. اسألني وهادلّك على اللي انت عاوزه.',
              chips:['انتي مين؟','ازاي أسمع الإذاعة؟','دخلتي الشغل ازاي؟ 😄'],
              proj:'إذاعة جنود الخفاء', url:'https://muons2002.github.io/radio-station/radio-jnoud.html' },
-  radio:   { nm:'موظف الإذاعة', em:'📻', gr:'linear-gradient(135deg,#a31621,#e05260)', rl:'الإذاعة والأغاني والتراث الصوتي',
+  emad:    { nm:'عماد أفندي', img:'av-emad.jpg', rl:'المكتبة والأرشيف — القرآن والشعراوي',
+             greet:'أهلاً وسهلاً يا فندم 📚 أنا عماد أفندي، مسؤول المكتبة والأرشيف. عندنا القرآن بعشرة قرّاء ومكتبة الشيخ الشعراوي بأكتر من ألف درس. أؤمرني؟',
+             chips:['الشعراوي عنده كام درس؟','أبدأ منين في المكتبة؟'],
+             proj:'مكتبة الشعراوي', url:'https://muons2002.github.io/radio-station/shaarawy.html' },
+  radio:   { nm:'موظف الإذاعة', img:'av-radio.jpg', rl:'الإذاعة والأغاني والتراث الصوتي',
              greet:'أهلاً بيك في قسم الإذاعة 📻 عندنا 45 محطة وأغاني الزمن الجميل وحكايات زمان. اسألني عن أي حاجة صوتية.',
              chips:['كام محطة عندكم؟','عاوز أسمع قرآن','فيه أغاني زمان؟'],
              proj:'إذاعة جنود الخفاء', url:'https://muons2002.github.io/radio-station/radio-jnoud.html' },
-  library: { nm:'موظف المكتبة', em:'🌙', gr:'linear-gradient(135deg,#5b2a86,#a86bd8)', rl:'القرآن الكريم ومكتبة الشيخ الشعراوي',
-             greet:'أهلاً بيك في المكتبة 🌙 عندنا القرآن بعشرة قرّاء ومكتبة الشيخ الشعراوي بأكتر من ألف درس. اسألني وهرشح لك تبدأ منين.',
-             chips:['الشعراوي عنده كام درس؟','أبدأ منين في المكتبة؟'],
-             proj:'مكتبة الشعراوي', url:'https://muons2002.github.io/radio-station/shaarawy.html' },
-  sports:  { nm:'موظف الرياضة', em:'⚽', gr:'linear-gradient(135deg,#1e7a34,#7ac74f)', rl:'رادار المباريات والدوري المصري',
+  sports:  { nm:'موظف الرياضة', img:'av-sports.jpg', rl:'رادار المباريات والدوري المصري',
              greet:'أهلاً يا كابتن ⚽ أنا ماسك رادار المباريات وقسم الدوري المصري. اسألني عن الرادار وهدلّك على المواعيد والنتائج والترتيب.',
              chips:['ايه اللي في رادار المباريات؟','الدوري المصري أخباره ايه؟'],
              proj:'رادار المباريات', url:'https://muons2002.github.io/radio-station/matches-radar.html' },
-  services:{ nm:'موظفة الخدمات', em:'🎨', gr:'linear-gradient(135deg,#0e7a6d,#39c2a5)', rl:'كانفا برو وأسعار الذهب والأكواد',
+  services:{ nm:'موظفة الخدمات', img:'av-services.jpg', rl:'كانفا برو وأسعار الذهب والأكواد',
              greet:'أهلاً بيك في قسم الخدمات 🎨 أنا ماسكة كانفا برو وأسعار الذهب وبوابة الأكواد وبطاقة العضوية. اسألني وهاشرح لك الخطوات واحدة واحدة.',
              chips:['ازاي أطلب كانفا برو؟','الذهب بكام النهاردة؟','عاوز أكواد تطبيقات'],
-             proj:'كانفا برو للأعضاء', url:'https://muons2002.github.io/radio-station/canva-pro.html' }
+             proj:'كانفا برو للأعضاء', url:'https://muons2002.github.io/radio-station/canva-pro.html' },
+  cat:     { nm:'القط الأسود', img:'av-cat.jpg', rl:'مساعد المدير — العلامة المسجلة للجروب', badge:'🐾 مساعد المدير',
+             greet:'مياو… أهلاً بيك 🐾 أنا القط الأسود، مساعد المدير والعلامة المسجلة للجروب — الناس بتعرف أبو محمود بيّا. اسألني عن أي حاجة وهادلّك على الموظف الصح.',
+             chips:['انت مين؟','بتعمل ايه هنا؟','مين المدير؟'],
+             proj:'كل المشاريع', url:'https://heylink.me/InvisibleSoldiers' },
+  ragab:   { nm:'رجب', img:'av-ragab.jpg', rl:'المشاوير والشاي — اللي مبهدلينه معانا', badge:'🏃 مشغول دايماً',
+             greet:'أهلاً بيك، أنا رجب 🏃 اللي مبهدلينه معاهم هنا — مشاوير وشاي وطلبات ما بتخلصش. اسألني عن أي موظف وهاوصّلك ليه… تشرب ايه على ما توصل؟',
+             chips:['انت مبهدل ليه؟ 😄','مين ماسك الإذاعة؟','عاوز شاي'],
+             proj:'كل المشاريع', url:'https://heylink.me/InvisibleSoldiers' }
 };
-var BOSS = { nm:'أبو محمود', em:'👨‍💼', gr:'linear-gradient(135deg,#b8860b,#e8b64c)', rl:'المؤسس والمدير',
+var BOSS = { nm:'أبو محمود', img:'av-boss.jpg', rl:'المؤسس والمدير',
              greet:'أهلاً بيك في مكتبنا يا غالي 🛡️ أنا أبو محمود، مؤسس جنود الخفاء. اسألني عن أي حاجة في مشاريعنا وهاوجّهك للموظف المختص.',
              chips:['ايه مشاريعكم؟','أوصل لكل حاجة منين؟','مين فريقك؟'] };
 
@@ -142,7 +152,7 @@ Object.keys(STAFF).forEach(function(key){
   var d = document.createElement('div'); d.className = 'desk';
   d.innerHTML =
     (s.badge ? '<div class="badge">' + s.badge + '</div>' : '') +
-    '<div class="top"><div class="av" style="background:' + s.gr + '">' + s.em + '</div>' +
+    '<div class="top"><img class="av" src="' + AV + s.img + '" alt="' + s.nm + '">' +
     '<div><div class="nm">' + s.nm + '</div><div class="rl">' + s.rl + '</div></div></div>' +
     '<div class="btns"><button class="btn btn-chat">💬 كلّمه</button>' +
     '<a class="btn btn-proj" href="' + s.url + '" target="_blank" rel="noopener">🔗 ' + s.proj + '</a></div>';
@@ -150,6 +160,7 @@ Object.keys(STAFF).forEach(function(key){
   grid.appendChild(d);
 });
 document.getElementById('bossCard').onclick = function(){ openChat('boss'); };
+document.getElementById('catBtn').onclick = function(e){ e.stopPropagation(); openChat('cat'); };
 
 var sheet = document.getElementById('sheet'), msgs = document.getElementById('msgs'),
     chipsBox = document.getElementById('chips'), inp = document.getElementById('inp'),
@@ -164,8 +175,7 @@ function addMsg(text, who){
 function openChat(key){
   cur = key; hist = [];
   var p = persona(key);
-  document.getElementById('shAv').textContent = p.em;
-  document.getElementById('shAv').style.background = p.gr;
+  document.getElementById('shAv').src = AV + p.img;
   document.getElementById('shNm').textContent = p.nm;
   document.getElementById('shRl').textContent = p.rl;
   msgs.innerHTML = ''; addMsg(p.greet, 'bot');
