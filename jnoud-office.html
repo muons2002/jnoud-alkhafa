@@ -18,19 +18,25 @@ body {
 h1 { font-family:'Changa',sans-serif; text-align:center; font-size:clamp(30px,6.5vw,50px); font-weight:800; margin-top:4px; }
 h1 .cy { color:#2FB9D8; }
 .sub { text-align:center; color:#d7ecf5; font-size:clamp(15px,3.6vw,20px); margin-top:4px; }
+.toprow { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:22px; }
 .boss {
-  margin:22px auto 0; max-width:560px; background:rgba(255,255,255,.07);
+  background:rgba(255,255,255,.07);
   border:2px solid rgba(232,182,76,.8); border-radius:24px; padding:16px 18px;
   display:flex; align-items:center; gap:14px; cursor:pointer; transition:transform .15s;
 }
 .boss:active { transform:scale(.98); }
+.catcard {
+  background:rgba(255,255,255,.07);
+  border:2px solid rgba(232,182,76,.55); border-radius:24px; padding:16px 18px;
+  display:flex; align-items:center; gap:14px;
+}
+.catcard .nm { font-family:'Changa',sans-serif; font-size:25px; font-weight:800; }
+.catcard .rl { font-size:15px; color:#ffd97a; }
+.catcard .btns { margin-top:10px; }
 img.av { border-radius:50%; object-fit:cover; flex-shrink:0; box-shadow:0 8px 20px rgba(0,0,0,.4); background:#0D2B45; }
 .boss img.av { width:86px; height:86px; border:2.5px solid rgba(232,182,76,.85); }
 .boss .nm { font-family:'Changa',sans-serif; font-size:27px; font-weight:800; }
 .boss .rl { font-size:16px; color:#ffd97a; }
-.boss .cat { margin-right:auto; text-align:center; flex-shrink:0; cursor:pointer; }
-.boss .cat img { width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid rgba(232,182,76,.7); }
-.boss .cat .cl { font-size:12px; color:#ffd97a; margin-top:3px; font-weight:700; }
 .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:20px; }
 @media (max-width:560px) {
   .desk { padding:12px; }
@@ -40,7 +46,8 @@ img.av { border-radius:50%; object-fit:cover; flex-shrink:0; box-shadow:0 8px 20
   .btn { font-size:14px; padding:8px 4px; }
   .boss .nm { font-size:22px; }
   .boss img.av { width:70px; height:70px; }
-  .boss .cat img { width:52px; height:52px; }
+  .catcard .nm { font-size:20px; }
+  .catcard .rl { font-size:13px; }
 }
 .desk { background:rgba(255,255,255,.06); border:1.5px solid rgba(47,185,216,.35); border-radius:22px; padding:16px; position:relative; }
 .desk .top { display:flex; align-items:center; gap:12px; }
@@ -87,13 +94,22 @@ img.av { border-radius:50%; object-fit:cover; flex-shrink:0; box-shadow:0 8px 20
   <h1>🏢 مكتب جنود الخفاء <span class="cy">الافتراضي</span></h1>
   <div class="sub">فريق من الذكاء الاصطناعي بيخدمك — دوس على أي موظف وكلّمه، هيجاوبك ويدلّك على مشروعه</div>
 
-  <div class="boss" id="bossCard">
-    <img class="av" src="office-avatars/av-boss.jpg" alt="أبو محمود">
-    <div>
-      <div class="nm">أبو محمود</div>
-      <div class="rl">المؤسس والمدير — دوس وكلّمه بنفسك</div>
+  <div class="toprow">
+    <div class="boss" id="bossCard">
+      <img class="av" src="office-avatars/av-boss.jpg" alt="أبو محمود">
+      <div>
+        <div class="nm">أبو محمود</div>
+        <div class="rl">المؤسس والمدير — دوس وكلّمه بنفسك</div>
+      </div>
     </div>
-    <div class="cat" id="catBtn"><img src="office-avatars/av-cat.jpg" alt="القط الأسود"><div class="cl">القط الأسود — المساعد</div></div>
+    <div class="catcard">
+      <img class="av" src="office-avatars/av-cat.jpg" alt="القط الأسود" style="width:86px;height:86px;border:2.5px solid rgba(232,182,76,.85)">
+      <div>
+        <div class="nm">القط الأسود 🐾</div>
+        <div class="rl">مساعد المدير — العلامة المسجلة للجروب</div>
+        <div class="btns"><button class="btn btn-chat" id="catChatBtn">💬 كلّمه</button></div>
+      </div>
+    </div>
   </div>
 
   <div class="grid" id="grid"></div>
@@ -143,10 +159,6 @@ var STAFF = {
              greet:'أهلاً بيك في قسم الخدمات 🎨 أنا ماسكة كانفا برو وأسعار الذهب وبوابة الأكواد وبطاقة العضوية. اسألني وهاشرح لك الخطوات واحدة واحدة.',
              chips:['ازاي أطلب كانفا برو؟','الذهب بكام النهاردة؟','عاوز أكواد تطبيقات'],
              proj:'كانفا برو للأعضاء', url:'https://muons2002.github.io/radio-station/canva-pro.html' },
-  cat:     { nm:'القط الأسود', img:'av-cat.jpg', rl:'مساعد المدير — العلامة المسجلة للجروب', badge:'🐾 مساعد المدير',
-             greet:'مياو… أهلاً بيك 🐾 أنا القط الأسود، مساعد المدير والعلامة المسجلة للجروب — الناس بتعرف أبو محمود بيّا. اسألني عن أي حاجة وهادلّك على الموظف الصح.',
-             chips:['انت مين؟','بتعمل ايه هنا؟','مين المدير؟'],
-             proj:'كل المشاريع', url:'https://heylink.me/InvisibleSoldiers' },
   ragab:   { nm:'رجب', img:'av-ragab.jpg', rl:'المشاوير والشاي — اللي مبهدلينه معانا', badge:'🏃 مشغول دايماً',
              greet:'أهلاً بيك، أنا رجب 🏃 اللي مبهدلينه معاهم هنا — مشاوير وشاي وطلبات ما بتخلصش. اسألني عن أي موظف وهاوصّلك ليه… تشرب ايه على ما توصل؟',
              chips:['انت مبهدل ليه؟ 😄','مين ماسك الإذاعة؟','عاوز شاي'],
@@ -155,6 +167,9 @@ var STAFF = {
 var BOSS = { nm:'أبو محمود', img:'av-boss.jpg', rl:'المؤسس والمدير',
              greet:'أهلاً بيك في مكتبنا يا غالي 🛡️ أنا أبو محمود، مؤسس جنود الخفاء. اسألني عن أي حاجة في مشاريعنا وهاوجّهك للموظف المختص.',
              chips:['ايه مشاريعكم؟','أوصل لكل حاجة منين؟','مين فريقك؟'] };
+var CAT = { nm:'القط الأسود', img:'av-cat.jpg', rl:'مساعد المدير — العلامة المسجلة للجروب',
+             greet:'مياو… أهلاً بيك 🐾 أنا القط الأسود، مساعد المدير والعلامة المسجلة للجروب — الناس بتعرف أبو محمود بيّا. اسألني عن أي حاجة وهادلّك على الموظف الصح.',
+             chips:['انت مين؟','بتعمل ايه هنا؟','مين المدير؟'] };
 
 var grid = document.getElementById('grid');
 Object.keys(STAFF).forEach(function(key){
@@ -170,14 +185,14 @@ Object.keys(STAFF).forEach(function(key){
   grid.appendChild(d);
 });
 document.getElementById('bossCard').onclick = function(){ openChat('boss'); };
-document.getElementById('catBtn').onclick = function(e){ e.stopPropagation(); openChat('cat'); };
+document.getElementById('catChatBtn').onclick = function(){ openChat('cat'); };
 
 var sheet = document.getElementById('sheet'), msgs = document.getElementById('msgs'),
     chipsBox = document.getElementById('chips'), inp = document.getElementById('inp'),
     sendBtn = document.getElementById('send');
 var cur = null, hist = [];
 
-function persona(key){ return key === 'boss' ? BOSS : STAFF[key]; }
+function persona(key){ return key === 'boss' ? BOSS : (key === 'cat' ? CAT : STAFF[key]); }
 function addMsg(text, who){
   var m = document.createElement('div'); m.className = 'msg ' + who; m.textContent = text;
   msgs.appendChild(m); msgs.scrollTop = msgs.scrollHeight; return m;
