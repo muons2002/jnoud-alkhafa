@@ -50,6 +50,7 @@ img.av { border-radius:50%; object-fit:cover; flex-shrink:0; box-shadow:0 8px 20
   .catcard .rl { font-size:13px; }
 }
 .desk { background:rgba(255,255,255,.06); border:1.5px solid rgba(47,185,216,.35); border-radius:22px; padding:16px; position:relative; }
+.desk.center { grid-column:1 / -1; width:calc(50% - 8px); justify-self:center; }
 .desk .top { display:flex; align-items:center; gap:12px; }
 .desk img.av { width:68px; height:68px; }
 .desk .nm { font-family:'Changa',sans-serif; font-size:23px; font-weight:800; }
@@ -175,6 +176,7 @@ var grid = document.getElementById('grid');
 Object.keys(STAFF).forEach(function(key){
   var s = STAFF[key];
   var d = document.createElement('div'); d.className = 'desk';
+  if (key === 'ragab') d.classList.add('center');
   d.innerHTML =
     (s.badge ? '<div class="badge">' + s.badge + '</div>' : '') +
     '<div class="top"><img class="av" src="' + AV + s.img + '" alt="' + s.nm + '">' +
