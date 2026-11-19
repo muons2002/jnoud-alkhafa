@@ -16,10 +16,10 @@
         --card: #10233f;
         --card-hover: #16304f;
         --line: #1e3a5f;
-        --gold: #d4af37;
-        --gold-soft: #e8c95c;
-        --gold-dim: rgba(212, 175, 55, 0.14);
-        --text: #f4f0e2;
+        --gold: #2FB9D8;
+        --gold-soft: #7fd4ea;
+        --gold-dim: rgba(47, 185, 216, 0.14);
+        --text: #eef4fb;
         --muted: #a7b8cf;
         --player-h: 148px;
       }
@@ -30,8 +30,8 @@
         overflow-x: hidden;
         overflow-x: clip;
         background:
-          radial-gradient(900px 420px at 50% -120px, rgba(212, 175, 55, 0.10), transparent 60%),
-          linear-gradient(180deg, var(--bg-2), var(--bg) 340px);
+          radial-gradient(900px 420px at 50% -120px, rgba(47, 185, 216, 0.10), transparent 60%),
+          linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%);
         color: var(--text);
         font-family: "Cairo", system-ui, sans-serif;
         display: flex;
@@ -61,7 +61,7 @@
         left: 50%; top: 50%;
         width: 168px; height: 168px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(232,201,92,.55) 0%, rgba(255,122,89,.30) 32%, rgba(94,200,255,.22) 50%, rgba(232,106,192,.14) 60%, rgba(212,175,55,0) 72%);
+        background: radial-gradient(circle, rgba(47,185,216,.55) 0%, rgba(255,122,89,.30) 32%, rgba(94,200,255,.22) 50%, rgba(232,106,192,.14) 60%, rgba(47,185,216,0) 72%);
         filter: blur(10px);
         opacity: .3;
         transform: translate(-50%, -50%) scale(.78);
@@ -77,7 +77,7 @@
         position: absolute;
         inset: 4px;
         border-radius: 50%;
-        background: conic-gradient(from 0deg, #d4af37, #ff7a59, #e86ac0, #5ec8ff, #7be0a3, #d4af37);
+        background: conic-gradient(from 0deg, #2FB9D8, #ff7a59, #e86ac0, #5ec8ff, #7be0a3, #2FB9D8);
         animation: ringSpin 16s linear infinite;
         pointer-events: none;
       }
@@ -87,7 +87,7 @@
         inset: 10px;
         border-radius: 50%;
         background: radial-gradient(circle at 50% 32%, #132c50, #0a1830 78%);
-        box-shadow: inset 0 0 0 1px rgba(212,175,55,.35), 0 6px 18px rgba(0,0,0,.45);
+        box-shadow: inset 0 0 0 1px rgba(47,185,216,.35), 0 6px 18px rgba(0,0,0,.45);
         display: flex; align-items: center; justify-content: center;
       }
       .clock-read {
@@ -152,7 +152,7 @@
         margin-inline-start: 4px;
       }
       .tab.active {
-        background: var(--gold);
+        background: linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87);
         border-color: var(--gold);
         color: #1a1405;
       }
@@ -340,12 +340,12 @@
       .ctl:disabled { opacity: .35; cursor: default; }
       #playBtn {
         width: 58px; height: 58px;
-        background: var(--gold);
+        background: linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87);
         color: #1a1405;
-        box-shadow: 0 4px 18px rgba(212,175,55,.4);
+        box-shadow: 0 4px 18px rgba(47,185,216,.2);
       }
       #playBtn svg { width: 28px; height: 28px; }
-      #playBtn:active { background: var(--gold-soft); }
+      #playBtn:active { background: linear-gradient(160deg,#35A3C2,#2389A8 60%,#1B7494); }
       svg.icon-off { display: none !important; }
     </style>
   </head>
@@ -573,7 +573,7 @@
         var v = parseFloat(seekEl.value) || 0;
         var pct = max > 0 ? (v / max) * 100 : 0;
         seekEl.style.backgroundImage =
-          "linear-gradient(to right, #d4af37 " + pct + "%, #1e3a5f " + pct + "%)";
+          "linear-gradient(to right, #2FB9D8 " + pct + "%, #1e3a5f " + pct + "%)";
         seekEl.style.backgroundSize = "100% 6px";
         seekEl.style.backgroundRepeat = "no-repeat";
         seekEl.style.backgroundPosition = "center";

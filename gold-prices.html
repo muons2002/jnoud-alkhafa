@@ -12,41 +12,41 @@
     <style>
       :root {
         color-scheme: light dark;
-        --bg: #f7f5f0;
-        --surface: #ffffff;
-        --surface-2: #fbf9f4;
-        --ink: #1d2735;
-        --ink-soft: #5b6572;
-        --line: #e5dfd0;
-        --gold: #b8860b;
-        --gold-strong: #96690a;
-        --gold-soft: #f6ecd4;
-        --gold-grad-a: #d9a521;
-        --gold-grad-b: #a87408;
-        --navy: #12263f;
-        --green: #1c7c43;
-        --green-soft: #e3f3e9;
-        --red: #b3372c;
-        --red-soft: #fbeae8;
-        --amber: #9a6a06;
-        --amber-soft: #fdf3d7;
-        --shadow: 0 10px 30px rgba(29, 39, 53, 0.08);
+        --bg: linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%);
+        --surface: #0D2B45;
+        --surface-2: #0A2240;
+        --ink: #eef4fb;
+        --ink-soft: #9db4cc;
+        --line: #1d4e66;
+        --gold: #2FB9D8;
+        --gold-strong: #7fd4ea;
+        --gold-soft: #14334d;
+        --gold-grad-a: #2FB9D8;
+        --gold-grad-b: #1B7F9E;
+        --navy: #0D2B45;
+        --green: #4cc984;
+        --green-soft: #14301f;
+        --red: #ef8a7f;
+        --red-soft: #3a1d1a;
+        --amber: #eec25e;
+        --amber-soft: #2f2812;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
         --radius: 18px;
       }
       @media (prefers-color-scheme: dark) {
         :root {
-          --bg: #0c1420;
-          --surface: #14202f;
-          --surface-2: #101a28;
-          --ink: #f0ead9;
-          --ink-soft: #a7b0bd;
-          --line: #263449;
-          --gold: #e0aa3e;
-          --gold-strong: #f0bc55;
-          --gold-soft: #2a2415;
-          --gold-grad-a: #e9b949;
-          --gold-grad-b: #b57f14;
-          --navy: #0c1420;
+          --bg: linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%);
+          --surface: #0D2B45;
+          --surface-2: #0A2240;
+          --ink: #eef4fb;
+          --ink-soft: #9db4cc;
+          --line: #1d4e66;
+          --gold: #2FB9D8;
+          --gold-strong: #7fd4ea;
+          --gold-soft: #14334d;
+          --gold-grad-a: #2FB9D8;
+          --gold-grad-b: #1B7F9E;
+          --navy: #0D2B45;
           --green: #4cc984;
           --green-soft: #14301f;
           --red: #ef8a7f;
@@ -131,7 +131,7 @@
         gap: 8px;
       }
       .btn.primary {
-        background: linear-gradient(160deg, var(--gold-grad-a), var(--gold-grad-b));
+        background: linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87);
         border-color: transparent;
         color: #fff;
       }
@@ -159,7 +159,7 @@
         border-radius: 22px;
         padding: 26px 22px 22px;
         text-align: center;
-        color: #fff8e7;
+        color: #eef4fb;
         background:
           radial-gradient(120% 160% at 85% -20%, rgba(255, 214, 110, 0.35), transparent 55%),
           linear-gradient(150deg, #1b3a5c 0%, #12263f 55%, #0d1d31 100%);
@@ -167,7 +167,7 @@
         position: relative;
         overflow: hidden;
       }
-      .hero-card .kicker { font-family: "Cairo", sans-serif; font-weight: 700; font-size: 1.05rem; color: #f3cd72; }
+      .hero-card .kicker { font-family: "Cairo", sans-serif; font-weight: 700; font-size: 1.05rem; color: #7fd4ea; }
       .hero-price {
         font-family: "Cairo", sans-serif;
         font-weight: 900;
@@ -230,7 +230,7 @@
       .adj-badge {
         display: none;
         margin-top: 12px;
-        background: #f3cd72;
+        background: #7fd4ea;
         color: #12263f;
         font-family: "Cairo", sans-serif;
         font-weight: 800;
@@ -241,7 +241,7 @@
       .adj-badge.show { display: inline-block; }
       .adj-line { display: none; margin: 6px 0 0; font-size: 0.86rem; font-weight: 700; color: var(--gold-strong); }
       .adj-line.show { display: block; }
-      .adj-line.hero-adj { color: #f3cd72; }
+      .adj-line.hero-adj { color: #7fd4ea; }
 
       /* ---------- Local market diff ---------- */
       .diff-panel {
@@ -1087,13 +1087,13 @@
           fill: "rgba(217,165,33,0.13)"
         }));
         svg.appendChild(el("polyline", {
-          points: pts.join(" "), fill: "none", stroke: "#d9a521",
+          points: pts.join(" "), fill: "none", stroke: "#2FB9D8",
           "stroke-width": "4", "stroke-linejoin": "round", "stroke-linecap": "round"
         }));
         HISTORY.forEach(function (r, i) {
           svg.appendChild(el("circle", {
             cx: px(i), cy: Math.round(py(r.v)), r: r.today ? "7" : "5",
-            fill: r.today ? "#2fb9d8" : "#d9a521"
+            fill: r.today ? "#2fb9d8" : "#2FB9D8"
           }));
         });
         var hiI = vals.indexOf(Math.max.apply(null, vals));

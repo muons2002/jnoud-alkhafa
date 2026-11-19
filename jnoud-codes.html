@@ -22,8 +22,8 @@
     --text:#f1f5f9;
     --muted:#a8b6c8;
     --muted-2:#7e90a8;
-    --gold:#f59e0b;
-    --gold-soft:rgba(245,158,11,.14);
+    --gold:#2FB9D8;
+    --gold-soft:rgba(47,185,216,.14);
     --blue:#38bdf8;
     --blue-soft:rgba(56,189,248,.13);
     --green:#22c55e;
@@ -38,8 +38,9 @@
     margin:0;
     background:
       radial-gradient(900px 420px at 85% -80px, rgba(56,189,248,.10), transparent 60%),
-      radial-gradient(700px 380px at 8% -60px, rgba(245,158,11,.08), transparent 55%),
-      var(--bg);
+      radial-gradient(700px 380px at 8% -60px, rgba(47,185,216,.04), transparent 55%),
+      linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%);
+    background-attachment:fixed;
     color:var(--text);
     font-family:"Cairo","Tajawal",system-ui,sans-serif;
     line-height:1.65;
@@ -117,16 +118,16 @@
   .first-step{
     text-align:center;
     background:
-      radial-gradient(560px 240px at 50% -60px, rgba(245,158,11,.22), transparent 65%),
+      radial-gradient(560px 240px at 50% -60px, rgba(47,185,216,.11), transparent 65%),
       linear-gradient(180deg,#26334d,var(--surface-2));
     border:2px solid var(--gold);
     border-radius:18px;padding:30px 20px 28px;margin-bottom:20px;
-    box-shadow:0 0 0 4px rgba(245,158,11,.14),0 0 34px rgba(245,158,11,.30),var(--shadow);
+    box-shadow:0 0 0 4px rgba(47,185,216,.14),0 0 34px rgba(47,185,216,.15),var(--shadow);
   }
   .hero-arrow{
     width:84px;height:84px;margin:0 auto 14px;border-radius:50%;
-    background:var(--gold);color:#1c1206;display:grid;place-items:center;
-    box-shadow:0 0 26px rgba(245,158,11,.55);
+    background:linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87);color:#06222e;display:grid;place-items:center;
+    box-shadow:0 0 26px rgba(47,185,216,.28);
     animation:heroBounce 1.8s ease-in-out infinite;
   }
   .hero-arrow svg{width:46px;height:46px}
@@ -152,7 +153,7 @@
     width:100%;direction:ltr;text-align:center;
     font-family:ui-monospace,"Courier New",monospace;
     font-size:2.7rem;font-weight:700;letter-spacing:.28em;color:#fff;
-    background:#020617;border:2px dashed rgba(245,158,11,.75);
+    background:#020617;border:2px dashed rgba(47,185,216,.75);
     border-radius:14px;padding:12px 8px 12px calc(8px + .28em);
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   }
@@ -172,7 +173,7 @@
     transition:background .15s,color .15s,border-color .15s;
   }
   .filter-btn:hover{color:var(--text);border-color:var(--blue)}
-  .filter-btn.active{background:var(--gold);border-color:var(--gold);color:#1c1206}
+  .filter-btn.active{background:linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87);border-color:var(--gold);color:#06222e}
   .result-count{color:var(--muted-2);font-size:.88rem;font-weight:600;margin:10px 2px 14px}
 
   /* ===== عناوين الأقسام ===== */
@@ -235,7 +236,7 @@
 
   /* صندوق كود Downloader */
   .code-box{
-    background:#020617;border:1.5px dashed rgba(245,158,11,.55);border-radius:12px;
+    background:#020617;border:1.5px dashed rgba(47,185,216,.55);border-radius:12px;
     padding:12px 12px 12px 14px;
   }
   .code-box .label{
@@ -276,8 +277,8 @@
   .btn svg{width:17px;height:17px;flex:0 0 auto}
   .btn-guide{background:transparent;color:var(--blue);border-color:rgba(56,189,248,.55)}
   .btn-guide:hover{background:var(--blue-soft)}
-  .btn-tutorial{background:var(--gold-soft);color:var(--gold);border-color:rgba(245,158,11,.5);grid-column:1/-1}
-  .btn-tutorial:hover{background:rgba(245,158,11,.24)}
+  .btn-tutorial{background:var(--gold-soft);color:var(--gold);border-color:rgba(47,185,216,.5);grid-column:1/-1}
+  .btn-tutorial:hover{background:rgba(47,185,216,.24)}
   .meta b{color:var(--text);font-weight:800}
 
   /* حالة عدم وجود نتائج */
@@ -331,14 +332,14 @@
   .modal .modal-code{
     direction:ltr;text-align:center;font-family:ui-monospace,"Courier New",monospace;
     font-size:1.4rem;font-weight:700;letter-spacing:.2em;color:#fff;
-    background:#020617;border:1.5px dashed rgba(245,158,11,.55);
+    background:#020617;border:1.5px dashed rgba(47,185,216,.55);
     border-radius:11px;padding:10px 8px;margin:12px 0 18px;
   }
   .steps{list-style:none;margin:0;padding:0;counter-reset:step;display:flex;flex-direction:column;gap:14px}
   .steps li{display:flex;gap:12px;align-items:flex-start}
   .steps .num{
     counter-increment:step;flex:0 0 34px;width:34px;height:34px;border-radius:50%;
-    background:var(--gold);color:#1c1206;font-weight:900;display:grid;place-items:center;font-size:1rem;
+    background:var(--gold);color:#06222e;font-weight:900;display:grid;place-items:center;font-size:1rem;
   }
   .steps p{margin:2px 0 0;color:var(--muted);font-size:.96rem}
   .steps p b{color:var(--text)}
@@ -371,7 +372,7 @@
   <div class="topbar-inner">
     <div class="brand">
       <div class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6l7-3z"/><path d="M12 8v5"/><path d="M9.5 10.5h5"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2FB9D8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6l7-3z"/><path d="M12 8v5"/><path d="M9.5 10.5h5"/></svg>
       </div>
       <div>
         <h1>بوابة <span class="gold">جنود الخفاء</span> التقنية</h1>

@@ -6,10 +6,10 @@
 <title>مكتبة الشيخ الشعراوي — جنود الخفاء</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body { font-family:'Segoe UI', Tahoma, Arial, sans-serif; background:#0a1120; color:#eef2f7; min-height:100vh; padding-bottom:132px; }
-  header { background:linear-gradient(160deg,#0d1b33 0%,#12294d 55%,#0d1b33 100%); border-bottom:2px solid #c9a227; padding:26px 16px 20px; text-align:center; }
-  header .bismillah { color:#c9a227; font-size:20px; margin-bottom:8px; }
-  header h1 { font-size:27px; color:#f3d97b; margin-bottom:6px; }
+  body { font-family:'Segoe UI', Tahoma, Arial, sans-serif; background:linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%); background-attachment:fixed; color:#eef2f7; min-height:100vh; padding-bottom:132px; }
+  header { background:linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%); border-bottom:2px solid #c9a227; padding:26px 16px 20px; text-align:center; }
+  header .bismillah { color:#2FB9D8; font-size:20px; margin-bottom:8px; }
+  header h1 { font-size:27px; color:#7fd4ea; margin-bottom:6px; }
   header p { color:#aebdd2; font-size:14px; }
   header .brand { margin-top:10px; color:#7fd4ea; font-size:13px; }
   .wrap { max-width:860px; margin:0 auto; padding:16px 12px; }
@@ -18,26 +18,26 @@
   .sec-btn .ico { font-size:30px; display:block; margin-bottom:6px; }
   .sec-btn .nm { font-size:17px; font-weight:700; display:block; }
   .sec-btn .ct { font-size:12.5px; color:#9fb2cc; display:block; margin-top:3px; }
-  .sec-btn.active { border-color:#c9a227; background:linear-gradient(160deg,#1a2c4e,#14264a); box-shadow:0 0 0 1px #c9a227 inset; }
+  .sec-btn.active { border-color:#2FB9D8; background:linear-gradient(160deg,#1a2c4e,#14264a); box-shadow:0 0 0 1px #2FB9D8 inset; }
   .sec-btn.soon { opacity:.75; cursor:default; grid-column:1 / -1; }
-  .sec-btn.soon .ct { color:#c9a227; }
+  .sec-btn.soon .ct { color:#2FB9D8; }
   .sec-btn.wide { grid-column:1 / -1; }
   .surah-head { display:flex; align-items:center; gap:11px; background:#101d36; border:1.5px solid #1d2f52; border-radius:12px; padding:12px 13px; margin-bottom:8px; cursor:pointer; }
   .surah-head:hover { border-color:#35507f; }
   .surah-head .num { flex:0 0 38px; height:38px; border-radius:50%; background:#1a2c4e; border:1.5px solid #35507f; color:#7fd4ea; font-weight:800; font-size:14.5px; display:flex; align-items:center; justify-content:center; }
   .surah-head .nm { flex:1; font-size:16.5px; font-weight:700; }
   .surah-head .ct { color:#8fa5c4; font-size:12.5px; white-space:nowrap; }
-  .surah-head .chev { color:#c9a227; font-size:14px; transition:.15s; }
+  .surah-head .chev { color:#2FB9D8; font-size:14px; transition:.15s; }
   .surah-head.open .chev { transform:rotate(180deg); }
   .grp-note { color:#9fb2cc; font-size:13.5px; text-align:center; margin-bottom:12px; line-height:1.8; }
   .search { width:100%; padding:12px 14px; border-radius:12px; border:1.5px solid #22365a; background:#0e1930; color:#fff; font-size:15.5px; margin-bottom:12px; }
-  .search:focus { outline:none; border-color:#c9a227; }
+  .search:focus { outline:none; border-color:#2FB9D8; }
   .ep { display:flex; align-items:center; gap:11px; background:#101d36; border:1.5px solid #1d2f52; border-radius:12px; padding:11px 13px; margin-bottom:8px; cursor:pointer; transition:.12s; }
   .ep:hover { border-color:#35507f; }
-  .ep .num { flex:0 0 38px; height:38px; border-radius:50%; background:linear-gradient(145deg,#c9a227,#8f7114); color:#131313; font-weight:800; font-size:15px; display:flex; align-items:center; justify-content:center; }
+  .ep .num { flex:0 0 38px; height:38px; border-radius:50%; background:linear-gradient(145deg,#2FB9D8,#1B7F9E); color:#06222e; font-weight:800; font-size:15px; display:flex; align-items:center; justify-content:center; }
   .ep .tt { flex:1; font-size:15.5px; line-height:1.5; }
   .ep .du { color:#8fa5c4; font-size:12.5px; white-space:nowrap; }
-  .ep.playing { border-color:#c9a227; background:#16294d; }
+  .ep.playing { border-color:#2FB9D8; background:#16294d; }
   .ep.playing .num { background:linear-gradient(145deg,#39c2dd,#1d7e99); color:#fff; }
   .eq { display:none; gap:2.5px; align-items:flex-end; height:16px; }
   .ep.playing .eq { display:flex; }
@@ -48,11 +48,11 @@
   footer { text-align:center; color:#66788f; font-size:12.5px; padding:14px 10px 4px; }
   /* player */
   .player { position:fixed; bottom:0; right:0; left:0; background:rgba(10,18,36,.97); border-top:2px solid #c9a227; padding:10px 14px 12px; z-index:50; backdrop-filter:blur(6px); }
-  .player .ttl { font-size:14.5px; color:#f3d97b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:8px; text-align:center; }
+  .player .ttl { font-size:14.5px; color:#7fd4ea; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:8px; text-align:center; }
   .player .row { display:flex; align-items:center; gap:10px; max-width:860px; margin:0 auto; }
   .pbtn { flex:0 0 auto; width:44px; height:44px; border-radius:50%; border:none; cursor:pointer; font-size:18px; background:#1a2c4e; color:#eef2f7; }
-  .pbtn.main { width:54px; height:54px; font-size:23px; background:linear-gradient(145deg,#c9a227,#8f7114); color:#131313; }
-  .seek { flex:1; accent-color:#c9a227; height:6px; cursor:pointer; }
+  .pbtn.main { width:54px; height:54px; font-size:23px; background:linear-gradient(145deg,#2794B6,#156A87); color:#06222e; }
+  .seek { flex:1; accent-color:#2FB9D8; height:6px; cursor:pointer; }
   .tm { font-size:12px; color:#9fb2cc; white-space:nowrap; min-width:78px; text-align:center; }
   .vol { width:74px; accent-color:#39c2dd; cursor:pointer; }
   @media (max-width:560px){ .vol{display:none} header h1{font-size:23px} .ep .tt{font-size:14.5px} }

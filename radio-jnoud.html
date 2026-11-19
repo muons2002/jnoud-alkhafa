@@ -11,18 +11,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --bg:#0d0b08;
-    --bg2:#14110b;
-    --card:#1a1712;
-    --card2:#211c14;
-    --line:#3a3222;
-    --line-soft:#2a2519;
-    --gold:#d9a92c;
-    --gold-hi:#f0c94e;
-    --gold-dim:#9a7d2e;
-    --text:#f3ecd9;
-    --muted:#b3a888;
-    --faint:#7d735c;
+    --bg:#081426;
+    --bg2:#0A3A56;
+    --card:#0D2B45;
+    --card2:#123656;
+    --line:#1d4e66;
+    --line-soft:#14334d;
+    --gold:#2FB9D8;
+    --gold-hi:#7fd4ea;
+    --gold-dim:#1B7F9E;
+    --text:#eef4fb;
+    --muted:#9db4cc;
+    --faint:#7188a3;
     --danger:#e0654f;
     --ok:#7fc96b;
     --radius:14px;
@@ -32,9 +32,10 @@
   body{
     margin:0;
     background:
-      radial-gradient(900px 480px at 85% -120px, rgba(217,169,44,.10), transparent 60%),
-      radial-gradient(700px 420px at 8% 0, rgba(217,169,44,.05), transparent 55%),
-      var(--bg);
+      radial-gradient(900px 480px at 85% -120px, rgba(47,185,216,.05), transparent 60%),
+      radial-gradient(700px 420px at 8% 0, rgba(47,185,216,.03), transparent 55%),
+      linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%);
+    background-attachment:fixed;
     color:var(--text);
     font-family:"Cairo", system-ui, "Segoe UI", Tahoma, sans-serif;
     min-height:100vh;
@@ -67,8 +68,8 @@
   }
   .fbtn .cnt{font-size:12.5px;color:var(--faint);font-weight:700}
   .fbtn:hover{border-color:var(--gold-dim);color:var(--text)}
-  .fbtn.active{background:var(--gold);border-color:var(--gold);color:#171204}
-  .fbtn.active .cnt{color:#5c4a10}
+  .fbtn.active{background:linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87);border-color:var(--gold);color:#06222e}
+  .fbtn.active .cnt{color:#0b3a4d}
   .search{margin:14px auto 0;max-width:460px;position:relative}
   .search svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:var(--faint);fill:none;stroke-width:2}
   .search input{
@@ -94,19 +95,19 @@
     scroll-margin-bottom:150px;
   }
   .card:hover{border-color:var(--line)}
-  .card.playing{border-color:var(--gold);background:linear-gradient(180deg,#2b2312,var(--card))}
+  .card.playing{border-color:var(--gold);background:linear-gradient(180deg,#0e3a56,var(--card))}
   .card.error{border-color:var(--danger)}
   .pbtn{
     flex:none;width:52px;height:52px;border-radius:50%;border:1.5px solid var(--gold-dim);
-    background:#100d07;color:var(--gold-hi);cursor:pointer;
+    background:#0a1a33;color:var(--gold-hi);cursor:pointer;
     display:flex;align-items:center;justify-content:center;transition:.18s;padding:0;
     scroll-margin-bottom:190px;scroll-margin-top:20px;
   }
-  .pbtn:hover{background:var(--gold);color:#171204;border-color:var(--gold)}
-  .card.playing .pbtn{background:var(--gold);color:#171204;border-color:var(--gold)}
+  .pbtn:hover{background:linear-gradient(160deg,#35A3C2,#2389A8 60%,#1B7494);color:#06222e;border-color:var(--gold)}
+  .card.playing .pbtn{background:linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87);color:#06222e;border-color:var(--gold)}
   .pbtn svg{width:22px;height:22px;fill:currentColor}
   .pbtn .spin{
-    width:20px;height:20px;border-radius:50%;border:2.5px solid rgba(240,201,78,.35);
+    width:20px;height:20px;border-radius:50%;border:2.5px solid rgba(127,212,234,.35);
     border-top-color:var(--gold-hi);animation:rot .7s linear infinite;display:none;
   }
   .pbtn.loading .spin{display:block}
@@ -116,7 +117,7 @@
   .name{font-size:16.5px;font-weight:800;line-height:1.4}
   .meta{margin-top:2px;color:var(--muted);font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .tags{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
-  .tag{font-size:11.5px;font-weight:800;color:var(--gold-hi);border:1px solid var(--line);border-radius:6px;padding:1px 8px;background:rgba(217,169,44,.07)}
+  .tag{font-size:11.5px;font-weight:800;color:var(--gold-hi);border:1px solid var(--line);border-radius:6px;padding:1px 8px;background:rgba(47,185,216,.08)}
   .tag.country{color:var(--muted)}
   .eq{display:none;align-items:flex-end;gap:2.5px;height:18px;flex:none}
   .card.playing .eq{display:flex}
@@ -135,14 +136,14 @@
     grid-column:1/-1;padding:20px 22px;
     border:1.5px solid var(--gold-dim);
     background:
-      radial-gradient(500px 200px at 90% -40px, rgba(217,169,44,.16), transparent 60%),
-      linear-gradient(180deg,#2a2210,#1a160d);
+      radial-gradient(500px 200px at 90% -40px, rgba(47,185,216,.08), transparent 60%),
+      linear-gradient(180deg,#123a5c,#0d2b45);
   }
   .card.featured .pbtn{width:64px;height:64px}
   .card.featured .pbtn svg{width:28px;height:28px}
   .card.featured .name{font-size:clamp(20px,4vw,26px);font-weight:900;color:var(--gold-hi)}
   .card.featured .meta{font-size:14.5px}
-  .badge-ours{background:var(--gold);color:#171204;border-color:var(--gold)}
+  .badge-ours{background:var(--gold);color:#06222e;border-color:var(--gold)}
 
   .empty{display:none;text-align:center;color:var(--faint);font-weight:700;padding:34px 0;font-size:15.5px}
   .empty.show{display:block}
@@ -152,7 +153,7 @@
   /* ---------- Bottom player bar ---------- */
   .player{
     position:fixed;inset-inline:0;bottom:0;z-index:50;
-    background:rgba(16,13,8,.96);backdrop-filter:blur(8px);
+    background:rgba(8,20,38,.96);backdrop-filter:blur(8px);
     border-top:1.5px solid var(--gold-dim);
     padding:10px 0 calc(10px + env(safe-area-inset-bottom));
   }
@@ -165,13 +166,13 @@
   .np .np-status.ok{color:var(--ok)}
   .pcontrols{display:flex;align-items:center;gap:10px;flex:none}
   .mainbtn{
-    width:56px;height:56px;border-radius:50%;border:none;background:var(--gold);color:#171204;
+    width:56px;height:56px;border-radius:50%;border:none;background:linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87);color:#06222e;
     cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.18s;padding:0;
   }
-  .mainbtn:hover{background:var(--gold-hi)}
+  .mainbtn:hover{background:linear-gradient(160deg,#35A3C2,#2389A8 60%,#1B7494)}
   .mainbtn:disabled{opacity:.45;cursor:default}
   .mainbtn svg{width:26px;height:26px;fill:currentColor}
-  .mainbtn .spin{width:22px;height:22px;border-radius:50%;border:3px solid rgba(23,18,4,.3);border-top-color:#171204;animation:rot .7s linear infinite;display:none}
+  .mainbtn .spin{width:22px;height:22px;border-radius:50%;border:3px solid rgba(6,34,46,.3);border-top-color:#06222e;animation:rot .7s linear infinite;display:none}
   .mainbtn.loading .spin{display:block}
   .mainbtn.loading svg{display:none}
   .stopbtn{
@@ -185,14 +186,14 @@
   .vol button svg{width:21px;height:21px;fill:currentColor}
   .vol input[type=range]{
     -webkit-appearance:none;appearance:none;width:110px;height:5px;border-radius:3px;
-    background:linear-gradient(to left,var(--gold) var(--fill,80%),#3a3222 var(--fill,80%));
+    background:linear-gradient(to left,var(--gold) var(--fill,80%),#1d4e66 var(--fill,80%));
     outline:none;cursor:pointer;direction:ltr;
   }
   .vol input[type=range]::-webkit-slider-thumb{
     -webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold-hi);
-    border:2px solid #171204;box-shadow:0 0 0 1px var(--gold-dim);
+    border:2px solid #06222e;box-shadow:0 0 0 1px var(--gold-dim);
   }
-  .vol input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--gold-hi);border:2px solid #171204}
+  .vol input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--gold-hi);border:2px solid #06222e}
 
   @media (max-width:640px){
     body{padding-bottom:170px}
@@ -218,11 +219,11 @@
 
 <header class="wrap">
   <svg class="shield" viewBox="0 0 60 70" aria-hidden="true">
-    <path d="M30 2 L54 10 V34 C54 52 43 62 30 68 C17 62 6 52 6 34 V10 Z" fill="#171204" stroke="#d9a92c" stroke-width="2.5"/>
-    <path d="M30 9 L47 14.5 V34 C47 47.5 39 55.5 30 60.5 C21 55.5 13 47.5 13 34 V14.5 Z" fill="none" stroke="#d9a92c" stroke-width="1" opacity=".45"/>
-    <circle cx="30" cy="38" r="4.5" fill="#f0c94e"/>
-    <path d="M19.5 27.5 a15 15 0 0 1 21 0" fill="none" stroke="#f0c94e" stroke-width="2.6" stroke-linecap="round"/>
-    <path d="M23.8 32 a9.5 9.5 0 0 1 12.4 0" fill="none" stroke="#f0c94e" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M30 2 L54 10 V34 C54 52 43 62 30 68 C17 62 6 52 6 34 V10 Z" fill="#0D2B45" stroke="#2FB9D8" stroke-width="2.5"/>
+    <path d="M30 9 L47 14.5 V34 C47 47.5 39 55.5 30 60.5 C21 55.5 13 47.5 13 34 V14.5 Z" fill="none" stroke="#2FB9D8" stroke-width="1" opacity=".45"/>
+    <circle cx="30" cy="38" r="4.5" fill="#7fd4ea"/>
+    <path d="M19.5 27.5 a15 15 0 0 1 21 0" fill="none" stroke="#7fd4ea" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M23.8 32 a9.5 9.5 0 0 1 12.4 0" fill="none" stroke="#7fd4ea" stroke-width="2.6" stroke-linecap="round"/>
   </svg>
   <h1>راديو جنود الخفاء</h1>
   <p class="tagline">حب الخير للغير · ٤٥ إذاعة مباشرة — عربي ورياضة وهيتس ولاتيني من كل العالم</p>

@@ -12,10 +12,10 @@
 <style>
   :root{
     color-scheme: dark;
-    --bg:#0a0906; --bg2:#12100a; --panel:#171410; --panel2:#1e1a13;
-    --gold:#c9a227; --gold2:#e8cc6d; --gold-dim:#8a7226;
-    --ink:#f2ead6; --muted:#b8ab8d; --faint:#7d735c;
-    --line:#2e2718; --line2:#453a20;
+    --bg:#081426; --bg2:#0A2240; --panel:#0D2B45; --panel2:#123656;
+    --gold:#2FB9D8; --gold2:#7fd4ea; --gold-dim:#1B7F9E;
+    --ink:#eef4fb; --muted:#9db4cc; --faint:#7188a3;
+    --line:#14334d; --line2:#1d4e66;
     --ok:#7fb069; --danger:#d1603d;
     --radius:14px;
   }
@@ -24,9 +24,10 @@
   @media (max-width:560px){ html{scroll-padding-bottom:164px} }
   body{
     margin:0; background:
-      radial-gradient(1100px 480px at 85% -120px, rgba(201,162,39,.10), transparent 60%),
-      radial-gradient(800px 400px at 5% 0, rgba(201,162,39,.05), transparent 55%),
-      var(--bg);
+      radial-gradient(1100px 480px at 85% -120px, rgba(47,185,216,.05), transparent 60%),
+      radial-gradient(800px 400px at 5% 0, rgba(47,185,216,.03), transparent 55%),
+      linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%);
+    background-attachment:fixed;
     color:var(--ink);
     font-family:"Tajawal", system-ui, sans-serif;
     padding-bottom:212px;
@@ -52,12 +53,12 @@
   button, [role="button"], select, input:not([type="checkbox"],[type="radio"]){min-height:2.25rem}
   button{font-family:inherit; cursor:pointer}
   a{color:var(--gold2)}
-  ::selection{background:var(--gold); color:#171106}
+  ::selection{background:var(--gold); color:#06222e}
 
   /* ===== Header / nav ===== */
   header.top{
     position:sticky; top:0; z-index:40;
-    background:rgba(10,9,6,.92); backdrop-filter:blur(10px);
+    background:rgba(8,20,38,.92); backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line2);
   }
   .top-inner{max-width:1240px; margin:0 auto; padding:.65rem 1rem .55rem}
@@ -76,11 +77,11 @@
     display:inline-flex; align-items:center; gap:.45rem;
   }
   nav.cats button .cnt{
-    background:#262014; color:var(--gold2); border:1px solid var(--line2);
+    background:#123656; color:var(--gold2); border:1px solid var(--line2);
     font-size:.72rem; border-radius:999px; padding:.02rem .5rem; font-weight:800;
   }
-  nav.cats button.active{background:linear-gradient(180deg,#2b2311,#1d1809); color:var(--gold2); border-color:var(--gold-dim)}
-  nav.cats button.active .cnt{background:var(--gold); color:#1a1405; border-color:var(--gold)}
+  nav.cats button.active{background:linear-gradient(180deg,#164a6e,#0d2b45); color:var(--gold2); border-color:var(--gold-dim)}
+  nav.cats button.active .cnt{background:var(--gold); color:#06222e; border-color:var(--gold)}
   .tools{display:flex; gap:.5rem; margin-top:.55rem; flex-wrap:wrap}
   .tools input[type="search"]{
     flex:1 1 220px; background:var(--panel); border:1px solid var(--line);
@@ -101,11 +102,11 @@
   .intro p{margin:0; color:var(--muted); line-height:1.9; font-size:.97rem}
   .resume-bar{
     display:none; align-items:center; gap:.7rem; flex-wrap:wrap;
-    border:1px solid var(--gold-dim); background:#221b0d; color:var(--gold2);
+    border:1px solid var(--gold-dim); background:#0e2c47; color:var(--gold2);
     border-radius:var(--radius); padding:.6rem .9rem; margin-bottom:1rem; font-size:.93rem;
   }
   .resume-bar.show{display:flex}
-  .resume-bar button{background:var(--gold); color:#1a1405; border:0; border-radius:9px; padding:.35rem .9rem; font-weight:800}
+  .resume-bar button{background:linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87); color:#06222e; border:0; border-radius:9px; padding:.35rem .9rem; font-weight:800}
   .resume-bar button.ghost{background:transparent; color:var(--muted); border:1px solid var(--line2)}
 
   .sec-head{display:flex; align-items:baseline; gap:.6rem; margin:.4rem 0 .7rem}
@@ -118,7 +119,7 @@
     background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
     padding:.9rem; display:flex; flex-direction:column; gap:.45rem;
   }
-  .card.playing{border-color:var(--gold-dim); background:linear-gradient(180deg,#1d180c,var(--panel))}
+  .card.playing{border-color:var(--gold-dim); background:linear-gradient(180deg,#0e3a56,var(--panel))}
   .card .cat{font-size:.74rem; color:var(--gold); font-weight:800}
   .card h3{font-family:"Amiri",serif; font-size:1.12rem; line-height:1.55; margin:0; color:var(--ink)}
   .card .credit{color:var(--muted); font-size:.86rem; line-height:1.7}
@@ -128,8 +129,8 @@
     border-radius:9px; padding:.42rem .4rem; font-size:.88rem; font-weight:800;
     display:inline-flex; align-items:center; justify-content:center; gap:.35rem; min-height:2.25rem;
   }
-  .play-btn{background:var(--gold); color:#1a1405; border:0}
-  .play-btn:hover{background:var(--gold2)}
+  .play-btn{background:linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87); color:#06222e; border:0}
+  .play-btn:hover{background:linear-gradient(160deg,#35A3C2,#2389A8 60%,#1B7494)}
   .dl-btn{background:transparent; color:var(--muted); border:1px solid var(--line2)}
   .empty{
     border:1px dashed var(--line2); border-radius:var(--radius); color:var(--muted);
@@ -146,7 +147,7 @@
   aside.story h3{font-family:"Amiri",serif; font-size:1.25rem; margin:.3rem 0 .2rem; line-height:1.6}
   aside.story .credit{color:var(--muted); font-size:.88rem; margin-bottom:.6rem}
   aside.story .body{
-    color:#ddd2b4; line-height:2.05; font-size:.96rem; white-space:pre-line;
+    color:#cfe0f2; line-height:2.05; font-size:.96rem; white-space:pre-line;
     border-top:1px solid var(--line); padding-top:.7rem;
     max-height:46vh; overflow:auto;
   }
@@ -164,7 +165,7 @@
     background:var(--panel2); color:var(--muted); border:1px solid var(--line2);
     border-radius:999px; padding:.35rem .85rem; font-weight:700; font-size:.9rem;
   }
-  .presets button.active{background:var(--gold); color:#1a1405; border-color:var(--gold)}
+  .presets button.active{background:linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87); color:#06222e; border-color:var(--gold)}
   .presets button.save{border-style:dashed; color:var(--gold2)}
   .bands{display:grid; grid-template-columns:repeat(5,1fr); gap:.6rem}
   @media (max-width:560px){ .bands{grid-template-columns:repeat(5,1fr); gap:.3rem} }
@@ -184,7 +185,7 @@
   /* ===== Fixed player ===== */
   .player{
     position:fixed; inset-inline:0; bottom:0; z-index:50;
-    background:rgba(14,12,8,.97); border-top:1px solid var(--gold-dim);
+    background:rgba(8,20,38,.97); border-top:1px solid var(--gold-dim);
     box-shadow:0 -12px 34px rgba(0,0,0,.55);
   }
   .player-inner{max-width:1240px; margin:0 auto; padding:.55rem 1rem calc(.6rem + env(safe-area-inset-bottom))}
@@ -192,7 +193,7 @@
   .p-meta{min-width:0; flex:1}
   .p-title{font-family:"Amiri",serif; font-size:1.08rem; color:var(--gold2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
   .p-credit{color:var(--muted); font-size:.82rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-  canvas#viz{width:150px; height:44px; flex:0 0 auto; background:#0d0b07; border:1px solid var(--line); border-radius:8px}
+  canvas#viz{width:150px; height:44px; flex:0 0 auto; background:#0a1a33; border:1px solid var(--line); border-radius:8px}
   @media (max-width:560px){ canvas#viz{width:92px; height:38px} }
   .p-seek{display:flex; align-items:center; gap:.6rem; margin-top:.45rem}
   .p-seek .t{font-size:.8rem; color:var(--muted); min-width:44px; text-align:center; font-variant-numeric:tabular-nums}
@@ -203,7 +204,7 @@
     border-radius:10px; min-width:44px; padding:.35rem .6rem; font-size:1rem;
     display:inline-flex; align-items:center; justify-content:center; gap:.3rem;
   }
-  .p-controls button.main{background:var(--gold); color:#1a1405; border-color:var(--gold); min-width:58px; font-size:1.15rem}
+  .p-controls button.main{background:linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87); color:#06222e; border-color:var(--gold); min-width:58px; font-size:1.15rem}
   .p-controls button.on{border-color:var(--gold); color:var(--gold2)}
   .p-controls .vol{display:inline-flex; align-items:center; gap:.35rem; color:var(--muted); font-size:.85rem}
   .p-controls .vol input{width:72px; accent-color:var(--gold)}
@@ -681,7 +682,7 @@ function drawViz() {
     const v = data[Math.floor(i * data.length / bars / 1.4)] / 255;
     const bh = Math.max(3, v * (h - 8));
     const grad = vctx.createLinearGradient(0, h, 0, h - bh);
-    grad.addColorStop(0, "#8a7226"); grad.addColorStop(1, "#e8cc6d");
+    grad.addColorStop(0, "#1B7F9E"); grad.addColorStop(1, "#7fd4ea");
     vctx.fillStyle = grad;
     vctx.fillRect(i * bw + 2, h - bh, bw - 4, bh);
   }

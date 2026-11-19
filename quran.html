@@ -8,58 +8,60 @@
 <title>جنود الخفاء - مشغل القرآن الكريم</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Arial, sans-serif; }
-  body { background: #0d0d0d; color: #f5f5f5; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 18px 12px; }
-  .container { width: 100%; max-width: 560px; background: #1a1a1a; border: 1px solid #3a2f14; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,.6); padding: 22px; }
+  body { background: linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%); background-attachment: fixed; color: #f5f5f5; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 18px 12px; }
+  .container { width: 100%; max-width: 560px; background: #0D2B45; border: 1px solid #1d4e66; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,.6); padding: 22px; }
   .header { text-align: center; margin-bottom: 18px; }
   .header .logo { font-size: 2.4rem; }
-  .header h1 { font-size: 1.5rem; color: #d4af37; margin: 4px 0; }
-  .header p { font-size: .9rem; color: #b8a05a; }
-  .label { font-size: .85rem; color: #c9a227; margin: 12px 0 6px; }
+  .header h1 { font-size: 1.5rem; color: #2FB9D8; margin: 4px 0; }
+  .header p { font-size: .9rem; color: #9db4cc; }
+  .label { font-size: .85rem; color: #2FB9D8; margin: 12px 0 6px; }
   select, input[type="search"] {
-    width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid #3a2f14;
-    background: #0d0d0d; color: #f5f5f5; font-size: 1rem; outline: none;
+    width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid #1d4e66;
+    background: linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%); background-attachment: fixed; color: #f5f5f5; font-size: 1rem; outline: none;
   }
-  select:focus, input[type="search"]:focus { border-color: #d4af37; }
-  .track-info { background: #0d0d0d; border: 1px solid #3a2f14; padding: 16px; border-radius: 14px; text-align: center; margin: 16px 0 14px; }
-  .track-num { font-size: .85rem; color: #b8a05a; }
-  .track-title { font-size: 1.4rem; font-weight: bold; color: #d4af37; margin: 4px 0; }
+  select:focus, input[type="search"]:focus { border-color: #2FB9D8; }
+  .track-info { background: linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%); background-attachment: fixed; border: 1px solid #1d4e66; padding: 16px; border-radius: 14px; text-align: center; margin: 16px 0 14px; }
+  .track-num { font-size: .85rem; color: #9db4cc; }
+  .track-title { font-size: 1.4rem; font-weight: bold; color: #2FB9D8; margin: 4px 0; }
   .track-reciter { font-size: .85rem; color: #999; }
   .progress-box { margin-bottom: 14px; }
-  input[type="range"] { width: 100%; accent-color: #d4af37; cursor: pointer; }
+  input[type="range"] { width: 100%; accent-color: #2FB9D8; cursor: pointer; }
   .time-info { display: flex; justify-content: space-between; font-size: .8rem; color: #999; margin-top: 4px; direction: ltr; font-variant-numeric: tabular-nums; }
   .controls { display: flex; justify-content: center; align-items: center; gap: 14px; margin-bottom: 8px; flex-wrap: wrap; }
-  .btn { background: #2a2a2a; border: 1px solid #3a2f14; color: #d4af37; border-radius: 50%; width: 46px; height: 46px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; font-family: inherit; flex: none; padding: 0; }
-  .btn:hover { background: #3a2f14; transform: scale(1.05); }
+  .btn { background: #123656; border: 1px solid #1d4e66; color: #2FB9D8; border-radius: 50%; width: 46px; height: 46px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; font-family: inherit; flex: none; padding: 0; }
+  .btn:hover { background: #1d4e66; transform: scale(1.05); }
   .btn:active { transform: scale(.95); }
-  .btn-play { width: 64px; height: 64px; background: #d4af37; color: #0d0d0d; font-size: 1.6rem; border: none; }
-  .btn-play:hover { background: #e5c15a; }
+  .btn-play { width: 64px; height: 64px; background: linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87); color: #06222e; font-size: 1.6rem; border: none; }
+  .btn-play:hover { background: linear-gradient(160deg,#35A3C2,#2389A8 60%,#1B7494); }
   .btn-small { font-size: .72rem; font-weight: bold; }
-  .btn-toggle[aria-pressed="true"] { background: #d4af37; color: #0d0d0d; border-color: #d4af37; }
+  .btn-toggle[aria-pressed="true"] { background: linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87); color: #06222e; border-color: #2FB9D8; }
   .btn-toggle svg { width: 20px; height: 20px; fill: currentColor; display: block; }
+  .toggle-group { display: flex; align-items: center; gap: 8px; }
+  .btn-sleep { width: auto; height: 46px; border-radius: 23px; padding: 0 16px; font-size: .92rem; font-weight: bold; white-space: nowrap; }
   .sub-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 4px 0 2px; flex-wrap: wrap; }
   .speed-wrap { display: flex; align-items: center; gap: 8px; font-size: .85rem; color: #999; }
   .speed-wrap select { width: auto; padding: 7px 9px; font-size: .85rem; direction: ltr; }
   .status-msg { text-align: center; font-size: .85rem; color: #888; margin: 6px 0 4px; min-height: 1.2em; }
-  .resume { display: none; margin-top: 10px; background: #0d0d0d; border: 1px dashed #d4af37; border-radius: 10px; padding: 12px 14px; font-size: .9rem; }
+  .resume { display: none; margin-top: 10px; background: linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%); background-attachment: fixed; border: 1px dashed #2FB9D8; border-radius: 10px; padding: 12px 14px; font-size: .9rem; }
   .resume.show { display: block; }
   .resume p { margin: 0 0 10px; color: #f5f5f5; }
   .resume .row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .rbtn { appearance: none; font: inherit; font-size: .88rem; font-weight: bold; border-radius: 9px; padding: 8px 14px; cursor: pointer; border: 1px solid #d4af37; }
-  .rbtn.go { background: #d4af37; color: #0d0d0d; }
-  .rbtn.ghost { background: transparent; color: #d4af37; }
+  .rbtn { appearance: none; font: inherit; font-size: .88rem; font-weight: bold; border-radius: 9px; padding: 8px 14px; cursor: pointer; border: 1px solid #2FB9D8; }
+  .rbtn.go { background: linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87); color: #06222e; }
+  .rbtn.ghost { background: transparent; color: #2FB9D8; }
   .error { display: none; margin-top: 10px; background: #2a1210; border: 1px solid #7a2b20; color: #f0927f; border-radius: 10px; padding: 12px 14px; font-size: .9rem; }
   .error.show { display: block; }
   .error button { appearance: none; font: inherit; font-weight: bold; font-size: .88rem; margin-top: 8px; background: transparent; color: inherit; border: 1px solid currentColor; border-radius: 8px; padding: 6px 14px; cursor: pointer; }
-  .playlist-section h3 { font-size: 1rem; color: #c9a227; margin: 14px 0 10px; border-bottom: 1px solid #3a2f14; padding-bottom: 6px; display: flex; justify-content: space-between; align-items: baseline; }
+  .playlist-section h3 { font-size: 1rem; color: #2FB9D8; margin: 14px 0 10px; border-bottom: 1px solid #1d4e66; padding-bottom: 6px; display: flex; justify-content: space-between; align-items: baseline; }
   .playlist-section h3 .count { font-size: .8rem; color: #888; font-weight: normal; }
   .playlist { max-height: 320px; overflow-y: auto; list-style: none; border-radius: 10px; }
   .playlist::-webkit-scrollbar { width: 6px; }
-  .playlist::-webkit-scrollbar-thumb { background: #3a2f14; border-radius: 3px; }
-  .playlist li { padding: 11px 14px; background: #0d0d0d; margin-bottom: 6px; border-radius: 9px; cursor: pointer; font-size: .95rem; display: flex; align-items: center; justify-content: space-between; transition: background .2s; }
-  .playlist li:hover { background: #2a2410; }
-  .playlist li.active { background: #d4af37; color: #0d0d0d; font-weight: bold; }
-  .playlist li .num { color: #b8a05a; font-size: .85rem; margin-left: 8px; white-space: nowrap; }
-  .playlist li.active .num { color: #0d0d0d; }
+  .playlist::-webkit-scrollbar-thumb { background: #1d4e66; border-radius: 3px; }
+  .playlist li { padding: 11px 14px; background: linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%); background-attachment: fixed; margin-bottom: 6px; border-radius: 9px; cursor: pointer; font-size: .95rem; display: flex; align-items: center; justify-content: space-between; transition: background .2s; }
+  .playlist li:hover { background: #123656; }
+  .playlist li.active { background: linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87); color: #06222e; font-weight: bold; }
+  .playlist li .num { color: #9db4cc; font-size: .85rem; margin-left: 8px; white-space: nowrap; }
+  .playlist li.active .num { color: #06222e; }
   .empty { text-align: center; color: #888; padding: 16px; }
   .footer { text-align: center; font-size: .8rem; color: #666; margin-top: 14px; }
   .footer .src { display: block; margin-top: 4px; font-size: .75rem; }
@@ -108,9 +110,12 @@
           <option value="2">2×</option>
         </select>
       </div>
-      <button class="btn btn-toggle" id="repeat-btn" title="تكرار السورة" aria-label="تكرار السورة" aria-pressed="false">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2l4 4-4 4V7H8a3 3 0 0 0-3 3v1H3v-1a5 5 0 0 1 5-5h9V2zM7 22l-4-4 4-4v3h9a3 3 0 0 0 3-3v-1h2v1a5 5 0 0 1-5 5H7v3z"/></svg>
-      </button>
+      <div class="toggle-group">
+        <button class="btn btn-toggle" id="repeat-btn" title="تكرار السورة" aria-label="تكرار السورة" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2l4 4-4 4V7H8a3 3 0 0 0-3 3v1H3v-1a5 5 0 0 1 5-5h9V2zM7 22l-4-4 4-4v3h9a3 3 0 0 0 3-3v-1h2v1a5 5 0 0 1-5 5H7v3z"/></svg>
+        </button>
+        <button class="btn btn-toggle btn-sleep" id="sleep-btn" title="وضع النوم — إيقاف التشغيل عند نهاية السورة" aria-label="وضع النوم" aria-pressed="false">🌙 وضع النوم</button>
+      </div>
     </div>
 
     <div class="status-msg" id="status">جاهز للتشغيل</div>
@@ -184,6 +189,7 @@ var nextBtn     = document.getElementById("next-btn");
 var backBtn     = document.getElementById("back-btn");
 var fwdBtn      = document.getElementById("fwd-btn");
 var repeatBtn   = document.getElementById("repeat-btn");
+var sleepBtn    = document.getElementById("sleep-btn");
 var speedSel    = document.getElementById("speed-select");
 var seek        = document.getElementById("seek-slider");
 var tCur        = document.getElementById("current-time");
@@ -207,6 +213,7 @@ var current = 0;          // فهرس السورة الحالية
 var reciterId = RECITERS[0].id;
 var pendingSeek = 0;      // موضع يُستأنف بعد تحميل البيانات
 var repeatOne = false;
+var sleepMode = false;
 var seeking = false;
 var lastSave = 0;
 var retryCount = 0;
@@ -227,7 +234,7 @@ function fmt(sec) {
 /* ---------- حفظ واستعادة موضع الاستماع ---------- */
 var memState = null;
 function saveState() {
-  var st = { surah: current, reciter: reciterId, time: audio.currentTime || 0, speed: parseFloat(speedSel.value) || 1 };
+  var st = { surah: current, reciter: reciterId, time: audio.currentTime || 0, speed: parseFloat(speedSel.value) || 1, sleep: sleepMode };
   memState = st;
   try { localStorage.setItem(LS_KEY, JSON.stringify(st)); } catch (e) { /* التخزين محجوب: يبقى الحفظ في الذاكرة فقط */ }
 }
@@ -242,6 +249,7 @@ function loadState() {
     }
     if (typeof st.time === "number" && st.time > 3) pendingSeek = st.time;
     if (typeof st.speed === "number" && st.speed >= 0.5 && st.speed <= 2) speedSel.value = String(st.speed);
+    if (typeof st.sleep === "boolean") sleepMode = st.sleep;
   }
 }
 
@@ -361,6 +369,15 @@ repeatBtn.addEventListener("click", function () {
   repeatBtn.setAttribute("aria-pressed", repeatOne ? "true" : "false");
   statusEl.textContent = repeatOne ? "تكرار السورة الحالية مفعّل" : "تكرار السورة متوقف";
 });
+function syncSleepBtn() {
+  sleepBtn.setAttribute("aria-pressed", sleepMode ? "true" : "false");
+}
+sleepBtn.addEventListener("click", function () {
+  sleepMode = !sleepMode;
+  syncSleepBtn();
+  statusEl.textContent = sleepMode ? "وضع النوم مفعّل — سيتوقف التشغيل عند نهاية السورة 🌙" : "وضع النوم متوقف";
+  saveState();
+});
 speedSel.addEventListener("change", function () {
   audio.playbackRate = parseFloat(speedSel.value) || 1;
   saveState();
@@ -416,6 +433,12 @@ audio.addEventListener("pause", function () {
 });
 audio.addEventListener("waiting", function () { statusEl.textContent = "جارٍ التحميل…"; });
 audio.addEventListener("ended", function () {
+  if (sleepMode) {
+    setPlayIcon();
+    statusEl.textContent = "انتهت السورة — وضع النوم أوقف التشغيل 🌙";
+    saveState();
+    return;
+  }
   if (repeatOne) { audio.currentTime = 0; playAudio(); return; }
   goTo(current + 1, true);
 });
@@ -482,6 +505,7 @@ document.addEventListener("visibilitychange", function () { if (document.hidden)
 
 /* ---------- البدء ---------- */
 loadState();
+syncSleepBtn();
 audio.playbackRate = parseFloat(speedSel.value) || 1;
 renderReciters();
 loadSurah(current, false);
