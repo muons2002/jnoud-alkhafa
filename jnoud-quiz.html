@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مسابقات جنود الخفاء 🏆</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Changa:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { overflow-x:hidden; }
+  body {
+    font-family:'Cairo',sans-serif; color:#EAF6FB; min-height:100vh;
+    background:linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%);
+    background-attachment:fixed;
+  }
+  .wrap { max-width:520px; margin:0 auto; padding:18px 14px 34px; }
+  .brand { text-align:center; color:#9fdcef; font-weight:700; font-size:14px; letter-spacing:.3px; }
+  h1.title {
+    font-family:'Changa',sans-serif; font-weight:800; text-align:center;
+    font-size:40px; line-height:1.25; color:#fff; margin-top:6px;
+  }
+  h1.title .gold { color:#F5C542; }
+  .subtitle { text-align:center; color:#BFE3F2; font-size:16px; margin-top:4px; }
+  .screen { display:none; }
+  .screen.on { display:block; animation:fade .25s ease; }
+  @keyframes fade { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none;} }
+
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:22px; }
+  .tile {
+    border:none; cursor:pointer; border-radius:18px; padding:22px 10px 18px;
+    color:#fff; font-family:'Cairo',sans-serif; text-align:center;
+    box-shadow:0 10px 22px rgba(0,0,0,.35); transition:transform .12s ease;
+  }
+  .tile:active { transform:scale(.97); }
+  .tile .ic { font-size:44px; display:block; line-height:1.1; }
+  .tile .nm { font-family:'Changa',sans-serif; font-weight:700; font-size:20px; display:block; margin-top:8px; }
+  .tile .ds { font-size:12.5px; opacity:.92; display:block; margin-top:2px; }
+  .tile.wide { grid-column:1 / -1; padding:18px 10px 15px; }
+  .tile.wide .ic { font-size:38px; }
+  .g-general { background:linear-gradient(135deg,#1E3C72,#2A9DF4); }
+  .g-sport   { background:linear-gradient(135deg,#00695C,#26A69A); }
+  .g-islamic { background:linear-gradient(135deg,#14532D,#22C55E); }
+  .g-history { background:linear-gradient(135deg,#8A5A00,#E0A526); }
+  .g-mix     { background:linear-gradient(135deg,#6A1B9A,#AB47BC); }
+  .note { text-align:center; color:#8FB8CC; font-size:13px; margin-top:18px; line-height:1.9; }
+
+  .qtop { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:6px; }
+  .chip {
+    background:rgba(255,255,255,.08); border:1px solid rgba(47,185,216,.35);
+    border-radius:999px; padding:5px 13px; font-size:14px; font-weight:700; color:#DFF3FA;
+  }
+  .chip.score { color:#F5C542; border-color:rgba(245,197,66,.5); }
+  .bar { height:10px; border-radius:99px; background:rgba(255,255,255,.12); margin-top:12px; overflow:hidden; }
+  .bar i { display:block; height:100%; width:0; border-radius:99px;
+    background:linear-gradient(90deg,#2FB9D8,#7ED6F2); transition:width .3s ease; }
+  .qcard {
+    background:rgba(255,255,255,.05); border:1px solid rgba(47,185,216,.25);
+    border-radius:20px; padding:22px 16px; margin-top:16px;
+  }
+  .qtext { font-family:'Changa',sans-serif; font-weight:700; font-size:23px; line-height:1.7; color:#fff; text-align:center; }
+  .opts { margin-top:18px; display:flex; flex-direction:column; gap:10px; }
+  .opt {
+    font-family:'Cairo',sans-serif; font-size:17px; font-weight:700; text-align:right;
+    background:rgba(255,255,255,.07); color:#EAF6FB; border:1.5px solid rgba(255,255,255,.16);
+    border-radius:14px; padding:13px 15px; cursor:pointer; transition:background .15s,border-color .15s;
+    width:100%;
+  }
+  .opt:active { transform:scale(.99); }
+  .opt.right { background:rgba(34,197,94,.28); border-color:#22C55E; color:#D9FBE7; }
+  .opt.wrong { background:rgba(239,68,68,.28); border-color:#EF4444; color:#FFE1E1; }
+  .opt.dim { opacity:.55; }
+  .opt:disabled { cursor:default; }
+  .feedback { text-align:center; font-weight:800; font-size:17px; min-height:26px; margin-top:14px; }
+  .feedback.ok { color:#4ADE80; } .feedback.no { color:#F87171; }
+  .btn {
+    display:block; width:100%; border:none; cursor:pointer; border-radius:14px;
+    font-family:'Changa',sans-serif; font-weight:700; font-size:19px; padding:13px 10px; margin-top:12px;
+    background:linear-gradient(135deg,#2FB9D8,#1D7FB8); color:#fff;
+    box-shadow:0 8px 18px rgba(0,0,0,.3); transition:transform .12s ease;
+  }
+  .btn:active { transform:scale(.98); }
+  .btn.ghost { background:rgba(255,255,255,.08); border:1px solid rgba(47,185,216,.4); box-shadow:none; }
+  .btn.gold { background:linear-gradient(135deg,#D99A16,#F5C542); color:#231a02; }
+  .btn[hidden] { display:none; }
+
+  .result { text-align:center; padding-top:14px; }
+  .medal { font-size:74px; line-height:1.1; }
+  .rank { font-family:'Changa',sans-serif; font-weight:800; font-size:32px; color:#F5C542; margin-top:6px; }
+  .bigscore { font-family:'Changa',sans-serif; font-weight:800; font-size:56px; color:#fff; margin-top:4px; }
+  .bigscore small { font-size:22px; color:#9fdcef; }
+  .rmsg { color:#BFE3F2; font-size:16.5px; margin-top:6px; line-height:1.9; }
+  .copied { color:#4ADE80; font-weight:800; min-height:24px; margin-top:8px; font-size:15px; }
+  .foot { text-align:center; color:#6E97AC; font-size:12.5px; margin-top:26px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">🛡️ جنود الخفاء — حب الخير للغير</div>
+
+  <!-- الرئيسية -->
+  <section id="scr-home" class="screen on">
+    <h1 class="title">مسابقات <span class="gold">جنود الخفاء</span> 🏆</h1>
+    <p class="subtitle">اختار قسمك واجمع النقاط… وورّينا رتبتك يا جندي!</p>
+    <div class="grid">
+      <button class="tile g-general" data-cat="general"><span class="ic">🌍</span><span class="nm">ثقافة عامة</span><span class="ds">معلومات من كل الدنيا</span></button>
+      <button class="tile g-sport" data-cat="sport"><span class="ic">⚽</span><span class="nm">رياضة</span><span class="ds">كورة وبطولات وأرقام</span></button>
+      <button class="tile g-islamic" data-cat="islamic"><span class="ic">🕌</span><span class="nm">معلومات إسلامية</span><span class="ds">معلومات عامة ثابتة</span></button>
+      <button class="tile g-history" data-cat="history"><span class="ic">🏛️</span><span class="nm">تاريخ مصر</span><span class="ds">من الفراعنة لليوم</span></button>
+      <button class="tile wide g-mix" data-cat="mix"><span class="ic">🎲</span><span class="nm">خليط الأقسام</span><span class="ds">١٠ أسئلة عشوائية من كل الأقسام — التحدي الكبير</span></button>
+    </div>
+    <p class="note">كل جولة ١٠ أسئلة • كل سؤال ٤ اختيارات<br>الرتب من «جندي تحت التدريب» لحد «لواء الخفاء 👑»</p>
+  </section>
+
+  <!-- الأسئلة -->
+  <section id="scr-quiz" class="screen">
+    <div class="qtop">
+      <span class="chip" id="q-cat">🌍 ثقافة عامة</span>
+      <span class="chip" id="q-prog">سؤال ١ من ١٠</span>
+      <span class="chip score" id="q-score">⭐ ٠</span>
+    </div>
+    <div class="bar"><i id="q-bar"></i></div>
+    <div class="qcard">
+      <div class="qtext" id="q-text"></div>
+      <div class="opts" id="q-opts"></div>
+      <div class="feedback" id="q-feed"></div>
+      <button class="btn" id="btn-next" hidden>السؤال التالي ⬅️</button>
+    </div>
+  </section>
+
+  <!-- النتيجة -->
+  <section id="scr-result" class="screen">
+    <div class="result">
+      <div class="medal" id="r-medal">🏆</div>
+      <div class="bigscore"><span id="r-score">٠</span> <small>من ١٠</small></div>
+      <div class="rank" id="r-rank">لواء الخفاء 👑</div>
+      <p class="rmsg" id="r-msg"></p>
+      <button class="btn gold" id="btn-copy">📋 انسخ نتيجتي وشاركها</button>
+      <div class="copied" id="r-copied"></div>
+      <button class="btn" id="btn-again">🔄 العب تاني</button>
+      <button class="btn ghost" id="btn-home">🏠 الرئيسية</button>
+    </div>
+  </section>
+
+  <p class="foot">مسابقات جنود الخفاء — للمتعة والفايدة 🌹</p>
+</div>
+<script>
+"use strict";
+var PAGE_URL = "https://muons2002.github.io/radio-station/jnoud-quiz.html";
+var AR = ["٠","١","٢","٣","٤","٥","٦","٧","٨","٩"];
+function toAr(n){ return String(n).replace(/\d/g, function(d){ return AR[+d]; }); }
+function shuffle(a){ a = a.slice(); for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+var BANK = {
+general: { name:"ثقافة عامة", icon:"🌍", qs:[
+ ["ما هي أكبر دولة في العالم من حيث المساحة؟", ["روسيا","الصين","كندا","أمريكا"], 0],
+ ["ما هي عاصمة اليابان؟", ["بكين","سول","طوكيو","بانكوك"], 2],
+ ["كم عدد ألوان قوس قزح؟", ["خمسة","ستة","سبعة","ثمانية"], 2],
+ ["ما هو أطول أنهار العالم؟", ["الأمازون","النيل","اليانغتسي","المسيسيبي"], 1],
+ ["ما هي أصغر دولة في العالم من حيث المساحة؟", ["موناكو","الفاتيكان","المالديف","قطر"], 1],
+ ["كم عدد كواكب المجموعة الشمسية؟", ["سبعة","ثمانية","تسعة","عشرة"], 1],
+ ["ما هو العنصر الكيميائي الذي رمزه «O»؟", ["الذهب","الأكسجين","الحديد","الهيدروجين"], 1],
+ ["في أي قارة تقع دولة البرازيل؟", ["أفريقيا","أوروبا","أمريكا الشمالية","أمريكا الجنوبية"], 3],
+ ["ما هي أكبر صحراء حارة في العالم؟", ["صحراء الربع الخالي","الصحراء الكبرى في أفريقيا","صحراء غوبي","صحراء أتاكاما"], 1],
+ ["كم عدد أيام السنة الكبيسة؟", ["٣٦٥ يوماً","٣٦٦ يوماً","٣٦٤ يوماً","٣٦٠ يوماً"], 1],
+ ["ما هو أسرع حيوان بري في العالم؟", ["الأسد","الحصان","الفهد","الغزال"], 2],
+ ["ما هي اللغة الأكثر تحدثاً في العالم من حيث عدد الناطقين الأصليين؟", ["الإنجليزية","الإسبانية","الصينية (الماندرين)","الهندية"], 2]
+]},
+sport: { name:"رياضة", icon:"⚽", qs:[
+ ["كم عدد لاعبي فريق كرة القدم داخل الملعب؟", ["٩ لاعبين","١٠ لاعبين","١١ لاعباً","١٢ لاعباً"], 2],
+ ["أي دولة فازت بأكبر عدد من بطولات كأس العالم لكرة القدم؟", ["ألمانيا","الأرجنتين","إيطاليا","البرازيل"], 3],
+ ["كم مرة فازت مصر بكأس الأمم الأفريقية؟", ["خمس مرات","ست مرات","سبع مرات","ثماني مرات"], 2],
+ ["كل كم سنة تُقام الألعاب الأولمبية الصيفية؟", ["سنتين","ثلاث سنوات","أربع سنوات","خمس سنوات"], 2],
+ ["كم عدد الحلقات في الشعار الأولمبي؟", ["أربع حلقات","خمس حلقات","ست حلقات","سبع حلقات"], 1],
+ ["في أي رياضة يُستخدم مصطلح «كش ملك»؟", ["الملاكمة","الشطرنج","التنس","الجودو"], 1],
+ ["ما هي المدة الأساسية لمباراة كرة القدم بدون وقت إضافي؟", ["٨٠ دقيقة","٩٠ دقيقة","١٠٠ دقيقة","١٢٠ دقيقة"], 1],
+ ["أي نادٍ إنجليزي يلعب له النجم المصري محمد صلاح؟", ["مانشستر يونايتد","تشيلسي","ليفربول","أرسنال"], 2],
+ ["ما طول سباق الماراثون تقريباً؟", ["٢١ كيلومتراً","٣٢ كيلومتراً","٤٢ كيلومتراً","٥٠ كيلومتراً"], 2],
+ ["أين أقيمت أول بطولة كأس عالم لكرة القدم عام ١٩٣٠؟", ["البرازيل","إيطاليا","إنجلترا","أوروغواي"], 3],
+ ["كم عدد أرباع (أشواط) مباراة كرة السلة؟", ["شوطان","ثلاثة","أربعة","خمسة"], 2],
+ ["ما هو النادي المصري الملقب بـ«القلعة البيضاء»؟", ["الأهلي","الزمالك","الإسماعيلي","المصري"], 1]
+]},
+islamic: { name:"معلومات إسلامية عامة", icon:"🕌", qs:[
+ ["كم عدد سور القرآن الكريم؟", ["١١٠ سور","١١٤ سورة","١١٦ سورة","١٢٠ سورة"], 1],
+ ["كم عدد أجزاء القرآن الكريم؟", ["عشرون جزءاً","ثلاثون جزءاً","أربعون جزءاً","ستون جزءاً"], 1],
+ ["كم عدد أركان الإسلام؟", ["أربعة","خمسة","ستة","سبعة"], 1],
+ ["من هو أول الخلفاء الراشدين؟", ["عمر بن الخطاب","عثمان بن عفان","علي بن أبي طالب","أبو بكر الصديق"], 3],
+ ["ما هي أول سورة في ترتيب المصحف؟", ["البقرة","الفاتحة","الإخلاص","يس"], 1],
+ ["ما هي أطول سورة في القرآن الكريم؟", ["آل عمران","النساء","البقرة","المائدة"], 2],
+ ["كم عدد الصلوات المفروضة في اليوم والليلة؟", ["ثلاث صلوات","أربع صلوات","خمس صلوات","ست صلوات"], 2],
+ ["في أي شهر هجري يصوم المسلمون؟", ["شعبان","رمضان","شوال","ذو الحجة"], 1],
+ ["كم عدد أشهر السنة الهجرية؟", ["عشرة أشهر","أحد عشر شهراً","اثنا عشر شهراً","تسعة أشهر"], 2],
+ ["ما هي قبلة المسلمين في الصلاة؟", ["المسجد الأقصى","الكعبة المشرفة","مسجد النبي ﷺ","قبة الصخرة"], 1],
+ ["أين يقع غار حراء الذي نزل فيه الوحي أول مرة؟", ["جبل عرفات","جبل النور بمكة","جبل أحد","جبل الطور"], 1],
+ ["من هو النبي الملقب بـ«كليم الله»؟", ["إبراهيم عليه السلام","موسى عليه السلام","عيسى عليه السلام","نوح عليه السلام"], 1]
+]},
+history: { name:"تاريخ مصر", icon:"🏛️", qs:[
+ ["من بنى الهرم الأكبر في الجيزة؟", ["الملك خفرع","الملك خوفو","الملك منقرع","الملك رمسيس الثاني"], 1],
+ ["في أي عام افتُتحت قناة السويس؟", ["١٨٥٩","١٨٦٩","١٨٨٢","١٩٠١"], 1],
+ ["من هو مؤسس مصر الحديثة؟", ["إبراهيم باشا","سعد زغلول","محمد علي باشا","الخديوي إسماعيل"], 2],
+ ["في أي عام قامت ثورة يوليو؟", ["١٩٤٨","١٩٥٢","١٩٥٦","١٩٦١"], 1],
+ ["من هو أول رئيس لجمهورية مصر العربية؟", ["جمال عبد الناصر","محمد نجيب","أنور السادات","محمد حسني مبارك"], 1],
+ ["ما اسم الكتابة المصرية القديمة؟", ["المسمارية","الهيروغليفية","الآرامية","القبطية"], 1],
+ ["من العالم الفرنسي الذي فك رموز حجر رشيد؟", ["نابليون بونابرت","شامبليون","هوارد كارتر","ماسبيرو"], 1],
+ ["في أي عام افتُتح السد العالي رسمياً؟", ["١٩٦٠","١٩٦٤","١٩٧١","١٩٨٠"], 2],
+ ["في أي عام انتصر الجيش المصري في حرب أكتوبر؟", ["١٩٦٧","١٩٧٣","١٩٧٩","١٩٥٦"], 1],
+ ["كم عدد محافظات مصر؟", ["٢١ محافظة","٢٤ محافظة","٢٧ محافظة","٣٠ محافظة"], 2],
+ ["من هو الأديب المصري الحائز على جائزة نوبل في الأدب؟", ["طه حسين","توفيق الحكيم","نجيب محفوظ","يوسف إدريس"], 2],
+ ["ما هي عاصمة مصر في عصر الدولة القديمة الفرعونية؟", ["طيبة","منف (ممفيس)","الإسكندرية","الفسطاط"], 1]
+]}
+};
+
+var RANKS = [
+ [0,3,"جندي تحت التدريب","🌱","بداية موفقة يا بطل! العب تاني وهتطلع في الرتب بسرعة 💪"],
+ [4,6,"جندي أول","🎖️","شغل جميل! انت جندي يعتمد عليه… كمان جولة وتترقى."],
+ [7,8,"رقيب الخفاء","⭐","ما شاء الله، رقيب صاحي ومركز… اللواء قربت منك!"],
+ [9,9,"ملازم الخفاء","🌟","خطوة واحدة عن القمة! تركيزك عالي يا ملازم."],
+ [10,10,"لواء الخفاء 👑","👑","كمال الأداء! ١٠ من ١٠… انت لواء الخفاء بحق وحقيقي 👑"]
+];
+
+var state = { cat:null, list:[], idx:0, score:0, answered:false };
+var $ = function(id){ return document.getElementById(id); };
+function show(id){
+  ["scr-home","scr-quiz","scr-result"].forEach(function(s){ $(s).classList.toggle("on", s===id); });
+  window.scrollTo(0,0);
+}
+function catLabel(key){ return key==="mix" ? "🎲 خليط الأقسام" : BANK[key].icon+" "+BANK[key].name; }
+
+function startRun(cat){
+  state.cat = cat; state.idx = 0; state.score = 0;
+  var pool = [];
+  if (cat === "mix") {
+    Object.keys(BANK).forEach(function(k){ BANK[k].qs.forEach(function(q){ pool.push(q); }); });
+  } else {
+    pool = BANK[cat].qs.slice();
+  }
+  state.list = shuffle(pool).slice(0,10).map(function(q){
+    var order = shuffle([0,1,2,3]);
+    return { q:q[0], opts:order.map(function(i){ return q[1][i]; }), right:order.indexOf(q[2]) };
+  });
+  $("q-cat").textContent = catLabel(cat);
+  show("scr-quiz");
+  renderQ();
+}
+function renderQ(){
+  var cur = state.list[state.idx];
+  state.answered = false;
+  $("q-prog").textContent = "سؤال "+toAr(state.idx+1)+" من "+toAr(state.list.length);
+  $("q-score").textContent = "⭐ "+toAr(state.score);
+  $("q-bar").style.width = ((state.idx)/state.list.length*100)+"%";
+  $("q-text").textContent = cur.q;
+  $("q-feed").textContent = ""; $("q-feed").className = "feedback";
+  $("btn-next").hidden = true;
+  var box = $("q-opts"); box.innerHTML = "";
+  cur.opts.forEach(function(txt, i){
+    var b = document.createElement("button");
+    b.className = "opt"; b.textContent = txt;
+    b.addEventListener("click", function(){ answer(i); });
+    box.appendChild(b);
+  });
+}
+function answer(i){
+  if (state.answered) return;
+  state.answered = true;
+  var cur = state.list[state.idx];
+  var btns = $("q-opts").children;
+  for (var k=0;k<btns.length;k++){
+    btns[k].disabled = true;
+    if (k === cur.right) btns[k].classList.add("right");
+    else if (k === i) btns[k].classList.add("wrong");
+    else btns[k].classList.add("dim");
+  }
+  if (i === cur.right) {
+    state.score++;
+    $("q-feed").textContent = "✅ إجابة صحيحة! الله ينور عليك";
+    $("q-feed").classList.add("ok");
+  } else {
+    $("q-feed").textContent = "❌ مش دي… الإجابة الصحيحة متعلم عليها بالأخضر";
+    $("q-feed").classList.add("no");
+  }
+  $("q-score").textContent = "⭐ "+toAr(state.score);
+  $("q-bar").style.width = ((state.idx+1)/state.list.length*100)+"%";
+  var last = state.idx === state.list.length-1;
+  $("btn-next").textContent = last ? "شوف النتيجة 🏁" : "السؤال التالي ⬅️";
+  $("btn-next").hidden = false;
+}
+function finish(){
+  var s = state.score, rank = RANKS[0];
+  RANKS.forEach(function(r){ if (s>=r[0] && s<=r[1]) rank = r; });
+  $("r-medal").textContent = rank[3];
+  $("r-score").textContent = toAr(s);
+  $("r-rank").textContent = rank[2];
+  $("r-msg").textContent = rank[4];
+  $("r-copied").textContent = "";
+  state.rankName = rank[2];
+  show("scr-result");
+}
+function shareText(){
+  return "🏆 لعبت «مسابقات جنود الخفاء» في قسم "+catLabel(state.cat).replace(/^\S+\s*/,"")+
+    " وجبت "+toAr(state.score)+" من "+toAr(state.list.length)+
+    " ورتبتي: "+state.rankName+" 💪\nورّيني رتبتك انت كمان من صفحة مسابقات جنود الخفاء 👇\n"+PAGE_URL+
+    "\n🛡️ جنود الخفاء — حب الخير للغير";
+}
+document.querySelectorAll(".tile").forEach(function(t){
+  t.addEventListener("click", function(){ startRun(t.getAttribute("data-cat")); });
+});
+$("btn-next").addEventListener("click", function(){
+  if (state.idx < state.list.length-1) { state.idx++; renderQ(); } else finish();
+});
+$("btn-again").addEventListener("click", function(){ startRun(state.cat); });
+$("btn-home").addEventListener("click", function(){ show("scr-home"); });
+$("btn-copy").addEventListener("click", function(){
+  var txt = shareText(), done = function(){ $("r-copied").textContent = "✅ اتنسخت! الصقها في الجروب وشارك رتبتك"; };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(done, function(){ fallbackCopy(txt); done(); });
+  } else { fallbackCopy(txt); done(); }
+});
+function fallbackCopy(txt){
+  var ta = document.createElement("textarea");
+  ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); } catch(e){}
+  document.body.removeChild(ta);
+}
+</script>
+</body>
+</html>
