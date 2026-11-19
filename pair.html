@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>إضافة سيرفرك للمشغل — جنود الخفاء</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&family=Changa:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Cairo', sans-serif; color: #eaf6fb; min-height: 100vh;
+    background: linear-gradient(160deg, #081426 0%, #0D2B45 55%, #0A3A56 100%);
+    padding: 22px 14px 40px;
+  }
+  .wrap { max-width: 520px; margin: 0 auto; }
+  .brand { text-align: center; color: #9fdcef; font-weight: 700; font-size: 15px; }
+  h1 { font-family: 'Changa', sans-serif; text-align: center; font-size: 30px; font-weight: 800; margin-top: 6px; }
+  h1 .cy { color: #2FB9D8; }
+  .sub { text-align: center; color: #d7ecf5; font-size: 16px; margin-top: 8px; line-height: 1.7; }
+  .card {
+    margin-top: 18px; background: rgba(255,255,255,.06);
+    border: 1.5px solid rgba(47,185,216,.4); border-radius: 22px; padding: 20px 18px;
+  }
+  .codebox {
+    text-align: center; background: rgba(47,185,216,.12); border: 1.5px dashed rgba(47,185,216,.6);
+    border-radius: 16px; padding: 10px; margin-bottom: 16px;
+  }
+  .codebox .lbl { font-size: 14px; color: #9fdcef; }
+  .codebox .num { font-family: 'Changa', sans-serif; font-size: 34px; font-weight: 800; color: #ffd257; letter-spacing: 4px; }
+  label { display: block; font-weight: 800; font-size: 15px; margin: 14px 2px 6px; }
+  label .opt { color: #9fdcef; font-weight: 400; font-size: 13px; }
+  input {
+    width: 100%; font-family: 'Cairo', sans-serif; font-size: 17px; color: #fff;
+    background: rgba(8,20,38,.65); border: 1.5px solid rgba(47,185,216,.35); border-radius: 14px;
+    padding: 12px 14px; outline: none;
+  }
+  input:focus { border-color: #2FB9D8; box-shadow: 0 0 0 3px rgba(47,185,216,.25); }
+  input.ltr { direction: ltr; text-align: left; }
+  .passrow { display: flex; gap: 8px; }
+  .passrow input { flex: 1; }
+  .eye {
+    border: 1.5px solid rgba(47,185,216,.35); background: rgba(8,20,38,.65); color: #fff;
+    border-radius: 14px; padding: 0 16px; font-size: 19px; cursor: pointer;
+  }
+  .btn {
+    width: 100%; margin-top: 20px; border: none; cursor: pointer;
+    font-family: 'Cairo', sans-serif; font-weight: 800; font-size: 19px; color: #06283d;
+    background: linear-gradient(135deg, #39d0f2, #1d8fc1); border-radius: 16px; padding: 14px;
+  }
+  .btn:disabled { opacity: .55; cursor: wait; }
+  .err {
+    display: none; margin-top: 14px; background: rgba(224,82,96,.15);
+    border: 1.5px solid rgba(224,82,96,.6); color: #ffb3ba;
+    border-radius: 14px; padding: 11px 14px; font-size: 15px; line-height: 1.7;
+  }
+  .privacy { text-align: center; color: #9fdcef; font-size: 14px; margin-top: 16px; line-height: 1.8; }
+  .ok { text-align: center; padding: 16px 4px; }
+  .ok .big { font-size: 54px; }
+  .ok h2 { font-family: 'Changa', sans-serif; font-size: 25px; margin-top: 8px; }
+  .ok p { color: #d7ecf5; font-size: 16px; margin-top: 8px; line-height: 1.8; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">🛡️ جنود الخفاء — حب الخير للغير</div>
+  <h1>📷 إضافة سيرفرك <span class="cy">للمشغل</span></h1>
+  <p class="sub">بدل ما تكتب بيانات سيرفرك بالريموت على الشاشة، اكتبها هنا من موبايلك براحتك وهي هتوصل للمشغل لوحدها.</p>
+
+  <div class="card" id="formCard">
+    <div class="codebox" id="codeBox">
+      <div class="lbl">كود الربط اللي على شاشتك</div>
+      <div class="num" id="codeShown">------</div>
+    </div>
+    <div id="codeFieldWrap" class="hidden">
+      <label for="fCode">كود الربط (6 أرقام من شاشة المشغل)</label>
+      <input id="fCode" class="ltr" inputmode="numeric" maxlength="6" placeholder="123456" autocomplete="off">
+    </div>
+
+    <label for="fName">اسم للسيرفر <span class="opt">(اختياري — مثال: سيرفر الرياضة)</span></label>
+    <input id="fName" placeholder="اسم السيرفر" autocomplete="off">
+
+    <label for="fHost">عنوان السيرفر (الهوست)</label>
+    <input id="fHost" class="ltr" placeholder="http://host:port" autocomplete="off" autocapitalize="none">
+
+    <label for="fUser">اسم المستخدم</label>
+    <input id="fUser" class="ltr" placeholder="اسم المستخدم" autocomplete="off" autocapitalize="none">
+
+    <label for="fPass">كلمة المرور</label>
+    <div class="passrow">
+      <input id="fPass" class="ltr" type="password" placeholder="كلمة المرور" autocomplete="off">
+      <button class="eye" id="btnEye" type="button" aria-label="إظهار كلمة المرور">👁</button>
+    </div>
+
+    <button class="btn" id="btnSend">📨 إرسال للمشغل</button>
+    <div class="err" id="errBox"></div>
+    <p class="privacy">🔒 بياناتك بتتبعت للمشغل اللي على شاشتك بس، ومش بتتخزن عندنا ولا بتفضل محفوظة — الكود بيتلغي لوحده بعد دقايق.</p>
+  </div>
+
+  <div class="card hidden" id="okCard">
+    <div class="ok">
+      <div class="big">✅</div>
+      <h2>وصلت البيانات للمشغل</h2>
+      <p>ارجع بص على الشاشة — المشغل هيضيف سيرفرك ويدخل لوحده خلال ثواني.<br>لو الشاشة لسه واقفة على الكود، استنى شوية صغيرين.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+var SEND_URL = 'https://jnoud-pair.m-uons2002.workers.dev/send';
+var params = new URLSearchParams(location.search);
+var code = (params.get('c') || '').replace(/\D/g, '').slice(0, 6);
+
+var codeBox = document.getElementById('codeBox');
+var codeFieldWrap = document.getElementById('codeFieldWrap');
+if (code.length === 6) {
+  document.getElementById('codeShown').textContent = code;
+} else {
+  codeBox.classList.add('hidden');
+  codeFieldWrap.classList.remove('hidden');
+}
+
+document.getElementById('btnEye').addEventListener('click', function () {
+  var p = document.getElementById('fPass');
+  p.type = p.type === 'password' ? 'text' : 'password';
+});
+
+function showErr(msg) {
+  var e = document.getElementById('errBox');
+  e.textContent = msg;
+  e.style.display = 'block';
+}
+
+document.getElementById('btnSend').addEventListener('click', function () {
+  var btn = this;
+  document.getElementById('errBox').style.display = 'none';
+  var finalCode = code.length === 6 ? code : document.getElementById('fCode').value.replace(/\D/g, '');
+  var name = document.getElementById('fName').value.trim();
+  var host = document.getElementById('fHost').value.trim();
+  var user = document.getElementById('fUser').value.trim();
+  var pass = document.getElementById('fPass').value;
+
+  if (finalCode.length !== 6) { showErr('اكتب كود الربط كامل — 6 أرقام زي ما هو ظاهر على شاشة المشغل.'); return; }
+  if (!host || !user || !pass) { showErr('من فضلك املأ عنوان السيرفر واسم المستخدم وكلمة المرور.'); return; }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ جاري الإرسال…';
+  fetch(SEND_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code: finalCode, name: name, host: host, user: user, pass: pass })
+  }).then(function (r) {
+    return r.json().catch(function () { return {}; }).then(function (j) { return { status: r.status, j: j }; });
+  }).then(function (res) {
+    if (res.j && res.j.ok) {
+      document.getElementById('formCard').classList.add('hidden');
+      document.getElementById('okCard').classList.remove('hidden');
+      window.scrollTo(0, 0);
+      return;
+    }
+    btn.disabled = false;
+    btn.textContent = '📨 إرسال للمشغل';
+    if (res.j && res.j.error === 'expired') showErr('الكود ده انتهى أو مش موجود — ارجع للمشغل واعمل كود جديد وحاول تاني.');
+    else if (res.j && res.j.error === 'bad_code') showErr('الكود مش مظبوط — اتأكد إنه نفس الـ 6 أرقام اللي على الشاشة.');
+    else showErr('حصلت مشكلة في الإرسال — جرب تاني بعد شوية.');
+  }).catch(function () {
+    btn.disabled = false;
+    btn.textContent = '📨 إرسال للمشغل';
+    showErr('مش قادر أوصل للخدمة — اتأكد من اتصال النت عندك وجرب تاني.');
+  });
+});
+</script>
+</body>
+</html>
