@@ -646,11 +646,11 @@
         };
 
         /* Egyptian market premium on the pure gram (عيار 24), measured
-           against iSagha market prices on 2026-11-18 and identical to the
-           daily alerts' calibration (24: +137, 21: +120, 18: +103 once
-           scaled by karat). Main prices = market; world prices are shown
-           in their own secondary section. */
-        var MARKET_PREMIUM = 137;
+           against iSagha market prices on 2026-11-20 (midpoint of buy/sell)
+           and identical to the daily alerts' calibration (24: +311,
+           21: +272, 18: +233 once scaled by karat). Main prices = market;
+           world prices are shown in their own secondary section. */
+        var MARKET_PREMIUM = 311;
 
         var GOLD_API = "https://api.gold-api.com/price/XAU";
         var FX_API = "https://open.er-api.com/v6/latest/USD";
@@ -1024,7 +1024,9 @@
     </script>
     <script>
       /* Gold history log — seeded ONLY from genuine daily alerts (calibrated
-         عيار 21 = world price + 120 EGP local premium). Append one entry per
+         عيار 21 = world price + local market premium; +120 EGP until
+         2026-11-19, +272 EGP from 2026-11-20 after the iSagha market
+         re-calibration). Append one entry per
          day (last alerted price of that day); never back-fill days before
          14 Nov 2026. Today's row stays intraday until alerts stop at 21:30. */
       (function () {
