@@ -4,7 +4,7 @@
   "editions": {
     "dz": {
       "audio": "nashra/2026-11-20-dz.mp3",
-      "duration": "1:25",
+      "duration": "1:20",
       "segments": [
         [
           "🪙",
@@ -35,7 +35,7 @@
     },
     "eg": {
       "audio": "nashra/2026-11-20-eg.mp3",
-      "duration": "1:21",
+      "duration": "1:25",
       "segments": [
         [
           "🪙",
@@ -97,7 +97,7 @@
     },
     "general": {
       "audio": "nashra/2026-11-20-general.mp3",
-      "duration": "1:13",
+      "duration": "1:14",
       "segments": [
         [
           "🪙",
