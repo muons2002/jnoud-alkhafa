@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نشرة جنود الخفاء الصباحية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Changa:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:"Cairo",sans-serif; color:#fff; min-height:100vh;
+    background: linear-gradient(165deg,#081426 0%,#0D2B45 55%,#0A3A56 100%);
+    padding:22px 16px 40px;
+  }
+  .wrap { max-width:640px; margin:0 auto; }
+  .head { display:flex; align-items:center; gap:16px; }
+  .logo {
+    width:76px; height:76px; border-radius:22px; font-size:40px; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(150deg,#FFC65C,#F08A2E 60%,#E86F1E);
+    box-shadow: 0 12px 28px rgba(240,138,46,.35);
+  }
+  .head h1 { font-family:"Changa","Cairo",sans-serif; font-size:30px; font-weight:800; line-height:1.25; }
+  .head p { font-size:16px; color:#9DB4CC; font-weight:600; margin-top:2px; }
+  .lbl { font-size:18px; font-weight:800; color:#7FD4EA; margin:26px 0 12px; }
+  .eds { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .ed {
+    background:#0D2B45; border:2px solid #1D4E66; border-radius:18px; padding:16px 14px;
+    text-align:center; cursor:pointer; transition:.15s;
+  }
+  .ed .fl { font-size:34px; }
+  .ed .nm { font-size:19px; font-weight:800; color:#BEE9F5; margin-top:6px; }
+  .ed.on { background:linear-gradient(160deg,#2794B6,#1E8FAD 55%,#156A87); border-color:#2FB9D8; }
+  .ed.on .nm { color:#06222E; }
+  .player {
+    margin-top:22px; border-radius:22px; padding:24px 22px;
+    background:linear-gradient(160deg,#123656,#0D2B45); border:2px solid #2FB9D8;
+  }
+  .player .date { font-size:17px; font-weight:800; color:#FFC65C; }
+  .player .t1 { font-family:"Changa","Cairo",sans-serif; font-size:27px; font-weight:800; margin-top:8px; }
+  .player .t2 { font-size:15px; color:#BEE9F5; font-weight:700; margin-top:4px; }
+  audio { width:100%; margin-top:16px; }
+  .seg {
+    display:flex; gap:12px; align-items:flex-start; background:#0D2B45; border:2px solid #1D4E66;
+    border-radius:16px; padding:14px 16px; margin-bottom:10px;
+  }
+  .seg .ic { font-size:24px; flex:0 0 auto; }
+  .seg .tx { font-size:17px; font-weight:700; color:#EAF6FB; line-height:1.55; }
+  .seg .tx small { display:block; font-size:14.5px; color:#9DB4CC; font-weight:600; }
+  .arch {
+    display:flex; align-items:center; justify-content:space-between; background:#0A2438; border:2px solid #1D4E66;
+    border-radius:16px; padding:14px 18px; margin-bottom:10px; font-size:17px; font-weight:700;
+  }
+  .arch a { color:#7FD4EA; text-decoration:none; font-weight:800; }
+  .foot { margin-top:26px; text-align:center; font-size:15px; color:#9DB4CC; font-weight:700; }
+  .err { background:#3B1113; border:2px solid #B3382E; border-radius:16px; padding:16px; font-size:16px; font-weight:700; display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="logo">📰</div>
+    <div>
+      <h1>نشرة جنود الخفاء الصباحية</h1>
+      <p>يومك في دقائق… بصوت جولي 🎙️ وبالفصحى لكل العرب</p>
+    </div>
+  </div>
+
+  <div class="lbl">🌍 اختر بلدك — ونشرة بلدك تجهز لك كل يوم</div>
+  <div class="eds" id="eds"></div>
+
+  <div class="player">
+    <div class="date" id="pDate">🌅 جارٍ التحميل…</div>
+    <div class="t1" id="pTitle">نشرة النهاردة</div>
+    <div class="t2" id="pSub">تقديم: جولي</div>
+    <audio id="au" controls preload="none"></audio>
+  </div>
+
+  <div class="err" id="err">تعذر تحميل نشرة اليوم الآن — حاول بعد قليل.</div>
+
+  <div class="lbl">📋 في نشرة النهاردة</div>
+  <div id="segs"></div>
+
+  <div class="lbl">🗂️ نشرات فاتت</div>
+  <div id="arch"></div>
+
+  <div class="foot">🛡️ جنود الخفاء — حب الخير للغير</div>
+</div>
+
+<script>
+const EDS = [
+  { id:'dz',      flag:'🇩🇿', name:'الجزائر' },
+  { id:'eg',      flag:'🇪🇬', name:'مصر' },
+  { id:'maghreb', flag:'🌍', name:'المغرب العربي' },
+  { id:'general', flag:'🗺️', name:'عربية عامة' },
+];
+let cur = localStorage.getItem('jnoud_nashra_edition') || 'dz';
+let latest = null;
+
+function renderEds(){
+  document.getElementById('eds').innerHTML = EDS.map(e =>
+    `<div class="ed ${e.id===cur?'on':''}" onclick="pick('${e.id}')">
+       <div class="fl">${e.flag}</div><div class="nm">${e.name}</div>
+     </div>`).join('');
+}
+function fmtDur(s){ if(!s) return ''; return s; }
+function apply(){
+  if(!latest) return;
+  const ed = latest.editions[cur]; if(!ed) return;
+  const meta = EDS.find(e=>e.id===cur);
+  document.getElementById('pDate').textContent = '🌅 ' + latest.dateLabel;
+  document.getElementById('pTitle').textContent = 'نشرة ' + meta.name;
+  document.getElementById('pSub').textContent = 'تقديم: جولي — المدة ' + ed.duration;
+  const au = document.getElementById('au');
+  if(au.getAttribute('src') !== ed.audio) au.src = ed.audio;
+  document.getElementById('segs').innerHTML = ed.segments.map(s =>
+    `<div class="seg"><span class="ic">${s[0]}</span><span class="tx">${s[1]}<small>${s[2]||''}</small></span></div>`).join('');
+}
+function pick(id){
+  cur = id;
+  localStorage.setItem('jnoud_nashra_edition', id);
+  renderEds(); apply();
+}
+async function load(){
+  try {
+    const r = await fetch('nashra/latest.json', { cache:'no-store' });
+    latest = await r.json();
+    renderEds(); apply();
+  } catch(e){ document.getElementById('err').style.display='block'; }
+  try {
+    const r2 = await fetch('nashra/archive.json', { cache:'no-store' });
+    const arch = await r2.json();
+    document.getElementById('arch').innerHTML = arch.map(a =>
+      `<div class="arch"><span>${a.label}</span><span>${EDS.map(e=>`<a href="${a.files[e.id]}" target="_blank" rel="noopener">${e.flag}</a>`).join(' ')}</span></div>`).join('');
+  } catch(e){ document.getElementById('arch').innerHTML = '<div class="arch"><span>لا توجد نشرات سابقة بعد</span></div>'; }
+}
+renderEds();
+load();
+</script>
+</body>
+</html>
