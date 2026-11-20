@@ -121,6 +121,10 @@ function pick(id){
   cur = id;
   localStorage.setItem('jnoud_nashra_edition', id);
   renderEds(); apply();
+  // Autoplay on selection: the tap itself is the user gesture browsers require.
+  const au = document.getElementById('au');
+  const p = au.play();
+  if(p && p.catch) p.catch(()=>{});
 }
 async function load(){
   try {
