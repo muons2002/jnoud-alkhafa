@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "date": "2026-11-20",
+    "label": "الجمعة 20 نوفمبر 2026",
+    "files": {
+      "dz": "nashra/2026-11-20-dz.mp3",
+      "eg": "nashra/2026-11-20-eg.mp3",
+      "maghreb": "nashra/2026-11-20-maghreb.mp3",
+      "general": "nashra/2026-11-20-general.mp3"
+    }
+  }
+]
