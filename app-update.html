@@ -4,45 +4,179 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>تحديث جديد — تطبيق جنود الخفاء</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Changa:wght@600;700;800&display=swap" rel="stylesheet" />
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-    background: linear-gradient(160deg, #060D1A 0%, #0D1526 55%, #13263F 100%);
-    color:#F5F7FA; min-height:100vh;
-    display:flex; align-items:center; justify-content:center; padding:24px 16px;
+    font-family: 'Cairo', sans-serif;
+    background: linear-gradient(160deg, #081426 0%, #0D2B45 55%, #0A3A56 100%);
+    background-attachment: fixed;
+    color: #EAF6FB;
+    min-height: 100vh;
+    padding: 22px 16px 40px;
   }
-  .wrap { max-width:420px; width:100%; text-align:center; }
-  .brand { color:#2FB9D8; font-size:15px; margin-bottom:22px; }
-  .icon {
-    width:92px; height:92px; margin:0 auto 18px; border-radius:50%;
-    background: linear-gradient(145deg, #3a2c00, #8a6d1a);
-    border:2px solid #F5C542;
-    display:flex; align-items:center; justify-content:center; font-size:44px;
+  .wrap { max-width: 560px; margin: 0 auto; text-align: center; }
+  .wrap-tv { max-width: 1180px; margin: 0 auto; text-align: center; }
+  .brand { color: #2FB9D8; font-weight: 800; font-size: 17px; margin-bottom: 10px; }
+  .up-ico { font-size: 54px; line-height: 1.1; }
+  h1 {
+    font-family: 'Changa', sans-serif;
+    font-size: 32px; font-weight: 800; color: #fff; margin: 8px 0 14px;
   }
-  h1 { font-size:26px; color:#F5C542; margin-bottom:14px; }
-  p { font-size:16.5px; line-height:1.9; color:#D7DEE8; margin-bottom:26px; }
-  .btn {
-    display:block; text-decoration:none; text-align:center;
-    background: linear-gradient(180deg, #35C4E8, #1E96BC);
-    color:#04222E; font-size:19px; font-weight:bold;
-    padding:15px 20px; border-radius:14px; margin-bottom:14px;
+  .warn {
+    background: rgba(255, 176, 32, .14);
+    border: 2px solid #FFB020;
+    color: #FFD97A;
+    font-weight: 900; font-size: 19px;
+    border-radius: 14px; padding: 12px 14px; margin: 0 auto 16px;
+    max-width: 640px;
   }
-  .note { font-size:13.5px; color:#8FA3B8; line-height:1.8; }
+  .chip {
+    display: inline-block;
+    background: linear-gradient(160deg, #2794B6, #1E8FAD 55%, #156A87);
+    color: #fff; font-weight: 800; font-size: 16px;
+    padding: 7px 18px; border-radius: 999px; margin-bottom: 16px;
+  }
+  .chip-orange {
+    background: linear-gradient(160deg, #E07B24, #B85C10);
+    font-size: 18px; padding: 9px 22px;
+  }
+  .card {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(47,185,216,.35);
+    border-radius: 18px; padding: 18px 16px;
+    font-size: 17px; line-height: 1.9; font-weight: 600;
+    margin-bottom: 20px; text-align: center;
+  }
+  .btn-download {
+    display: block;
+    background: linear-gradient(160deg, #2FBF71, #1E9E57);
+    color: #fff; text-decoration: none;
+    font-family: 'Changa', sans-serif;
+    font-size: 23px; font-weight: 800;
+    padding: 16px 10px; border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(0,0,0,.35);
+    margin-bottom: 18px;
+  }
+  .toggle {
+    display: inline-block; color: #2FB9D8; font-weight: 800; font-size: 17px;
+    text-decoration: underline; cursor: pointer; margin-bottom: 16px;
+  }
+  .note {
+    border: 1.5px dashed rgba(47,185,216,.6);
+    border-radius: 14px; padding: 13px 14px;
+    font-size: 15.5px; line-height: 1.9; font-weight: 600;
+    color: #CDEAF5; margin-top: 20px;
+  }
+  .grid { display: none; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 6px; }
+  .grid.open { display: grid; }
+  .grid-tv { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 10px; }
+  .tile {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 7px; text-decoration: none; color: #fff;
+    border-radius: 18px; padding: 16px 8px 13px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.3);
+    min-height: 104px;
+  }
+  .tile-tv { min-height: 128px; padding: 20px 8px 16px; }
+  .tile-emoji { font-size: 34px; line-height: 1; }
+  .tile-tv .tile-emoji { font-size: 42px; }
+  .tile-title { font-weight: 800; font-size: 15.5px; line-height: 1.5; }
+  .tile-tv .tile-title { font-size: 17px; }
+  .tv-text { font-size: 19px; line-height: 2; font-weight: 700; margin-bottom: 18px; }
+  #view-tv { display: none; }
 </style>
 </head>
 <body>
+
+<!-- ===== Mobile view (default) ===== -->
+<div id="view-mobile">
   <div class="wrap">
     <div class="brand">🛡️ جنود الخفاء — حب الخير للغير</div>
-    <div class="icon">⬆️</div>
+    <div class="up-ico">⬆️</div>
     <h1>وصل تحديث جديد 🎉</h1>
-    <p>الإصدار الجديد من تطبيق جنود الخفاء وصل — وشيلنا منه كود الدخول خالص،<br>
-    مع شكل جديد مرتّب وإصلاح صوت الأذكار.<br>
-    حمّله وثبّته فوق النسخة الحالية على طول — من غير ما تمسح حاجة.</p>
-    <a class="btn" href="https://jnoud-gateway.m-uons2002.workers.dev/dl">⬇️ تحميل الإصدار الجديد</a>
-    <div class="note">هيفتح التحميل في المتصفح — بعد ما يخلص، ثبّت الملف فوق النسخة الحالية<br>
-    تطبيق جنود الخفاء الرسمي</div>
-    <div class="note" style="margin-top:14px">📺 لو بتفتح من تطبيق الشاشات: التحديث ده خاص بتطبيق الموبايل بس، ونسخة الشاشات شغالة زي ما هي — المشاريع هترجع تفتح عندك خلال أيام.</div>
+    <div class="warn">⚠️ التحديث ده للموبايل فقط وليس للشاشات</div>
+    <div><span class="chip">📱 التنبيه ده للي بيفتح من الموبايل</span></div>
+    <div class="card">الإصدار الجديد من تطبيق جنود الخفاء وصل — وشيلنا منه كود الدخول خالص، مع شكل جديد مرتّب وإصلاح صوت الأذكار. حمّله وثبّته فوق النسخة الحالية على طول — من غير ما تمسح حاجة.</div>
+    <a class="btn-download" href="https://jnoud-gateway.m-uons2002.workers.dev/dl">⬇️ تحميل الإصدار الجديد</a>
+    <a class="toggle" id="toggle-projects">أو كمّل للمشاريع من هنا من غير تحديث ←</a>
+    <div class="grid" id="projects-mobile">
+        <a class="tile " style="background: linear-gradient(150deg, #0D7A99, #2FB9D8);" href="https://muons2002.github.io/radio-station/app-update.html"><span class="tile-emoji">🔄</span><span class="tile-title">تحديث جديد: شيلنا كود الدخول</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #1E3C72, #2A5298);" href="https://muons2002.github.io/radio-station/jnoud-codes.html"><span class="tile-emoji">💻</span><span class="tile-title">بوابة جنود الخفاء التقنية</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #8E2DE2, #4A00E0);" href="https://muons2002.github.io/radio-station/jnoud-player.html"><span class="tile-emoji">▶️</span><span class="tile-title">مشغل جنود الخفاء العام</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #8A5A00, #C9962E);" href="https://muons2002.github.io/radio-station/konouz-elturath.html"><span class="tile-emoji">🏺</span><span class="tile-title">كنوز التراث المصري الأصيل</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #00695C, #26A69A);" href="https://muons2002.github.io/radio-station/matches-radar.html"><span class="tile-emoji">📡</span><span class="tile-title">جدول مباريات جنود الخفاء</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #4527A0, #7E57C2);" href="https://muons2002.github.io/radio-station/m3u-checker.html"><span class="tile-emoji">🧪</span><span class="tile-title">فاحص وفلترة ملفات القنوات</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #AD1457, #EC407A);" href="https://muons2002.github.io/radio-station/playlist-studio.html"><span class="tile-emoji">🎬</span><span class="tile-title">استوديو قوائم البث</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #9C7A00, #D4A017);" href="https://muons2002.github.io/radio-station/gold-prices.html"><span class="tile-emoji">🪙</span><span class="tile-title">أسعار الذهب في مصر</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #283593, #5C6BC0);" href="https://muons2002.github.io/radio-station/sat-finder.html"><span class="tile-emoji">🛰️</span><span class="tile-title">دليل الترددات وموجه الطبق</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #37474F, #78909C);" href="https://muons2002.github.io/radio-station/maintenance-assistant.html"><span class="tile-emoji">🛠️</span><span class="tile-title">المساعد الهندسي للصيانة والشبكات</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #4E342E, #8D6E63);" href="https://muons2002.github.io/radio-station/sat-db.html"><span class="tile-emoji">💾</span><span class="tile-title">منصة الستالايت والسوفت وير</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #B71C1C, #E53935);" href="https://muons2002.github.io/radio-station/radio-jnoud.html"><span class="tile-emoji">📻</span><span class="tile-title">إذاعة جنود الخفاء</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #AD1457, #EC407A);" href="https://muons2002.github.io/radio-station/aghani-zaman.html"><span class="tile-emoji">🎵</span><span class="tile-title">أغاني الزمن الجميل</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #6A1B9A, #AB47BC);" href="https://muons2002.github.io/radio-station/hikayat-elaroui.html"><span class="tile-emoji">🪔</span><span class="tile-title">حكايات عبد العزيز العروي</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #004D40, #00897B);" href="https://muons2002.github.io/radio-station/quran.html"><span class="tile-emoji">📖</span><span class="tile-title">القرآن الكريم</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #1A237E, #3949AB);" href="https://muons2002.github.io/radio-station/prayer.html"><span class="tile-emoji">🕌</span><span class="tile-title">مواقيت الصلاة</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #880E4F, #C2185B);" href="https://muons2002.github.io/radio-station/tasbih.html"><span class="tile-emoji">📿</span><span class="tile-title">التسبيح والأذكار</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #8D6E00, #F9A825);" href="https://muons2002.github.io/radio-station/shaarawy.html"><span class="tile-emoji">🎙️</span><span class="tile-title">مكتبة الشيخ الشعراوي</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #1E5631, #2E7D32);" href="https://muons2002.github.io/radio-station/radio-quran.html"><span class="tile-emoji">📻</span><span class="tile-title">راديو قرآن كريم</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #311B92, #673AB7);" href="https://muons2002.github.io/radio-station/alf-leila.html"><span class="tile-emoji">🌙</span><span class="tile-title">ألف ليلة وليلة</span></a>
+        <a class="tile " style="background: linear-gradient(150deg, #7A1030, #C2185B);" href="https://muons2002.github.io/radio-station/art-live.html"><span class="tile-emoji">🎬</span><span class="tile-title">قنوات ART</span></a>
+    </div>
+    <div class="note">📺 لو انت فاتح من تطبيق الشاشات: التنبيه ده مش ليك — نسخة الشاشات شغالة زي ما هي ومشاريعها تحت في نفس الصفحة دي على طول.</div>
   </div>
+</div>
+
+<!-- ===== TV view ===== -->
+<div id="view-tv">
+  <div class="wrap-tv">
+    <div class="brand">🛡️ جنود الخفاء — حب الخير للغير</div>
+    <h1>📺 أنت فاتح من تطبيق الشاشات</h1>
+    <div class="warn">⚠️ التحديث ده للموبايل فقط وليس للشاشات</div>
+    <div><span class="chip chip-orange">تنبيه التحديث اللي شفته خاص بنسخة الموبايل بس — مش ليك</span></div>
+    <p class="tv-text">نسخة الشاشات شغالة زي ما هي ومفيش لها تحديث دلوقتي ومتحمّلش أي حاجة.<br>مشاريعك كلها تحت — اختار مشروعك وافتحه على طول:</p>
+    <div class="grid-tv">
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #0D7A99, #2FB9D8);" href="https://muons2002.github.io/radio-station/app-update.html"><span class="tile-emoji">🔄</span><span class="tile-title">تحديث جديد: شيلنا كود الدخول</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #1E3C72, #2A5298);" href="https://muons2002.github.io/radio-station/jnoud-codes.html"><span class="tile-emoji">💻</span><span class="tile-title">بوابة جنود الخفاء التقنية</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #8E2DE2, #4A00E0);" href="https://muons2002.github.io/radio-station/jnoud-player.html"><span class="tile-emoji">▶️</span><span class="tile-title">مشغل جنود الخفاء العام</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #8A5A00, #C9962E);" href="https://muons2002.github.io/radio-station/konouz-elturath.html"><span class="tile-emoji">🏺</span><span class="tile-title">كنوز التراث المصري الأصيل</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #00695C, #26A69A);" href="https://muons2002.github.io/radio-station/matches-radar.html"><span class="tile-emoji">📡</span><span class="tile-title">جدول مباريات جنود الخفاء</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #4527A0, #7E57C2);" href="https://muons2002.github.io/radio-station/m3u-checker.html"><span class="tile-emoji">🧪</span><span class="tile-title">فاحص وفلترة ملفات القنوات</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #AD1457, #EC407A);" href="https://muons2002.github.io/radio-station/playlist-studio.html"><span class="tile-emoji">🎬</span><span class="tile-title">استوديو قوائم البث</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #9C7A00, #D4A017);" href="https://muons2002.github.io/radio-station/gold-prices.html"><span class="tile-emoji">🪙</span><span class="tile-title">أسعار الذهب في مصر</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #283593, #5C6BC0);" href="https://muons2002.github.io/radio-station/sat-finder.html"><span class="tile-emoji">🛰️</span><span class="tile-title">دليل الترددات وموجه الطبق</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #37474F, #78909C);" href="https://muons2002.github.io/radio-station/maintenance-assistant.html"><span class="tile-emoji">🛠️</span><span class="tile-title">المساعد الهندسي للصيانة والشبكات</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #4E342E, #8D6E63);" href="https://muons2002.github.io/radio-station/sat-db.html"><span class="tile-emoji">💾</span><span class="tile-title">منصة الستالايت والسوفت وير</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #B71C1C, #E53935);" href="https://muons2002.github.io/radio-station/radio-jnoud.html"><span class="tile-emoji">📻</span><span class="tile-title">إذاعة جنود الخفاء</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #AD1457, #EC407A);" href="https://muons2002.github.io/radio-station/aghani-zaman.html"><span class="tile-emoji">🎵</span><span class="tile-title">أغاني الزمن الجميل</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #6A1B9A, #AB47BC);" href="https://muons2002.github.io/radio-station/hikayat-elaroui.html"><span class="tile-emoji">🪔</span><span class="tile-title">حكايات عبد العزيز العروي</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #004D40, #00897B);" href="https://muons2002.github.io/radio-station/quran.html"><span class="tile-emoji">📖</span><span class="tile-title">القرآن الكريم</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #1A237E, #3949AB);" href="https://muons2002.github.io/radio-station/prayer.html"><span class="tile-emoji">🕌</span><span class="tile-title">مواقيت الصلاة</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #880E4F, #C2185B);" href="https://muons2002.github.io/radio-station/tasbih.html"><span class="tile-emoji">📿</span><span class="tile-title">التسبيح والأذكار</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #8D6E00, #F9A825);" href="https://muons2002.github.io/radio-station/shaarawy.html"><span class="tile-emoji">🎙️</span><span class="tile-title">مكتبة الشيخ الشعراوي</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #1E5631, #2E7D32);" href="https://muons2002.github.io/radio-station/radio-quran.html"><span class="tile-emoji">📻</span><span class="tile-title">راديو قرآن كريم</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #311B92, #673AB7);" href="https://muons2002.github.io/radio-station/alf-leila.html"><span class="tile-emoji">🌙</span><span class="tile-title">ألف ليلة وليلة</span></a>
+        <a class="tile tile-tv" style="background: linear-gradient(150deg, #7A1030, #C2185B);" href="https://muons2002.github.io/radio-station/art-live.html"><span class="tile-emoji">🎬</span><span class="tile-title">قنوات ART</span></a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var ua = navigator.userAgent || '';
+  var isTV = /TV|SmartTV|HbbTV|AFT|BRAVIA|webOS|Tizen|Android TV/i.test(ua)
+    || (window.innerWidth >= 1100 && window.innerWidth > window.innerHeight);
+  if (isTV) {
+    document.getElementById('view-mobile').style.display = 'none';
+    document.getElementById('view-tv').style.display = 'block';
+  }
+  var t = document.getElementById('toggle-projects');
+  var g = document.getElementById('projects-mobile');
+  if (t && g) {
+    t.onclick = function () { g.className = (g.className.indexOf('open') >= 0) ? 'grid' : 'grid open'; };
+  }
+})();
+</script>
 </body>
 </html>
