@@ -42,6 +42,16 @@ button{font-family:'Cairo',sans-serif;font-weight:800;border:none;border-radius:
 .mp-msg{text-align:center;font-size:14.5px;font-weight:700;margin-top:10px;min-height:20px}
 .mp-open{display:none;text-align:center;margin-top:8px;background:#F5C451;color:#231a04;border-radius:12px;padding:11px;font-weight:900;font-size:15.5px;text-decoration:none}
 .mp-open.show{display:block}
+.keyBar{width:min(320px,94vw);margin:14px auto 0;background:#0d1826;border:1.5px solid rgba(245,196,81,.55);border-radius:16px;padding:11px 12px}
+.kb-label{display:block;font-weight:800;font-size:14px;color:#F5C451;margin-bottom:8px}
+.kb-row{display:flex;gap:8px}
+.kb-input{flex:1;min-width:0;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:9px 10px;color:#EAF6FB;font-size:14px}
+.kb-save{width:auto;margin-top:0;flex:0 0 auto;background:#14532D;color:#fff;border:1.5px solid #22C55E;border-radius:10px;padding:9px 16px;font-weight:800;font-size:14px;cursor:pointer}
+.kb-note{font-size:12.5px;color:#9fd8ea;margin-top:7px;min-height:16px}
+.kb-saved{display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:800;font-size:13.5px;color:#4ADE80}
+.kb-change{width:auto;margin-top:0;flex:0 0 auto;background:transparent;color:#F5C451;border:1px solid rgba(245,196,81,.6);border-radius:9px;padding:4px 12px;font-weight:800;font-size:12.5px;cursor:pointer}
+@keyframes kbFlash{0%,100%{box-shadow:0 0 0 0 rgba(245,196,81,0)}25%{box-shadow:0 0 0 4px rgba(245,196,81,.85)}50%{box-shadow:0 0 0 0 rgba(245,196,81,0)}75%{box-shadow:0 0 0 4px rgba(245,196,81,.85)}}
+.kb-flash{animation:kbFlash 1.2s ease}
 
 .tag{display:inline-block;margin-top:7px;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:800}
 .tag-full{background:#F5C451;color:#231a04}
@@ -57,6 +67,14 @@ button{font-family:'Cairo',sans-serif;font-weight:800;border:none;border-radius:
 </style></head><body><div class="wrap">
 <h1>🎨 بدّل تصميم البوابة بدوسة واحدة</h1>
 <p class="sub">دوس على أي تصميم يعجبك — والمعاينة الكبيرة تحت هتتغير فوراً</p>
+<div class="keyBar" id="keyBar">
+<div id="kbOpen">
+<label class="kb-label" for="kbInput">🔑 مفتاح اللوحة</label>
+<div class="kb-row"><input type="password" class="kb-input" id="kbInput" placeholder="اكتب المفتاح هنا" autocomplete="off"><button type="button" class="kb-save" id="kbSave">حفظ</button></div>
+<div class="kb-note" id="kbNote"></div>
+</div>
+<div class="kb-saved" id="kbSaved" style="display:none"><span>✅ المفتاح محفوظ على الجهاز ده</span><button type="button" class="kb-change" id="kbChange">تغيير</button></div>
+</div>
 <div class="miniPrev" id="miniPrev">
 <div class="mp-phone" id="mpPhone">
 <div class="mp-art" id="mpArt"></div>
@@ -149,19 +167,40 @@ function decorateApply(){
     d.appendChild(b);
   });
 }
+function refreshKeyBar(){
+  var has=!!(localStorage.getItem('jnoud_board_key')||'');
+  document.getElementById('kbOpen').style.display=has?'none':'block';
+  document.getElementById('kbSaved').style.display=has?'flex':'none';
+}
+function saveKey(){
+  var inp=document.getElementById('kbInput');
+  var v=(inp.value||'').trim();
+  if(!v){ document.getElementById('kbNote').textContent='اكتب المفتاح الأول'; return; }
+  localStorage.setItem('jnoud_board_key', v);
+  inp.value='';
+  document.getElementById('kbNote').textContent='';
+  refreshKeyBar();
+}
 function applyLive(id, btn){
   var key=localStorage.getItem('jnoud_board_key')||'';
-  if(!key){
-    key=prompt('اكتب مفتاح اللوحة')||'';
-    if(!key) return;
-    localStorage.setItem('jnoud_board_key', key);
-  }
   var msg=document.getElementById('mpMsg'), open=document.getElementById('mpOpen');
+  if(!key){
+    msg.style.color='#F5C451';
+    msg.textContent='اكتب مفتاح اللوحة فوق الأول وبعدين دوس تطبيق';
+    open.classList.remove('show');
+    var note=document.getElementById('kbNote'); if(note) note.textContent='اكتب مفتاح اللوحة فوق الأول وبعدين دوس تطبيق';
+    var bar=document.getElementById('keyBar');
+    bar.scrollIntoView({behavior:'smooth', block:'center'});
+    bar.classList.remove('kb-flash'); void bar.offsetWidth; bar.classList.add('kb-flash');
+    var inp=document.getElementById('kbInput'); if(inp) setTimeout(function(){ inp.focus(); }, 450);
+    return;
+  }
   msg.style.color='#EAF6FB'; msg.textContent='⏳ جاري التطبيق…';
   fetch('https://jnoud-theme.m-uons2002.workers.dev/set', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ key:key, theme:id }) })
     .then(function(r){
       if(r.status===403){
         localStorage.removeItem('jnoud_board_key');
+        refreshKeyBar();
         msg.style.color='#FB7185'; msg.textContent='المفتاح غلط';
         open.classList.remove('show');
         return null;
@@ -180,6 +219,14 @@ function applyLive(id, btn){
     .catch(function(){ msg.style.color='#FB7185'; msg.textContent='معلش، حصلت مشكلة في الاتصال'; });
 }
 document.getElementById('mpApply').addEventListener('click', function(){ applyLive(sel, this); });
+document.getElementById('kbSave').addEventListener('click', saveKey);
+document.getElementById('kbInput').addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); saveKey(); } });
+document.getElementById('kbChange').addEventListener('click', function(){
+  document.getElementById('kbOpen').style.display='block';
+  document.getElementById('kbSaved').style.display='none';
+  document.getElementById('kbInput').focus();
+});
+refreshKeyBar();
 decorateApply();
 updateMini();
 </script>
