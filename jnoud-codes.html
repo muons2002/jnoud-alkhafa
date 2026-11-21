@@ -70,7 +70,7 @@
     display:grid;place-items:center;
   }
   .brand-mark svg{width:28px;height:28px}
-  .brand h1{font-family:'Segoe UI',Tahoma,Arial,sans-serif;font-size:1.35rem;font-weight:900;margin:0;line-height:1.3}
+  .brand h1{font-family:'Segoe UI',Tahoma,Arial,sans-serif;font-size:1.1rem;font-weight:900;margin:0;line-height:1.3}
   .brand h1 .gold{color:var(--gold)}
   .brand p{margin:0;color:var(--muted);font-size:.88rem;font-weight:600}
   .search-wrap{position:relative}
@@ -95,7 +95,7 @@
 
   @media (min-width:760px){
     .topbar-inner{flex-direction:row;align-items:center;justify-content:space-between;padding:16px 24px}
-    .brand h1{font-size:1.55rem}
+    .brand h1{font-size:1.1rem}
     .search-wrap{width:min(420px,44vw)}
   }
 
@@ -109,7 +109,7 @@
     border-radius:var(--radius);padding:14px 18px;margin-bottom:18px;
   }
   .intro .stat{display:flex;align-items:baseline;gap:7px}
-  .intro .stat b{font-size:1.3rem;color:var(--gold);font-weight:900}
+  .intro .stat b{font-size:1.18rem;color:var(--gold);font-weight:900}
   .intro .stat span{color:var(--muted);font-size:.9rem;font-weight:600}
   .intro .hint{flex:1 1 260px;color:var(--muted);font-size:.9rem;margin:0}
   .intro .hint b{color:var(--blue)}
@@ -133,9 +133,9 @@
   .hero-arrow svg{width:46px;height:46px}
   @keyframes heroBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
   @media (prefers-reduced-motion:reduce){.hero-arrow{animation:none}}
-  .first-step h2{font-family:'Segoe UI',Tahoma,Arial,sans-serif;margin:0 0 8px;font-size:1.7rem;font-weight:900;line-height:1.45}
+  .first-step h2{font-family:'Segoe UI',Tahoma,Arial,sans-serif;margin:0 0 8px;font-size:1.45rem;font-weight:900;line-height:1.45}
   .first-step h2 .dl-name{color:var(--gold)}
-  @media (min-width:760px){.first-step h2{font-size:2.1rem}}
+  @media (min-width:760px){.first-step h2{font-size:1.75rem}}
   .first-step p{
     margin:0 auto 20px;max-width:580px;
     color:var(--muted);font-size:1.02rem;font-weight:600;
@@ -152,15 +152,15 @@
   .hero-code-value{
     width:100%;direction:ltr;text-align:center;
     font-family:ui-monospace,"Courier New",monospace;
-    font-size:2.7rem;font-weight:700;letter-spacing:.28em;color:#fff;
+    font-size:2.15rem;font-weight:700;letter-spacing:.28em;color:#fff;
     background:#020617;border:2px dashed rgba(47,185,216,.75);
     border-radius:14px;padding:12px 8px 12px calc(8px + .28em);
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   }
-  @media (max-width:420px){.hero-code-value{font-size:2.05rem}}
+  @media (max-width:420px){.hero-code-value{font-size:1.45rem}}
   .hero-copy{
     width:100%;justify-content:center;
-    font-size:1.15rem;padding:13px 22px;border-radius:12px;min-height:3.4rem;
+    font-size:1.05rem;padding:13px 22px;border-radius:12px;min-height:3.4rem;
   }
   .hero-copy svg{width:20px;height:20px}
   @media (min-width:640px){.hero-copy{width:auto;min-width:320px}}
@@ -182,7 +182,7 @@
     margin:14px 2px 0;
   }
   .section-head:first-child{margin-top:0}
-  .section-head h2{font-family:'Segoe UI',Tahoma,Arial,sans-serif;margin:0;font-size:1.2rem;font-weight:900;color:var(--text);white-space:nowrap}
+  .section-head h2{font-family:'Segoe UI',Tahoma,Arial,sans-serif;margin:0;font-size:1.1rem;font-weight:900;color:var(--text);white-space:nowrap}
   .section-head h2 .count{color:var(--gold);font-size:.95rem;font-weight:800}
   .section-head::after{content:"";flex:1;height:1px;background:var(--line-soft)}
 
@@ -201,7 +201,7 @@
   .card-head{display:flex;align-items:flex-start;gap:12px}
   .app-icon{
     width:60px;height:60px;flex:0 0 60px;border-radius:15px;
-    display:grid;place-items:center;font-size:1.95rem;line-height:1;
+    display:grid;place-items:center;font-size:1.6rem;line-height:1;
     border:1px solid rgba(255,255,255,.22);
     box-shadow:0 8px 18px rgba(2,6,23,.45),inset 0 1px 0 rgba(255,255,255,.28);
     text-shadow:0 2px 6px rgba(2,6,23,.45);
@@ -252,7 +252,7 @@
   .code-value{
     flex:1;direction:ltr;text-align:center;
     font-family:ui-monospace,"Courier New",monospace;
-    font-size:1.55rem;font-weight:700;letter-spacing:.22em;color:#fff;
+    font-size:1.1rem;font-weight:700;letter-spacing:.22em;color:#fff;
     background:rgba(56,189,248,.08);border-radius:9px;padding:4px 6px 4px calc(6px + .22em);
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   }
@@ -288,7 +288,7 @@
   }
   .empty.show{display:block}
   .empty svg{width:52px;height:52px;color:var(--muted-2);margin-bottom:8px}
-  .empty h3{margin:0 0 6px;font-size:1.15rem}
+  .empty h3{margin:0 0 6px;font-size:1.05rem}
   .empty p{margin:0;color:var(--muted)}
   .empty button{
     margin-top:14px;background:var(--surface-3);color:var(--text);
@@ -327,11 +327,11 @@
   .modal-close{
     flex:0 0 auto;width:40px;height:40px;min-height:40px;border-radius:10px;
     background:var(--surface-3);border:1px solid var(--line);color:var(--text);
-    font-size:1.15rem;cursor:pointer;display:grid;place-items:center;line-height:1;
+    font-size:1.05rem;cursor:pointer;display:grid;place-items:center;line-height:1;
   }
   .modal .modal-code{
     direction:ltr;text-align:center;font-family:ui-monospace,"Courier New",monospace;
-    font-size:1.4rem;font-weight:700;letter-spacing:.2em;color:#fff;
+    font-size:1.25rem;font-weight:700;letter-spacing:.2em;color:#fff;
     background:#020617;border:1.5px dashed rgba(47,185,216,.55);
     border-radius:11px;padding:10px 8px;margin:12px 0 18px;
   }
