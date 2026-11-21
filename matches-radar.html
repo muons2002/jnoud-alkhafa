@@ -133,6 +133,11 @@
 
   /* ===== Match cards ===== */
   .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:14px}
+  .lg-head{grid-column:1/-1;display:flex;align-items:center;gap:9px;margin-top:12px;color:var(--gold);font-weight:900;font-size:16.5px}
+  .lg-head:first-child{margin-top:0}
+  .lg-head .lg-ic{width:28px;height:28px;border-radius:9px;background:rgba(232,199,102,.14);display:grid;place-items:center;flex:0 0 auto}
+  .lg-head .lg-ic svg{width:17px;height:17px}
+  .lg-head .lg-cnt{margin-inline-start:auto;font-size:12px;color:var(--muted);font-weight:700}
   @media (min-width:760px){.grid{grid-template-columns:1fr 1fr}}
   .card{
     background:linear-gradient(180deg,var(--card2),var(--card));
@@ -963,7 +968,7 @@ function render() {
     return;
   }
   emptyState.hidden = true;
-  grid.innerHTML = list.map(m => {
+  const cardOf = m => {
     const ov = overrideFor(m);
     const ch = (ov && ov.channel) ? ov.channel : BROADCASTERS[m.bc];
     const commentator = ov && ov.commentator ? ov.commentator : null;
@@ -997,7 +1002,6 @@ function render() {
     return '' +
     '<article class="card' + (isZ ? " zamalek" : "") + '">' +
       '<div class="card-head">' +
-        '<span class="league"><span class="lg-ic">' + ICON.trophy + '</span>' + esc(m.league) + '</span>' +
         statusHtml +
       '</div>' +
       (isZ ? '<div><span class="zamalek-badge"><i></i> مباراة الزمالك — قمة اليوم</span></div>' : "") +
@@ -1022,7 +1026,23 @@ function render() {
         '<button type="button" class="act iptv" data-iptv="' + m.id + '">' + ICON.play + ' شاهد عبر IPTV</button>' +
       '</div>' +
     '</article>';
-  }).join("");
+  };
+  const groups = [];
+  LEAGUES.forEach(lg => {
+    const ms = list.filter(m => m.league === lg.name);
+    if (ms.length) groups.push({ name: lg.name, ms: ms });
+  });
+  list.forEach(m => {
+    if (!LEAGUES.some(lg => lg.name === m.league)) {
+      let g = groups.find(x => x.name === m.league);
+      if (!g) { g = { name: m.league, ms: [] }; groups.push(g); }
+      if (!g.ms.includes(m)) g.ms.push(m);
+    }
+  });
+  grid.innerHTML = groups.map(g =>
+    '<div class="lg-head"><span class="lg-ic">' + ICON.trophy + '</span><span>' + esc(g.name) + '</span><span class="lg-cnt">' + g.ms.length + (g.ms.length === 1 ? ' مباراة' : ' مباريات') + '</span></div>' +
+    g.ms.map(cardOf).join("")
+  ).join("");
   updateCountdowns();
 }
 
