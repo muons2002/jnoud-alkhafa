@@ -1,0 +1,122 @@
+[
+  {
+    "id": "navy",
+    "name": "كحلي جنود الخفاء (الأصلي)",
+    "bg1": "#081426",
+    "bg2": "#0D2B45",
+    "bg3": "#0A3A56",
+    "accent": "#2FB9D8",
+    "accent2": "#7FE3FF",
+    "text": "#EAF6FB",
+    "muted": "#BFE3F0",
+    "gold": "#F5C451"
+  },
+  {
+    "id": "gold",
+    "name": "ليلي ذهبي",
+    "bg1": "#0B0B12",
+    "bg2": "#17141F",
+    "bg3": "#241B2E",
+    "accent": "#F5C451",
+    "accent2": "#FFE29A",
+    "text": "#FBF6E9",
+    "muted": "#D9CBA8",
+    "gold": "#F5C451"
+  },
+  {
+    "id": "emerald",
+    "name": "زمردي",
+    "bg1": "#04150E",
+    "bg2": "#0A2A1C",
+    "bg3": "#0E3D27",
+    "accent": "#2FD88F",
+    "accent2": "#8FF5C3",
+    "text": "#EAFCF2",
+    "muted": "#BDEED3",
+    "gold": "#F5C451"
+  },
+  {
+    "id": "royal",
+    "name": "بنفسجي ملكي",
+    "bg1": "#120826",
+    "bg2": "#22104A",
+    "bg3": "#30145F",
+    "accent": "#A78BFA",
+    "accent2": "#CDBFFD",
+    "text": "#F3EFFF",
+    "muted": "#CFC4F5",
+    "gold": "#F5C451"
+  },
+  {
+    "id": "wine",
+    "name": "عنابي فاخر",
+    "bg1": "#170407",
+    "bg2": "#2E0A12",
+    "bg3": "#420D1A",
+    "accent": "#FB7185",
+    "accent2": "#FDA4AF",
+    "text": "#FDF0F2",
+    "muted": "#F3C2CB",
+    "gold": "#F5C451"
+  },
+  {
+    "id": "light",
+    "name": "نهاري فاتح",
+    "bg1": "#F2F7FA",
+    "bg2": "#E3EEF5",
+    "bg3": "#D2E4EF",
+    "accent": "#1E8FAD",
+    "accent2": "#0E7490",
+    "text": "#0B2735",
+    "muted": "#3D6070",
+    "gold": "#B45309"
+  },
+  {
+    "id": "silver",
+    "name": "رمادي فضي",
+    "bg1": "#101216",
+    "bg2": "#1B1E24",
+    "bg3": "#262A31",
+    "accent": "#C7CEDA",
+    "accent2": "#EDF1F7",
+    "text": "#F4F6F9",
+    "muted": "#B9C0CC",
+    "gold": "#F5C451"
+  },
+  {
+    "id": "heritage",
+    "name": "تراثي برونزي",
+    "bg1": "#170E04",
+    "bg2": "#2C1C0A",
+    "bg3": "#3F280E",
+    "accent": "#E0A458",
+    "accent2": "#F5CD96",
+    "text": "#FBF3E4",
+    "muted": "#E3CDA6",
+    "gold": "#E0A458"
+  },
+  {
+    "id": "ocean",
+    "name": "فيروزي بحري",
+    "bg1": "#03252B",
+    "bg2": "#06333B",
+    "bg3": "#08424D",
+    "accent": "#2DD4BF",
+    "accent2": "#99F6E4",
+    "text": "#ECFDFB",
+    "muted": "#BDEEE7",
+    "gold": "#F5C451"
+  },
+  {
+    "id": "rose",
+    "name": "وردي ليلي",
+    "bg1": "#160511",
+    "bg2": "#2B0A20",
+    "bg3": "#3D0E2C",
+    "accent": "#F472B6",
+    "accent2": "#FBCFE8",
+    "text": "#FDF0F7",
+    "muted": "#F0C3DC",
+    "gold": "#F5C451"
+  }
+]
