@@ -9,7 +9,14 @@
     "accent2": "#7FE3FF",
     "text": "#EAF6FB",
     "muted": "#BFE3F0",
-    "gold": "#F5C451"
+    "gold": "#F5C451",
+    "art": {
+      "bg": null,
+      "header": null,
+      "embedded": true,
+      "pattern": true,
+      "cardRadius": "16px"
+    }
   },
   {
     "id": "gold",
@@ -21,7 +28,13 @@
     "accent2": "#FFE29A",
     "text": "#FBF6E9",
     "muted": "#D9CBA8",
-    "gold": "#F5C451"
+    "gold": "#F5C451",
+    "art": {
+      "bg": "theme-assets/bg-gold-pattern.webp",
+      "header": "theme-assets/header-gold-ornament.webp",
+      "pattern": true,
+      "cardRadius": "22px"
+    }
   },
   {
     "id": "emerald",
@@ -33,7 +46,8 @@
     "accent2": "#8FF5C3",
     "text": "#EAFCF2",
     "muted": "#BDEED3",
-    "gold": "#F5C451"
+    "gold": "#F5C451",
+    "art": null
   },
   {
     "id": "royal",
@@ -45,7 +59,8 @@
     "accent2": "#CDBFFD",
     "text": "#F3EFFF",
     "muted": "#CFC4F5",
-    "gold": "#F5C451"
+    "gold": "#F5C451",
+    "art": null
   },
   {
     "id": "wine",
@@ -57,7 +72,8 @@
     "accent2": "#FDA4AF",
     "text": "#FDF0F2",
     "muted": "#F3C2CB",
-    "gold": "#F5C451"
+    "gold": "#F5C451",
+    "art": null
   },
   {
     "id": "light",
@@ -69,7 +85,8 @@
     "accent2": "#0E7490",
     "text": "#0B2735",
     "muted": "#3D6070",
-    "gold": "#B45309"
+    "gold": "#B45309",
+    "art": null
   },
   {
     "id": "silver",
@@ -81,7 +98,8 @@
     "accent2": "#EDF1F7",
     "text": "#F4F6F9",
     "muted": "#B9C0CC",
-    "gold": "#F5C451"
+    "gold": "#F5C451",
+    "art": null
   },
   {
     "id": "heritage",
@@ -93,7 +111,8 @@
     "accent2": "#F5CD96",
     "text": "#FBF3E4",
     "muted": "#E3CDA6",
-    "gold": "#E0A458"
+    "gold": "#E0A458",
+    "art": null
   },
   {
     "id": "ocean",
@@ -105,7 +124,8 @@
     "accent2": "#99F6E4",
     "text": "#ECFDFB",
     "muted": "#BDEEE7",
-    "gold": "#F5C451"
+    "gold": "#F5C451",
+    "art": null
   },
   {
     "id": "rose",
@@ -117,6 +137,7 @@
     "accent2": "#FBCFE8",
     "text": "#FDF0F7",
     "muted": "#F0C3DC",
-    "gold": "#F5C451"
+    "gold": "#F5C451",
+    "art": null
   }
 ]
