@@ -47,7 +47,12 @@
     "text": "#EAFCF2",
     "muted": "#BDEED3",
     "gold": "#F5C451",
-    "art": null
+    "art": {
+      "bg": "theme-assets/bg-emerald.webp",
+      "header": "theme-assets/header-emerald.webp",
+      "pattern": true,
+      "cardRadius": null
+    }
   },
   {
     "id": "royal",
@@ -60,7 +65,12 @@
     "text": "#F3EFFF",
     "muted": "#CFC4F5",
     "gold": "#F5C451",
-    "art": null
+    "art": {
+      "bg": "theme-assets/bg-royal.webp",
+      "header": "theme-assets/header-royal.webp",
+      "pattern": true,
+      "cardRadius": null
+    }
   },
   {
     "id": "wine",
@@ -73,7 +83,12 @@
     "text": "#FDF0F2",
     "muted": "#F3C2CB",
     "gold": "#F5C451",
-    "art": null
+    "art": {
+      "bg": "theme-assets/bg-wine.webp",
+      "header": "theme-assets/header-wine.webp",
+      "pattern": true,
+      "cardRadius": null
+    }
   },
   {
     "id": "light",
@@ -86,7 +101,12 @@
     "text": "#0B2735",
     "muted": "#3D6070",
     "gold": "#B45309",
-    "art": null
+    "art": {
+      "bg": "theme-assets/bg-light.webp",
+      "header": "theme-assets/header-light.webp",
+      "pattern": true,
+      "cardRadius": null
+    }
   },
   {
     "id": "silver",
@@ -99,7 +119,12 @@
     "text": "#F4F6F9",
     "muted": "#B9C0CC",
     "gold": "#F5C451",
-    "art": null
+    "art": {
+      "bg": "theme-assets/bg-silver.webp",
+      "header": "theme-assets/header-silver.webp",
+      "pattern": true,
+      "cardRadius": null
+    }
   },
   {
     "id": "heritage",
@@ -112,7 +137,12 @@
     "text": "#FBF3E4",
     "muted": "#E3CDA6",
     "gold": "#E0A458",
-    "art": null
+    "art": {
+      "bg": "theme-assets/bg-heritage.webp",
+      "header": "theme-assets/header-heritage.webp",
+      "pattern": true,
+      "cardRadius": null
+    }
   },
   {
     "id": "ocean",
@@ -125,7 +155,12 @@
     "text": "#ECFDFB",
     "muted": "#BDEEE7",
     "gold": "#F5C451",
-    "art": null
+    "art": {
+      "bg": "theme-assets/bg-ocean.webp",
+      "header": "theme-assets/header-ocean.webp",
+      "pattern": true,
+      "cardRadius": null
+    }
   },
   {
     "id": "rose",
@@ -138,6 +173,11 @@
     "text": "#FDF0F7",
     "muted": "#F0C3DC",
     "gold": "#F5C451",
-    "art": null
+    "art": {
+      "bg": "theme-assets/bg-rose.webp",
+      "header": "theme-assets/header-rose.webp",
+      "pattern": true,
+      "cardRadius": null
+    }
   }
 ]
