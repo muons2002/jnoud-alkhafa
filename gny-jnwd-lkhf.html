@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:,">
+<title>أغاني جنود الخفاء — الزمن الجميل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============ THEMES ============ */
+:root, [data-theme="spotify"]{
+  --bg:#121212; --bg2:#181818; --card:#1e1e1e; --card2:#282828;
+  --acc:#1db954; --acc2:#1ed760; --acc-soft:rgba(29,185,84,.14);
+  --txt:#ffffff; --mut:#b3b3b3; --line:rgba(255,255,255,.09);
+  --player:#181818; --hero:linear-gradient(180deg,#1f3d2b 0%,#121212 90%);
+  --font:'Cairo',Tahoma,sans-serif; --hfont:'Cairo',Tahoma,sans-serif;
+  --radius:10px; --tile-r:8px; --shadow:none;
+}
+[data-theme="layali"]{
+  --bg:#071426; --bg2:#0a1e38; --card:#0d2b45; --card2:#123a5c;
+  --acc:#d9a441; --acc2:#f0c35c; --acc-soft:rgba(217,164,65,.13);
+  --txt:#f3ead3; --mut:#9db4cc; --line:rgba(217,164,65,.22);
+  --player:#081a30; --hero:linear-gradient(165deg,#0a3a56 0%,#071426 75%);
+  --font:'Cairo',Tahoma,sans-serif; --hfont:'Amiri',serif;
+  --radius:16px; --tile-r:18px; --shadow:0 8px 22px rgba(0,0,0,.35);
+}
+[data-theme="sahra"]{
+  --bg:#170b06; --bg2:#22100a; --card:#2b1409; --card2:#3a1c0d;
+  --acc:#e8873a; --acc2:#ffb35c; --acc-soft:rgba(232,135,58,.14);
+  --txt:#fdf1e3; --mut:#c9a582; --line:rgba(232,135,58,.22);
+  --player:#1d0d06; --hero:linear-gradient(165deg,#4a2410 0%,#170b06 78%);
+  --font:'Cairo',Tahoma,sans-serif; --hfont:'Amiri',serif;
+  --radius:20px; --tile-r:22px; --shadow:0 8px 22px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:var(--font);min-height:100vh;padding-bottom:132px;transition:background .3s,color .3s}
+button,[role="button"],select,input:not([type="checkbox"]){min-height:2.25rem}
+button{font-family:inherit;cursor:pointer}
+a{color:inherit}
+
+/* ============ GATE / LOGIN ============ */
+body.locked{overflow:hidden}
+.gate{position:fixed;inset:0;z-index:200;background:var(--hero);background-color:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px 16px;overflow-y:auto}
+.gate.hidden{display:none}
+.gate-card{width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);border-radius:calc(var(--radius) + 6px);box-shadow:0 24px 60px rgba(0,0,0,.5);padding:32px 26px 26px;text-align:center}
+.gate-card.shake{animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(7px)}75%{transform:translateX(-7px)}}
+.gate-logo{width:72px;height:72px;margin:0 auto 14px;border-radius:20px;background:var(--acc-soft);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:36px}
+.gate-card h1{font-family:var(--hfont);font-size:27px;font-weight:900;line-height:1.35}
+.gate-card h1 .gold{color:var(--acc)}
+.gate-sub{color:var(--mut);font-size:14.5px;margin:6px 0 22px;line-height:1.8}
+.gate-form{text-align:start;display:flex;flex-direction:column;gap:14px}
+.gate-field label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px}
+.gate-input{position:relative}
+.gate-input input{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);color:var(--txt);padding:12px 14px;font-size:15px;font-family:inherit;min-height:3rem}
+.gate-input input:focus{outline:2px solid var(--acc);outline-offset:1px;border-color:var(--acc)}
+.gate-input input::placeholder{color:var(--mut)}
+.pass-input input{padding-inline-end:52px}
+.eye-btn{position:absolute;inset-inline-start:4px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:20px;line-height:1;min-width:42px;min-height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center}
+.eye-btn:hover{background:var(--acc-soft)}
+.gate-error{background:rgba(229,57,53,.13);border:1px solid rgba(229,57,53,.55);color:#ff9d97;border-radius:var(--radius);padding:9px 13px;font-size:13.5px;font-weight:700;line-height:1.7}
+.gate-btn{background:var(--acc);border:none;color:#101010;font-weight:900;border-radius:999px;padding:12px 18px;font-size:16.5px;min-height:3.1rem;margin-top:2px}
+[data-theme="layali"] .gate-btn,[data-theme="sahra"] .gate-btn{color:#1a1206}
+.gate-btn:hover{background:var(--acc2)}
+.logout-btn{background:transparent;border:1px solid var(--line);color:var(--mut);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;min-height:2.25rem}
+.logout-btn:hover{color:var(--acc);border-color:var(--acc)}
+.update-btn{background:var(--acc);border:none;color:#101010;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:800;min-height:2.25rem}
+[data-theme="layali"] .update-btn,[data-theme="sahra"] .update-btn{color:#1a1206}
+.update-btn:hover{background:var(--acc2)}
+.update-btn:disabled{opacity:.6;cursor:wait}
+.upd-panel{margin-top:16px;background:var(--card);border:1px solid var(--acc);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow)}
+.upd-title{font-family:var(--hfont);font-size:18px;font-weight:800}
+.upd-desc{color:var(--mut);font-size:13.5px;line-height:1.8}
+.upd-desc a{color:var(--acc);font-weight:700}
+.upd-btn{background:var(--acc);border:none;color:#101010;font-weight:900;border-radius:999px;padding:12px 18px;font-size:15.5px;min-height:3rem}
+[data-theme="layali"] .upd-btn,[data-theme="sahra"] .upd-btn{color:#1a1206}
+.upd-btn:hover{background:var(--acc2)}
+.upd-btn:disabled{opacity:.65;cursor:wait}
+.upd-row{display:flex;gap:10px;flex-wrap:wrap}
+.upd-row .upd-btn{flex:1;min-width:180px}
+.apk-btn{background:transparent;border:1.5px solid var(--acc);color:var(--acc);font-weight:900;border-radius:999px;padding:12px 18px;font-size:15.5px;min-height:3rem;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;flex:1;min-width:180px}
+.apk-btn:hover{background:var(--acc-soft)}
+.upd-meta{color:var(--mut);font-size:12.5px;line-height:1.7}
+.upd-status{border-radius:var(--radius);padding:10px 13px;font-size:13.5px;font-weight:700;line-height:1.8;border:1px solid var(--line);background:var(--bg2)}
+.upd-status.ok{border-color:var(--acc);background:var(--acc-soft)}
+.upd-status.err{border-color:rgba(229,57,53,.55);background:rgba(229,57,53,.12);color:#ff9d97}
+.upd-new{list-style:none;display:flex;flex-wrap:wrap;gap:7px}
+.upd-new li{background:var(--acc-soft);border:1px solid var(--acc);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700}
+.upd-new li b{color:var(--acc)}
+.spin{display:inline-block;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============ SETTINGS ============ */
+.settings{position:fixed;inset:0;z-index:190;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px 16px;overflow-y:auto}
+.settings.hidden{display:none}
+.set-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.set-head h2{font-family:var(--hfont);font-size:22px;font-weight:900}
+.set-close{background:var(--bg2);border:1px solid var(--line);color:var(--txt);border-radius:50%;width:38px;height:38px;min-width:38px;min-height:38px;font-size:16px;display:inline-flex;align-items:center;justify-content:center}
+.set-close:hover{border-color:var(--acc);color:var(--acc)}
+.set-ok{background:var(--acc-soft);border:1px solid var(--acc);color:var(--txt);border-radius:var(--radius);padding:9px 13px;font-size:13.5px;font-weight:700;line-height:1.7}
+.set-note{color:var(--mut);font-size:12.5px;line-height:1.9;text-align:start}
+
+/* ============ HEADER ============ */
+.topbar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1080px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px}
+.brand .shield{width:38px;height:38px;border-radius:12px;background:var(--acc-soft);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:20px}
+.brand small{display:block;font-weight:600;color:var(--mut);font-size:11.5px}
+.themes{margin-inline-start:auto;display:flex;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px}
+.themes button{border:none;background:transparent;color:var(--mut);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:700;min-height:2.25rem}
+.themes button.on{background:var(--acc);color:#101010}
+[data-theme="layali"] .themes button.on,[data-theme="sahra"] .themes button.on{color:#1a1206}
+
+/* ============ HERO ============ */
+.hero{background:var(--hero);padding:30px 16px 22px}
+.hero-in{max-width:1080px;margin:0 auto}
+.hero h1{font-family:var(--hfont);font-size:clamp(30px,6vw,46px);font-weight:900;line-height:1.25}
+.hero h1 .gold{color:var(--acc)}
+.hero p{color:var(--mut);font-size:15px;margin-top:6px;max-width:560px;line-height:1.8}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:9px 16px;font-size:13.5px}
+.stat b{color:var(--acc);font-size:17px}
+.searchbar{max-width:1080px;margin:18px auto 0;display:flex;gap:8px}
+.searchbar input{flex:1;background:var(--card);border:1px solid var(--line);border-radius:999px;color:var(--txt);padding:11px 18px;font-size:15px;font-family:inherit;min-height:2.75rem}
+.searchbar input::placeholder{color:var(--mut)}
+.searchbar input:focus{outline:2px solid var(--acc);outline-offset:1px}
+
+/* ============ CONTENT ============ */
+.wrap{max-width:1080px;margin:0 auto;padding:8px 16px 10px}
+h2.sec{font-family:var(--hfont);font-size:21px;margin:26px 2px 13px;display:flex;align-items:center;gap:9px}
+h2.sec::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 12px 14px;text-align:center;cursor:pointer;transition:transform .15s,border-color .15s,background .15s;box-shadow:var(--shadow)}
+.card:hover{transform:translateY(-3px);border-color:var(--acc);background:var(--card2)}
+.tile{width:64px;height:64px;margin:0 auto 10px;border-radius:var(--tile-r);display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.card .nm{font-weight:800;font-size:16px;line-height:1.5}
+.card .ct{color:var(--mut);font-size:12.5px;margin-top:3px}
+.card .play-hint{margin-top:9px;display:inline-flex;align-items:center;gap:5px;color:var(--acc);font-size:12.5px;font-weight:700}
+
+/* ============ TRACK VIEW ============ */
+#view{display:none}
+.back{background:none;border:1px solid var(--acc);color:var(--acc);border-radius:999px;padding:7px 16px;font-size:14px;font-weight:700;margin:14px 0}
+.vhead{display:flex;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.vhead .tile{margin:0;width:72px;height:72px;font-size:36px;flex-shrink:0}
+.vhead .nm{font-family:var(--hfont);font-size:26px;font-weight:800}
+.vhead .ct{color:var(--mut);font-size:13.5px;margin-top:2px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.tools input{flex:1;min-width:160px;background:var(--card);border:1px solid var(--line);border-radius:999px;color:var(--txt);padding:10px 16px;font-size:14px;font-family:inherit}
+.tools input:focus{outline:2px solid var(--acc)}
+.btn{background:var(--acc);border:none;color:#101010;font-weight:800;border-radius:999px;padding:9px 18px;font-size:14px;display:inline-flex;align-items:center;gap:6px}
+[data-theme="layali"] .btn,[data-theme="sahra"] .btn{color:#1a1206}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--txt)}
+.btn.ghost.on{border-color:var(--acc);color:var(--acc);background:var(--acc-soft)}
+
+.row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;margin-bottom:7px;cursor:pointer;transition:border-color .12s}
+.row:hover{border-color:var(--acc)}
+.row.on{border-color:var(--acc);background:var(--acc-soft)}
+.row .n{color:var(--mut);font-size:12px;min-width:26px;text-align:center}
+.row .t{flex:1;font-size:15px;line-height:1.55;min-width:0}
+.row .s{color:var(--mut);font-size:12px;display:block}
+.row .p{color:var(--acc);font-size:16px;min-width:28px;text-align:center}
+.row .acts{display:flex;gap:2px;flex-shrink:0}
+.iconbtn{background:none;border:none;color:var(--mut);font-size:17px;min-width:38px;min-height:38px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.iconbtn:hover{color:var(--acc);background:var(--acc-soft)}
+.iconbtn.fav{color:var(--acc)}
+.eq{display:inline-flex;gap:2.5px;align-items:flex-end;height:15px;min-width:28px;justify-content:center}
+.eq i{width:3.5px;background:var(--acc);border-radius:2px;height:5px;animation:eqb .7s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:.18s}.eq i:nth-child(3){animation-delay:.36s}.eq i:nth-child(4){animation-delay:.1s}
+body:not(.playing) .eq i{animation-play-state:paused;height:5px}
+@keyframes eqb{0%,100%{height:5px}50%{height:15px}}
+.empty{color:var(--mut);text-align:center;padding:30px 0;font-size:15px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 4px}
+/* ============ POLISH: gold hero, section nav, random ============ */
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--acc-soft);border:1px solid var(--acc);color:var(--acc);border-radius:999px;padding:5px 14px;font-size:13px;font-weight:800;margin-bottom:12px}
+.hero h1 .gold{background:linear-gradient(135deg,var(--acc2),var(--acc) 55%,var(--acc));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero{box-shadow:inset 0 1px 0 color-mix(in srgb,var(--acc) 30%,transparent)}
+.secnav{display:flex;gap:8px;overflow-x:auto;padding:14px 2px 4px;scrollbar-width:none}
+.secnav::-webkit-scrollbar{display:none}
+.secnav button{flex-shrink:0;background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:999px;padding:7px 15px;font-size:13.5px;font-weight:700;white-space:nowrap}
+.secnav button:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-soft)}
+.hero-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.hero-hint{color:var(--mut);font-size:13px}
+.card:hover{box-shadow:0 10px 24px rgba(0,0,0,.4),0 0 0 1px var(--acc)}
+.gate-logo{box-shadow:0 0 0 1px var(--acc),0 0 26px var(--acc-soft)}
+.chip{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:999px;padding:7px 15px;font-size:13.5px;font-weight:700}
+.chip.on{background:var(--acc);color:#101010;border-color:var(--acc)}
+[data-theme="layali"] .chip.on,[data-theme="sahra"] .chip.on{color:#1a1206}
+
+/* ============ PLAYER ============ */
+#player{position:fixed;bottom:0;right:0;left:0;z-index:50;background:var(--player);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -8px 30px rgba(0,0,0,.35)}
+#player .pin{max-width:1080px;margin:0 auto}
+.pnow{display:flex;align-items:center;gap:11px;margin-bottom:7px}
+.pthumb{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.pmeta{flex:1;min-width:0}
+#ptitle{font-size:14.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#psinger{color:var(--mut);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pfav{flex-shrink:0}
+.pctl{display:flex;align-items:center;gap:6px}
+.pctl button{background:none;border:none;color:var(--txt);font-size:21px;min-width:42px;min-height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center}
+.pctl button.small{font-size:16px;color:var(--mut);min-width:38px;min-height:38px}
+.pctl button.small.on{color:var(--acc)}
+#playBtn{font-size:19px;background:var(--acc);color:#101010;width:48px;height:48px;min-width:48px}
+[data-theme="layali"] #playBtn,[data-theme="sahra"] #playBtn{color:#1a1206}
+#seek{flex:1;accent-color:var(--acc);height:4px;min-width:50px;cursor:pointer}
+#vol{width:70px;accent-color:var(--acc);height:4px;cursor:pointer}
+#time{color:var(--mut);font-size:11.5px;min-width:82px;text-align:center;font-variant-numeric:tabular-nums}
+.foot{text-align:center;color:var(--mut);font-size:12.5px;padding:20px 12px 6px;line-height:1.9}
+.toast{position:fixed;bottom:150px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card2);color:var(--txt);border:1px solid var(--acc);border-radius:999px;padding:9px 20px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:60;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (max-width:560px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+  #vol,.volic{display:none}
+  #time{min-width:70px;font-size:11px}
+  .themes button{padding:6px 9px;font-size:12px}
+  .brand small{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body data-theme="layali" class="locked">
+
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+  <div class="gate-card">
+    <div class="gate-logo" aria-hidden="true">🛡️</div>
+    <h1 id="gateTitle">أغاني <span class="gold">جنود الخفاء</span></h1>
+    <p class="gate-sub">أهلاً بيك في مكتبة الزمن الجميل<br>سجّل دخولك عشان تبدأ تسمع</p>
+    <form class="gate-form" id="gateForm" novalidate>
+      <div class="gate-field">
+        <label for="gateUser">اسم المستخدم</label>
+        <div class="gate-input">
+          <input id="gateUser" type="text" autocomplete="username" dir="ltr" lang="en" autocapitalize="off" autocorrect="off" spellcheck="false" style="text-align:left">
+        </div>
+      </div>
+      <div class="gate-field">
+        <label for="gatePass">كلمة المرور</label>
+        <div class="gate-input pass-input">
+          <input id="gatePass" type="password" autocomplete="current-password" placeholder="Password" dir="ltr" lang="en" autocapitalize="off" autocorrect="off" spellcheck="false" style="text-align:left">
+          <button class="eye-btn" id="gateEye" type="button" aria-label="إظهار كلمة المرور" aria-pressed="false" title="إظهار / إخفاء كلمة المرور">👁️</button>
+        </div>
+      </div>
+      <p class="gate-error" id="gateError" role="alert" hidden></p>
+      <button class="gate-btn" type="submit">دخول</button>
+    </form>
+  </div>
+</div>
+
+<div class="settings hidden" id="settings" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+  <div class="gate-card" id="setCard">
+    <div class="set-head">
+      <h2 id="setTitle">⚙️ الإعدادات</h2>
+      <button class="set-close" id="setClose" type="button" aria-label="إغلاق الإعدادات">✖</button>
+    </div>
+    <p class="gate-sub" style="text-align:start;margin-bottom:18px">من هنا تقدر تغيّر كلمة سر الدخول بتاعتك.</p>
+    <form class="gate-form" id="setForm" novalidate>
+      <div class="gate-field">
+        <label for="curPass">كلمة السر الحالية</label>
+        <div class="gate-input pass-input">
+          <input id="curPass" type="password" autocomplete="current-password" placeholder="Password" dir="ltr" lang="en" autocapitalize="off" autocorrect="off" spellcheck="false" style="text-align:left">
+          <button class="eye-btn set-eye" type="button" data-for="curPass" aria-label="إظهار كلمة السر الحالية" aria-pressed="false" title="إظهار / إخفاء">👁️</button>
+        </div>
+      </div>
+      <div class="gate-field">
+        <label for="newPass">كلمة السر الجديدة</label>
+        <div class="gate-input pass-input">
+          <input id="newPass" type="password" autocomplete="new-password" placeholder="New password" dir="ltr" lang="en" autocapitalize="off" autocorrect="off" spellcheck="false" style="text-align:left">
+          <button class="eye-btn set-eye" type="button" data-for="newPass" aria-label="إظهار كلمة السر الجديدة" aria-pressed="false" title="إظهار / إخفاء">👁️</button>
+        </div>
+      </div>
+      <div class="gate-field">
+        <label for="confPass">تأكيد كلمة السر الجديدة</label>
+        <div class="gate-input pass-input">
+          <input id="confPass" type="password" autocomplete="new-password" placeholder="Repeat new password" dir="ltr" lang="en" autocapitalize="off" autocorrect="off" spellcheck="false" style="text-align:left">
+          <button class="eye-btn set-eye" type="button" data-for="confPass" aria-label="إظهار تأكيد كلمة السر" aria-pressed="false" title="إظهار / إخفاء">👁️</button>
+        </div>
+      </div>
+      <p class="gate-error" id="setError" role="alert" hidden></p>
+      <p class="set-ok" id="setOk" role="status" hidden></p>
+      <button class="gate-btn" type="submit">🔑 تغيير كلمة السر</button>
+      <p class="set-note">التغيير بيتحفظ على الجهاز ده بس (الموبايل اللي في إيدك) ومش بيأثّر على دخول باقي الأعضاء من أجهزتهم. ولو مسحت بيانات التطبيق هترجع كلمة السر الأصلية: <b>Khafa</b>.</p>
+    </form>
+  </div>
+</div>
+
+<div class="topbar"><div class="topbar-in">
+  <div class="brand"><span class="shield">🛡️</span><span>جنود الخفاء<small>حب الخير للغير</small></span></div>
+  <div class="themes" role="group" aria-label="اختيار التصميم">
+    <button data-settheme="spotify">🎧 الأساسي</button>
+    <button data-settheme="layali" class="on">🌙 ليالي الطرب</button>
+    <button data-settheme="sahra">🪔 سهرة ذهبية</button>
+  </div>
+  <button class="update-btn" id="updBtnTop" type="button">🔄 تحديث الأغاني</button>
+  <button class="logout-btn" id="settingsBtn" type="button">⚙️ الإعدادات</button>
+  <button class="logout-btn" id="logoutBtn" type="button">🚪 خروج</button>
+</div></div>
+
+<div class="hero"><div class="hero-in">
+  <div class="hero-badge">✨ مكتبة جنود الخفاء — الزمن الجميل</div>
+  <h1>أغاني <span class="gold">الزمن الجميل</span></h1>
+  <p>مكتبة جنود الخفاء الصوتية كاملة زي ما هي على موقعك: عمالقة الطرب، شعبيات الزمن الجميل، دبكات وأفراح، وميكس ديسكو — شغّل أي أغنية فوراً أو حمّلها واسمعها من غير نت.</p>
+  <div class="stats">
+    <span class="stat"><b id="statSongs">422</b> أغنية</span>
+    <span class="stat"><b id="statSingers">16</b> مطرباً وقسماً</span>
+    <span class="stat"><b>3</b> تصاميم للاختيار</span>
+  </div>
+  <div class="upd-panel" id="updPanel">
+    <div class="upd-title">🔄 بوابة التحديث المباشر</div>
+    <p class="upd-desc">ضيف أغاني جديدة على <a href="https://muons2002.dpdns.org/aghani-zaman.html" target="_blank" rel="noopener">موقعك «أغاني الزمن الجميل»</a>، وبعدين دوس الزر ده — الأغاني الجديدة هتوصل هنا فوراً وتتضاف للقايمة، من غير ما تنزّل أو تثبّت تطبيق جديد. ولو عاوز أحدث نسخة من التطبيق نفسه، دوس زر «آخر إصدار من التطبيق» وهينزّل أحدث ملف APK من موقعك على طول.</p>
+    <div class="upd-row">
+      <button class="upd-btn" id="updBtn" type="button">🔄 هات الأغاني الجديدة</button>
+      <a class="apk-btn" href="https://muons2002.dpdns.org/aghani-junud-al-khafa.apk" download>⬇️ آخر إصدار من التطبيق</a>
+    </div>
+    <div class="upd-meta" id="updMeta">المكتبة دلوقتي: 422 أغنية • لسه ما فحصتش من ساعة ما فتحت</div>
+    <div class="upd-status" id="updStatus" role="status" hidden></div>
+    <ul class="upd-new" id="updNew" hidden></ul>
+  </div>
+  <div class="searchbar">
+    <input id="gq" type="search" placeholder="🔍 دوّر على أغنية أو مطرب في المكتبة كلها…" aria-label="بحث في كل المكتبة">
+  </div>
+  <div class="secnav" id="secNav" aria-label="أقسام المكتبة"></div>
+  <div class="hero-actions">
+    <button class="btn" id="randBtn" type="button">🎲 شغّل أغنية عشوائية</button>
+    <span class="hero-hint">أو اختار مطرب من القايمة تحت 👇</span>
+  </div>
+</div></div>
+
+<div class="wrap" id="home"></div>
+
+<div class="wrap" id="view">
+  <button class="back" id="backBtn">⬅ كل المطربين</button>
+  <div class="vhead"><div class="tile" id="vTile"></div><div><div class="nm" id="vName"></div><div class="ct" id="vCount"></div></div></div>
+  <div class="tools">
+    <input id="q" type="search" placeholder="دوّر جوه أغانيه…" aria-label="بحث داخل المطرب">
+    <button class="btn" id="playAllBtn">▶ تشغيل الكل</button>
+    <button class="btn ghost" id="shuffleBtn">🔀 عشوائي</button>
+  </div>
+  <div id="list"></div>
+</div>
+
+<div class="wrap" id="searchView" style="display:none">
+  <button class="back" id="backBtn2">⬅ رجوع</button>
+  <h2 class="sec" id="searchTitle">نتائج البحث</h2>
+  <div id="searchList"></div>
+</div>
+
+<div class="foot">معظم الأغاني مستضافة على أرشيف الإنترنت المفتوح (archive.org)، ومقطع واحد على موقع جنود الخفاء نفسه — مكتبة «أغاني الزمن الجميل»<br>زر ⬇ بيحمّل ملف الـMP3 على جهازك عشان تسمعه من غير نت</div>
+
+<div id="player"><div class="pin">
+  <div class="pnow">
+    <div class="pthumb" id="pthumb" style="background:var(--card2)">🎵</div>
+    <div class="pmeta"><div id="ptitle">اختر أغنية للتشغيل</div><div id="psinger">422 أغنية من الزمن الجميل</div></div>
+    <button class="iconbtn pfav" id="pfav" title="مفضلة" style="display:none">🤍</button>
+  </div>
+  <div class="pctl">
+    <button class="small" id="shufBtn" title="تشغيل عشوائي">🔀</button>
+    <button id="prevBtn" title="السابق">⏮</button>
+    <button id="playBtn" title="تشغيل / إيقاف">▶</button>
+    <button id="nextBtn" title="التالي">⏭</button>
+    <button class="small" id="repBtn" title="تكرار">🔁</button>
+    <input id="seek" type="range" min="0" max="1000" value="0" aria-label="موضع التشغيل">
+    <span id="time">0:00 / 0:00</span>
+    <span class="volic">🔊</span>
+    <input id="vol" type="range" min="0" max="100" value="100" aria-label="مستوى الصوت">
+  </div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+<audio id="au" preload="metadata"></audio>
+
+<script>
+const DATA = {"halim":[{"t":"قارئة الفنجان","u":"https://archive.org/download/57.-kareaat-al-fengan/57.Kareaat%20Al%20Fengan.mp3"},{"t":"رسالة من تحت الماء","u":"https://archive.org/download/halim_rissala_men_taht_almaa_live_1975/%D8%B1%D8%B3%D8%A7%D9%84%D8%A9%20%D9%85%D9%86%20%D8%AA%D8%AD%D8%AA%20%D8%A7%D9%84%D9%85%D8%A7%D8%A1%20-%20%D8%AD%D9%81%D9%84%20%D8%B3%D9%8A%D9%86%D9%85%D8%A7%20%D8%B1%D9%8A%D9%81%D9%88%D9%84%D9%89%207-10-1975.mp3"},{"t":"موعود","u":"https://archive.org/download/halim_mawoud_old_recording/%D9%85%D9%88%D8%B9%D9%88%D8%AF.mp3"},{"t":"مداح القمر","u":"https://archive.org/download/20220414_20220414_0945/%D9%85%D8%AF%D8%A7%D8%AD%20%D8%A7%D9%84%D9%82%D9%85%D8%B1.mp3"},{"t":"حاول تفتكرني","u":"https://archive.org/download/halim_hawel_teftekerny/%D8%AD%D8%A7%D9%88%D9%84%20%D8%AA%D9%81%D8%AA%D9%83%D8%B1%D9%86%D9%89.mp3"},{"t":"زي الهوى","u":"https://archive.org/download/ZaylhawaTunis/ZayeleHawa.mp3"},{"t":"فاتت جنبنا","u":"https://archive.org/download/30-6-1974/%D9%81%D8%A7%D8%AA%D8%AA%20%D8%AC%D9%86%D8%A8%D9%86%D8%A7%20-%20%D8%AD%D9%81%D9%84%2030-6-1974.mp3"},{"t":"أي دمعة حزن لا","u":"https://archive.org/download/halim_ay_dameat_hozn_la/%D8%A3%D9%89%20%D8%AF%D9%85%D8%B9%D8%A9%20%D8%AD%D8%B2%D9%86%20%D9%84%D8%A7.mp3"},{"t":"نبتدي منين الحكاية","u":"https://archive.org/download/NebtidiFinalCut_201408/Nebtidi%20FinalCut.mp3"},{"t":"جانا الهوى","u":"https://archive.org/download/44.-gana-el-hawa/44.Gana%20El%20Hawa.mp3"},{"t":"الوطن الأكبر مجموعة الفنانين ستوديو","u":"https://archive.org/download/halim-5-tessgilette-zemene/%D8%A7%D9%84%D9%88%D8%B7%D9%86%20%D8%A7%D9%84%D8%A3%D9%83%D8%A8%D8%B1%20..%20%D9%85%D8%AC%D9%85%D9%88%D8%B9%D8%A9%20%D8%A7%D9%84%D9%81%D9%86%D8%A7%D9%86%D9%8A%D9%86%20..%20%D8%B3%D8%AA%D9%88%D8%AF%D9%8A%D9%88.mp3"},{"t":"بالأحضان ستوديو ( ألحان زمان","u":"https://archive.org/download/halim-5-tessgilette-zemene/%D8%A8%D8%A7%D9%84%D8%A3%D8%AD%D8%B6%D8%A7%D9%86%20..%20%D8%B3%D8%AA%D9%88%D8%AF%D9%8A%D9%88%20..%20%28%20%D8%A3%D9%84%D8%AD%D8%A7%D9%86%20%D8%B2%D9%85%D8%A7%D9%86.mp3"},{"t":"ابو عيون جريئة  حفلة","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%A7%D8%A8%D9%88%20%D8%B9%D9%8A%D9%88%D9%86%20%D8%AC%D8%B1%D9%8A%D8%A6%D8%A9%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9.mp3"},{"t":"أحبك  حفلة 27 مارس 1969","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%A3%D8%AD%D8%A8%D9%83%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%2027%20%D9%85%D8%A7%D8%B1%D8%B3%20%201969.mp3"},{"t":"أنا لك على طول  حفلة 30 . أكتوبر . 1958","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%A3%D9%86%D8%A7%20%D9%84%D9%83%20%D8%B9%D9%84%D9%89%20%D8%B7%D9%88%D9%84%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%2030%20.%20%D8%A3%D9%83%D8%AA%D9%88%D8%A8%D8%B1%20.%201958.mp3"},{"t":"أهواك + أسمر يا أسمرانى  حفلة عام 1957","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%A3%D9%87%D9%88%D8%A7%D9%83%20%2B%20%D8%A3%D8%B3%D9%85%D8%B1%20%D9%8A%D8%A7%20%D8%A3%D8%B3%D9%85%D8%B1%D8%A7%D9%86%D9%89%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%D8%B9%D8%A7%D9%85%201957.mp3"},{"t":"أول مرة  . حفلة 23 يولية 1959","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%A3%D9%88%D9%84%20%D9%85%D8%B1%D8%A9%20..%20%D8%AD%D9%84%D9%8A%D9%85%20...%20%D8%AD%D9%81%D9%84%D8%A9%20%2023%20%D9%8A%D9%88%D9%84%D9%8A%D8%A9%201959.mp3"},{"t":"ايه ذنبى ايه  حفلة عام 1955","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%A7%D9%8A%D9%87%20%D8%B0%D9%86%D8%A8%D9%89%20%D8%A7%D9%8A%D9%87%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%D8%B9%D8%A7%D9%85%20%20%201955.mp3"},{"t":"بأمر الحب  حفلة","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%A8%D8%A3%D9%85%D8%B1%20%D8%A7%D9%84%D8%AD%D8%A8%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%20%D8%AD%D9%81%D9%84%D8%A9.mp3"},{"t":"بتقولى بكرة  حفلة","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%A8%D8%AA%D9%82%D9%88%D9%84%D9%89%20%D8%A8%D9%83%D8%B1%D8%A9%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9.mp3"},{"t":"بعد ايه  . حفل السودان عام 1960","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%A8%D8%B9%D8%AF%20%D8%A7%D9%8A%D9%87%20..%20%D8%AD%D9%84%D9%8A%D9%85%20...%20%D8%AD%D9%81%D9%84%20%D8%A7%D9%84%D8%B3%D9%88%D8%AF%D8%A7%D9%86%20%D8%B9%D8%A7%D9%85%20%201960.mp3"},{"t":"تخونوه  حفلة 1960","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%AA%D8%AE%D9%88%D9%86%D9%88%D9%87%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%201960.mp3"},{"t":"توبة  حفلة عام 1954","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%AA%D9%88%D8%A8%D8%A9%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%D8%B9%D8%A7%D9%85%201954.mp3"},{"t":"جواب  . حفلة ثالثة","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%AC%D9%88%D8%A7%D8%A8%20..%20%D8%AD%D9%84%D9%8A%D9%85%20...%20%D8%AD%D9%81%D9%84%D8%A9%20%D8%AB%D8%A7%D9%84%D8%AB%D8%A9.mp3"},{"t":"حبك نار  حفلة مع تقديم من الموجى","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%AD%D8%A8%D9%83%20%D9%86%D8%A7%D8%B1%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%D9%85%D8%B9%20%D8%AA%D9%82%D8%AF%D9%8A%D9%85%20%D9%85%D9%86%20%D8%A7%D9%84%D9%85%D9%88%D8%AC%D9%89.mp3"},{"t":"حفلة عام 1957  ظلموه + أسمر يا أسمرانى","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%AD%D9%81%D9%84%D8%A9%20%20%D8%B9%D8%A7%D9%85%20%201957%20%20..%20%20%20%D8%AD%D9%84%D9%8A%D9%85%20%20..%20%20%20%D8%B8%D9%84%D9%85%D9%88%D9%87%20%2B%20%D8%A3%D8%B3%D9%85%D8%B1%20%D9%8A%D8%A7%20%D8%A3%D8%B3%D9%85%D8%B1%D8%A7%D9%86%D9%89.mp3"},{"t":"حلفنى  حفلة 15 ديسمبر 1955 قصر النيل","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%AD%D9%84%D9%81%D9%86%D9%89%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%2015%20%D8%AF%D9%8A%D8%B3%D9%85%D8%A8%D8%B1%201955%20..%20%D9%82%D8%B5%D8%B1%20%D8%A7%D9%84%D9%86%D9%8A%D9%84.mp3"},{"t":"حلو وكداب  حفلة 3 أبريل 1956 سينما ريفولى","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%AD%D9%84%D9%88%20%D9%88%D9%83%D8%AF%D8%A7%D8%A8%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%203%20%D8%A3%D8%A8%D8%B1%D9%8A%D9%84%201956%20..%20%D8%B3%D9%8A%D9%86%D9%85%D8%A7%20%D8%B1%D9%8A%D9%81%D9%88%D9%84%D9%89.mp3"},{"t":"صافينى مرة  حفلة","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%B5%D8%A7%D9%81%D9%8A%D9%86%D9%89%20%D9%85%D8%B1%D8%A9%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9.mp3"},{"t":"ظالم  حفلة عام 1954 مسرح الأذاعة العائم","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%B8%D8%A7%D9%84%D9%85%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%D8%B9%D8%A7%D9%85%201954%20..%20%D9%85%D8%B3%D8%B1%D8%AD%20%D8%A7%D9%84%D8%A3%D8%B0%D8%A7%D8%B9%D8%A9%20%D8%A7%D9%84%D8%B9%D8%A7%D8%A6%D9%85.mp3"},{"t":"على قد الشوق  حفلة 25 يولية 1954 حديقة الأندلس","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D8%B9%D9%84%D9%89%20%D9%82%D8%AF%20%D8%A7%D9%84%D8%B4%D9%88%D9%82%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%2025%20%D9%8A%D9%88%D9%84%D9%8A%D8%A9%201954%20..%20%D8%AD%D8%AF%D9%8A%D9%82%D8%A9%20%D8%A7%D9%84%D8%A3%D9%86%D8%AF%D9%84%D8%B3.mp3"},{"t":"فوق الشوك  حفلة عام 1961 سينما أوبرا","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D9%81%D9%88%D9%82%20%D8%A7%D9%84%D8%B4%D9%88%D9%83%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%D8%B9%D8%A7%D9%85%201961%20..%20%D8%B3%D9%8A%D9%86%D9%85%D8%A7%20%D8%A3%D9%88%D8%A8%D8%B1%D8%A7.mp3"},{"t":"فى يوم فى شهر فى سنة  حفلة يوم 25 يولية 1975","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D9%81%D9%89%20%D9%8A%D9%88%D9%85%20..%20%D9%81%D9%89%20%D8%B4%D9%87%D8%B1%20..%20%D9%81%D9%89%20%D8%B3%D9%86%D8%A9%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%D9%8A%D9%88%D9%85%2025%20%D9%8A%D9%88%D9%84%D9%8A%D8%A9%201975.mp3"},{"t":"فى يوم من الأيام  حفلة المحلة عام 1957","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D9%81%D9%89%20%D9%8A%D9%88%D9%85%20%D9%85%D9%86%20%D8%A7%D9%84%D8%A3%D9%8A%D8%A7%D9%85%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%D8%A7%D9%84%D9%85%D8%AD%D9%84%D8%A9%20%D8%B9%D8%A7%D9%85%20%201957.mp3"},{"t":"قولى حاجة  حفلة","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D9%82%D9%88%D9%84%D9%89%20%D8%AD%D8%A7%D8%AC%D8%A9%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%D8%AD%D9%81%D9%84%D8%A9.mp3"},{"t":"لايق عليك الخال  حفلة الباخرة سودان عام 1954","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D9%84%D8%A7%D9%8A%D9%82%20%D8%B9%D9%84%D9%8A%D9%83%20%D8%A7%D9%84%D8%AE%D8%A7%D9%84%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%D8%A7%D9%84%D8%A8%D8%A7%D8%AE%D8%B1%D8%A9%20%D8%B3%D9%88%D8%AF%D8%A7%D9%86%20%D8%B9%D8%A7%D9%85%201954.mp3"},{"t":"يا أبو قلب خالى  . حفلة","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D9%8A%D8%A7%20%D8%A3%D8%A8%D9%88%20%D9%82%D9%84%D8%A8%20%D8%AE%D8%A7%D9%84%D9%89%20..%20%D8%AD%D9%84%D9%8A%D9%85%20...%20%D8%AD%D9%81%D9%84%D8%A9.mp3"},{"t":"ياقلبى خبى  حفلة من السبعينات توزيع جديد","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D9%8A%D8%A7%D9%82%D9%84%D8%A8%D9%89%20%D8%AE%D8%A8%D9%89%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%D9%85%D9%86%20%D8%A7%D9%84%D8%B3%D8%A8%D8%B9%D9%8A%D9%86%D8%A7%D8%AA%20..%20%D8%AA%D9%88%D8%B2%D9%8A%D8%B9%20%D8%AC%D8%AF%D9%8A%D8%AF.mp3"},{"t":"يامواعدنى بكرة  حفلة","u":"https://archive.org/download/halim-tessgilette-zemene_20150817/%D9%8A%D8%A7%D9%85%D9%88%D8%A7%D8%B9%D8%AF%D9%86%D9%89%20%D8%A8%D9%83%D8%B1%D8%A9%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%28Trimmed%29.mp3"},{"t":"الحب جميل","u":"https://archive.org/download/halim-5-tessgilette-zemene/%D8%A7%D9%84%D8%AD%D8%A8%20%D8%AC%D9%85%D9%8A%D9%84.mp3"},{"t":"حكاية شعب - حفل دمشق 24-2-1960","u":"https://archive.org/download/halim-5-tessgilette-zemene/%D8%AD%D9%83%D8%A7%D9%8A%D8%A9%20%D8%B4%D8%B9%D8%A8%20-%20%D8%AD%D9%81%D9%84%20%D8%AF%D9%85%D8%B4%D9%82%2024-2-1960.mp3"},{"t":"لاتكذبى  حفلة عام 1966","u":"https://archive.org/download/halim-5-tessgilette-zemene/%D9%84%D8%A7%D8%AA%D9%83%D8%B0%D8%A8%D9%89%20..%20%D8%AD%D9%84%D9%8A%D9%85%20..%20%D8%AD%D9%81%D9%84%D8%A9%20%D8%B9%D8%A7%D9%85%201966.mp3"}],"layla":[{"t":"سنتين وانا أحايل","u":"https://archive.org/download/LeylaMourad/99.mp3"},{"t":"فاكر تاني","u":"https://archive.org/download/LeylaMourad/52.mp3"},{"t":"أنا زي ما أنا و إنت بتتغير","u":"https://archive.org/download/LeylaMourad/128.mp3"},{"t":"عروس النيل","u":"https://archive.org/download/LeylaMourad/66-.mp3"},{"t":"العيش و الملح","u":"https://archive.org/download/LeylaMourad/116.mp3"},{"t":"حكايتنا إحنا إلإتنين","u":"https://archive.org/download/LeylaMourad/95.mp3"},{"t":"اللي يقدر علي قلبي","u":"https://archive.org/download/LeylaMourad/117.mp3"},{"t":"الحب جميل","u":"https://archive.org/download/LeylaMourad/124.mp3"},{"t":"أمانه تنسى يوم","u":"https://archive.org/download/LeylaMourad/127.mp3"},{"t":"غني لي شوي شوي","u":"https://archive.org/download/LeylaMourad/71.mp3"},{"t":"ياما وياما","u":"https://archive.org/download/LeylaMourad/49.mp3"},{"t":"يا حبيب الروح","u":"https://archive.org/download/LeylaMourad/23.mp3"},{"t":"مايهمنيش","u":"https://archive.org/download/LeylaMourad/77.mp3"},{"t":"آه لو عرفت المخبى","u":"https://archive.org/download/LeylaMourad/91.mp3"},{"t":"حبيب قلبي","u":"https://archive.org/download/LeylaMourad/103.mp3"},{"t":"مستنيه","u":"https://archive.org/download/LeylaMourad/58.mp3"},{"t":"ياقلبي مالك كده حيران 28","u":"https://archive.org/download/LeylaMourad/2828.mp3"},{"t":"جواب حبيبي","u":"https://archive.org/download/LeylaMourad/102.mp3"},{"t":"إن كنت فاكر","u":"https://archive.org/download/LeylaMourad/137.mp3"},{"t":"يامين يقولك 30","u":"https://archive.org/download/LeylaMourad/3030.mp3"},{"t":"ليه خليتني أحبك","u":"https://archive.org/download/LeylaMourad/67.mp3"},{"t":"حيران ليه","u":"https://archive.org/download/LeylaMourad/56.mp3"},{"t":"توبة يا أهل الهوى","u":"https://archive.org/download/LeylaMourad/75.mp3"},{"t":"يا من أنادى","u":"https://archive.org/download/LeylaMourad/27.mp3"},{"t":"يا طبيب القلب","u":"https://archive.org/download/LeylaMourad/35.mp3"},{"t":"حيرانه ليه","u":"https://archive.org/download/LeylaMourad/105.mp3"},{"t":"يا ست يا طاهرة","u":"https://archive.org/download/LeylaMourad/25.mp3"},{"t":"لأ ما تغيرش عليا","u":"https://archive.org/download/LeylaMourad/64.mp3"},{"t":"إسأل عليا","u":"https://archive.org/download/LeylaMourad/122.mp3"},{"t":"اكتبلك جوابات","u":"https://archive.org/download/LeylaMourad/133.mp3"},{"t":"هو الدلال يعنى خصام","u":"https://archive.org/download/LeylaMourad/41.mp3"},{"t":"حبيت جمالك","u":"https://archive.org/download/LeylaMourad/84.mp3"},{"t":"إتمختري يا خيل","u":"https://archive.org/download/LeylaMourad/111.mp3"},{"t":"yy أبجد هوز","u":"https://archive.org/download/LeylaMourad/Yy.mp3"},{"t":"انا قلبي خالي","u":"https://archive.org/download/LeylaMourad/12.mp3"},{"t":"مين يرحم المظلوم","u":"https://archive.org/download/LeylaMourad/70.mp3"},{"t":"يا رايحين للنبي","u":"https://archive.org/download/LeylaMourad/43.mp3"},{"t":"ياصحبة الورد","u":"https://archive.org/download/LeylaMourad/47.mp3"},{"t":"راح فين يا قلبي","u":"https://archive.org/download/LeylaMourad/107.mp3"},{"t":"علمني و أعلمك","u":"https://archive.org/download/LeylaMourad/110.mp3"},{"t":"يا اللي غيابك حيرني","u":"https://archive.org/download/LeylaMourad/20.mp3"},{"t":"أناجي الليل","u":"https://archive.org/download/LeylaMourad/65-.mp3"},{"t":"الدنيا غنوه","u":"https://archive.org/download/LeylaMourad/134.mp3"},{"t":"سلم علي","u":"https://archive.org/download/LeylaMourad/15.mp3"},{"t":"يا اعز من عيني","u":"https://archive.org/download/LeylaMourad/19.mp3"},{"t":"حيران","u":"https://archive.org/download/LeylaMourad/21.mp3"},{"t":"احنا الاثنين","u":"https://archive.org/download/LeylaMourad/131.mp3"},{"t":"مين يشتري الورد","u":"https://archive.org/download/LeylaMourad/22.mp3"},{"t":"يا مسافر و ناسي هواك","u":"https://archive.org/download/LeylaMourad/13.mp3"},{"t":"الحب","u":"https://archive.org/download/LeylaMourad/01.mp3"}],"souad":[{"t":"إمتى الهوى ينصف حبيبين","u":"https://archive.org/download/sndthndr_gmail_20180207/%D8%B3%D8%B9%D8%A7%D8%AF%20%D9%85%D8%AD%D9%85%D8%AF-%20%D8%A5%D9%85%D8%AA%D9%89%20%D8%A7%D9%84%D9%87%D9%88%D9%89%20%D9%8A%D9%86%D8%B5%D9%81%20%D8%AD%D8%A8%D9%8A%D8%A8%D9%8A%D9%86.mp3"},{"t":"يا مرحبا بك يا جمال — حفل نادر","u":"https://archive.org/download/YaMarhaba-tessgiletteZemene/%D9%8A%D8%A7%20%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%20%D8%A8%D9%83%20%D9%8A%D8%A7%20%D8%AC%D9%85%D8%A7%D9%84%20%D8%AD%D9%81%D9%84%20%D9%86%D8%A7%D8%AF%D8%B1%20%D9%85%D8%B9%20%D8%B3%D8%B9%D8%A7%D8%AF%20%D9%85%D8%AD%D9%85%D8%AF.mp3"},{"t":"الاطلال","u":"https://archive.org/download/AghaniSou3adMed/17.mp3"},{"t":"إذا الشعب يوماً","u":"https://archive.org/download/AghaniSou3adMed/Ss.mp3"},{"t":"شيئ غريب_0","u":"https://archive.org/download/AghaniSou3adMed/47_0.mp3"},{"t":"يطول ليلي واتوه واحتار","u":"https://archive.org/download/AghaniSou3adMed/102.mp3"},{"t":"يطول ليلي يتخللها ليالي وتفريدات","u":"https://archive.org/download/AghaniSou3adMed/103.mp3"},{"t":"قصيدة إنتظار","u":"https://archive.org/download/AghaniSou3adMed/59.mp3"},{"t":"هوّا صحيح الهوى غلاب - جلسة","u":"https://archive.org/download/AghaniSou3adMed/84-.mp3"},{"t":"هو صحيح الهوى غلاااب","u":"https://archive.org/download/AghaniSou3adMed/82.mp3"},{"t":"هو صحيح الهوى غلاب","u":"https://archive.org/download/AghaniSou3adMed/83.mp3"},{"t":"دمعة على خد الزمن qs","u":"https://archive.org/download/AghaniSou3adMed/Qs.mp3"},{"t":"الشوق يا بويا سعاد محمد في حفلc","u":"https://archive.org/download/AghaniSou3adMed/c.mp3"},{"t":"الأولى آه b","u":"https://archive.org/download/AghaniSou3adMed/B.mp3"},{"t":"إمتى","u":"https://archive.org/download/AghaniSou3adMed/24.mp3"},{"t":"انا قد نسيتك فانسني","u":"https://archive.org/download/AghaniSou3adMed/25.mp3"},{"t":"أحبك وأتحرم منك","u":"https://archive.org/download/AghaniSou3adMed/08.mp3"},{"t":"أحبك","u":"https://archive.org/download/AghaniSou3adMed/09.mp3"},{"t":"دور أنا هويت kj","u":"https://archive.org/download/AghaniSou3adMed/Kj.mp3"},{"t":"وحشتني -","u":"https://archive.org/download/AghaniSou3adMed/88-.mp3"},{"t":"بقى عايز تنسانى","u":"https://archive.org/download/AghaniSou3adMed/36.mp3"},{"t":"أنغام الماضي","u":"https://archive.org/download/AghaniSou3adMed/30.mp3"},{"t":"مين فـكـرك - سعاد محمد","u":"https://archive.org/download/AghaniSou3adMed/77-.mp3"},{"t":"من غير حب -","u":"https://archive.org/download/AghaniSou3adMed/68-.mp3"},{"t":"و جرحتنى","u":"https://archive.org/download/AghaniSou3adMed/85.mp3"},{"t":"السهر يحلالي","u":"https://archive.org/download/AghaniSou3adMed/19.mp3"},{"t":"سألت علينا الغيطان","u":"https://archive.org/download/AghaniSou3adMed/41.mp3"},{"t":"ياسلام سلم","u":"https://archive.org/download/AghaniSou3adMed/95.mp3"},{"t":"يـانـا و يا نا","u":"https://archive.org/download/AghaniSou3adMed/98.mp3"},{"t":"سعاد محمد غنى لى شوى","u":"https://archive.org/download/AghaniSou3adMed/42.mp3"},{"t":"قصيدة (( القدس )) او (( حبيبة السماء ))","u":"https://archive.org/download/AghaniSou3adMed/58.mp3"},{"t":"الله زاد محمدا تعظيما","u":"https://archive.org/download/AghaniSou3adMed/21.mp3"},{"t":"h حبيبة السماء","u":"https://archive.org/download/AghaniSou3adMed/H.mp3"},{"t":"إذا ما الصبح نادانا","u":"https://archive.org/download/AghaniSou3adMed/13.mp3"},{"t":"بصلي واسأل علي","u":"https://archive.org/download/AghaniSou3adMed/35.mp3"},{"t":"أنا ناسيه أهلى وناسى","u":"https://archive.org/download/AghaniSou3adMed/26.mp3"},{"t":"أوعدك","u":"https://archive.org/download/AghaniSou3adMed/32.mp3"},{"t":"اسأل عليه","u":"https://archive.org/download/AghaniSou3adMed/14.mp3"},{"t":"m; راح الحب-سعاد محمد","u":"https://archive.org/download/AghaniSou3adMed/M-.mp3"},{"t":"أتحداك يوم تنسانى","u":"https://archive.org/download/AghaniSou3adMed/04.mp3"},{"t":"ما هكذا","u":"https://archive.org/download/AghaniSou3adMed/66.mp3"},{"t":"انتصرى ياقاهرة","u":"https://archive.org/download/AghaniSou3adMed/28.mp3"},{"t":"تنهيدة f","u":"https://archive.org/download/AghaniSou3adMed/F.mp3"},{"t":"صدفة سعيدة","u":"https://archive.org/download/AghaniSou3adMed/48.mp3"},{"t":"غلبنا الشوق","u":"https://archive.org/download/AghaniSou3adMed/53.mp3"},{"t":"كثر خيرك","u":"https://archive.org/download/AghaniSou3adMed/62.mp3"},{"t":"فتح الهواء الشباك","u":"https://archive.org/download/AghaniSou3adMed/55.mp3"},{"t":"قصيدة نجـــوى","u":"https://archive.org/download/AghaniSou3adMed/60.mp3"},{"t":"هلا بالورد","u":"https://archive.org/download/AghaniSou3adMed/81.mp3"},{"t":"أجمل سلام بنظره حلوه وابتسام","u":"https://archive.org/download/AghaniSou3adMed/05.mp3"},{"t":"صوت فلسطين","u":"https://archive.org/download/AghaniSou3adMed/50.mp3"},{"t":"غمر الطيب حبيبي","u":"https://archive.org/download/AghaniSou3adMed/54.mp3"},{"t":"واجريحاه","u":"https://archive.org/download/AghaniSou3adMed/86.mp3"},{"t":"وحياة من جمع أيامنا","u":"https://archive.org/download/AghaniSou3adMed/89.mp3"},{"t":"ايه يادنيا - سعاد محمد","u":"https://archive.org/download/AghaniSou3adMed/33-.mp3"},{"t":"حكايتى فى هواك uu","u":"https://archive.org/download/AghaniSou3adMed/Uu.mp3"},{"t":"موشح ساقني بالورد","u":"https://archive.org/download/AghaniSou3adMed/71.mp3"},{"t":"موشح يا مائس القد","u":"https://archive.org/download/AghaniSou3adMed/73.mp3"},{"t":"أبعتله جواب","u":"https://archive.org/download/AghaniSou3adMed/02.mp3"},{"t":"والله وعرفت تحب ياقلبي -","u":"https://archive.org/download/AghaniSou3adMed/87-.mp3"}],"wahab":[{"t":"همسة حائرة","u":"https://archive.org/download/moharram1000_gmail_20170920_2324/%D9%85%D8%AD%D9%85%D8%AF%20%D8%B9%D8%A8%D8%AF%20%D8%A7%D9%84%D9%88%D9%87%D8%A7%D8%A8%20%D9%87%D9%85%D8%B3%D9%87%20%D8%AD%D8%A7%D8%A6%D8%B1%D9%87%20%20%D8%A7%D9%84%D8%AA%D8%B3%D8%AC%D9%8A%D9%84%20%D8%A7%D9%84%D8%A7%D8%B0%D8%A7%D8%B9%D9%8A%20%D9%A2%20%D8%A3%D8%BA%D8%B3%D8%B7%D8%B3%20%D9%A1%D9%A9%D9%A4%D9%A6.mp3"},{"t":"كليوباترا","u":"https://archive.org/download/wahab_cleopatra_vinyl_lp_studio/%D9%83%D9%84%D9%8A%D9%88%D8%A8%D8%A7%D8%AA%D8%B1%D8%A7.mp3"},{"t":"الجندول","u":"https://archive.org/download/moharram1000_gmail_20170920_2324/%D8%A7%D9%84%D8%AC%D9%86%D8%AF%D9%88%D9%84%20-%20%D9%85%D8%AD%D9%85%D8%AF%20%D8%B9%D8%A8%D8%AF%20%D8%A7%D9%84%D9%88%D9%87%D8%A7%D8%A8%20-%20%D8%AA%D9%86%D9%82%D9%8A%D8%A9%20%D9%88%20%D8%AA%D9%86%D9%82%D9%8A%D8%AD%20%D8%B5%D9%88%D8%AA%D9%8A.mp3"},{"t":"مضناك جفاه مرقده","u":"https://archive.org/download/moharram1965_gmail_1_201710/%D9%85%D8%B6%D9%86%D8%A7%D9%83%20%D8%AC%D9%81%D8%A7%D9%87%20%D9%85%D8%B1%D9%82%D8%AF%D9%87-%20%D9%85%D8%AD%D9%85%D8%AF%20%D8%B9%D8%A8%D8%AF%20%D8%A7%D9%84%D9%88%D9%87%D8%A7%D8%A8%20%D8%B9%D9%88%D8%AF%28%D9%83%D8%A7%D9%85%D9%84%D8%A9%20%D9%88%D9%86%D8%A7%D8%AF%D8%B1%D8%A9%291%20.mp3"},{"t":"النهر الخالد","u":"https://archive.org/download/annahr-elkhaled-tessgilette-zemene/%D8%A7%D9%84%D9%86%D9%87%D8%B1%20%D8%A7%D9%84%D8%AE%D8%A7%D9%84%D8%AF.mp3"},{"t":"الكرنك","u":"https://archive.org/download/moharram1000_gmail_20170920_2324/%D8%A7%D9%84%D9%83%D8%B1%D9%86%D9%83%20%20%D8%AC%D9%88%D8%AF%D8%A9%20%D8%B9%D8%A7%D9%84%D9%8A%D8%A9%20-%20%D9%85%D8%AD%D9%85%D8%AF%20%D8%B9%D8%A8%D8%AF%D8%A7%D9%84%D9%88%D9%87%D8%A7%D8%A8.mp3"},{"t":"في الليل لما خلى — محمد عبد الوهاب","u":"https://archive.org/download/fillil-lammaghala-tessgilette-zemene/%D9%85%D8%AD%D9%85%D8%AF%20%D8%B9%D8%A8%D8%AF%20%D8%A7%D9%84%D9%88%D9%87%D8%A7%D8%A8%20%D9%80%20%D9%81%D9%8A%20%D8%A7%D9%84%D9%84%D9%8A%D9%84%20%D9%84%D9%85%D8%A7%20%D8%AE%D9%84%D9%8A.mp3"},{"t":"إمتى الزمان — محمد عبد الوهاب","u":"https://archive.org/download/emtazzamen-tessgilette-zemene/%D9%85%D8%AD%D9%85%D8%AF%20%D8%B9%D8%A8%D8%AF%20%D8%A7%D9%84%D9%88%D9%87%D8%A7%D8%A8%20%D9%80%20%D8%A5%D9%85%D8%AA%D9%89%20%D8%A7%D9%84%D8%B2%D9%85%D8%A7%D9%86.mp3"},{"t":"كل ده كان ليه — محمد عبد الوهاب","u":"https://archive.org/download/KolDhKnLh-Tessgilette-zemene/1.mp3"},{"t":"الهوان وياك معزة — محمد عبد الوهاب","u":"https://archive.org/download/elhawen-tessgilette-zemene/%D9%85%D8%AD%D9%85%D8%AF%20%D8%B9%D8%A8%D8%AF%20%D8%A7%D9%84%D9%88%D9%87%D8%A7%D8%A8%20%D9%80%20%D8%A7%D9%84%D9%87%D9%88%D8%A7%D9%86%20%D9%88%D9%8A%D8%A7%D9%83%20%D9%85%D8%B9%D8%B2%D8%A9.mp3"},{"t":"كل ده كان ليه (تسجيل استوديو) — محمد عبد الوهاب","u":"https://archive.org/download/kolde-kenlih-tessgilette-zemene/%D9%83%D9%84%D9%8A%20%D8%AF%D9%87%20%D9%83%D8%A7%D9%86%20%D9%84%D9%8A%D9%87%20%D8%AA%D8%B3%D8%AC%D9%8A%D9%84%20%D8%A7%D8%B3%D8%AA%D9%88%D8%AF%D9%8A%D9%88.mp3"},{"t":"يا وردة الحب الصافي","u":"https://archive.org/download/yewarda-tessgilette-zemene/%D9%8A%D8%A7%20%D9%88%D8%B1%D8%AF%D8%A9%20%D8%A7%D9%84%D8%AD%D8%A8%20%D8%A7%D9%84%D8%B5%D8%A7%D9%81%D9%8A.mp3"},{"t":"كل ده كان ليه","u":"https://archive.org/download/wahab_kol_dah_kan_leih_live_recording/01%20%D9%83%D9%84%20%D8%AF%D9%87%20%D9%83%D8%A7%D9%86%20%D9%84%D9%8A%D9%87%20%D8%AD%D9%81%D9%84%D8%A9%20%D9%85%D8%AD%D9%85%D8%AF%20%D8%B9%D8%A8%D8%AF%20%D8%A7%D9%84%D9%88%D9%87%D8%A7%D8%A8.mp3"},{"t":"أحب عيشة الحرية","u":"https://archive.org/download/a7eb3echetelhorria-tessgilette-zemene/%D9%85%D8%AD%D9%85%D8%AF%20%D8%B9%D8%A8%D8%AF%20%D8%A7%D9%84%D9%88%D9%87%D8%A7%D8%A8%20%D9%80%20%D8%A3%D8%AD%D8%A8%20%D8%B9%D9%8A%D8%B4%D8%A9%20%D8%A7%D9%84%D8%AD%D8%B1%D9%8A%D8%A9.mp3"},{"t":"لا مش أنا اللي أبكي","u":"https://archive.org/download/lp_angam-mn-alkahra_various-abdul-halim-hafez-farid-al-atrash/disc1/01.02.%20%D9%84%D8%A7%20%D9%85%D8%B4%20%D8%A3%D9%86%D8%A7%20%D8%A7%D9%84%D9%84%D9%8A%20%D8%A3%D8%A8%D9%83%D9%8A%20%3D%20La%20Mush%20An%20Illi%20Abki.mp3"},{"t":"سهرت منه الليالي","u":"https://archive.org/download/sehertou-tessgilette-zemene/%D9%85%D8%AD%D9%85%D8%AF%20%D8%B9%D8%A8%D8%AF%20%D8%A7%D9%84%D9%88%D9%87%D8%A7%D8%A8%20%D9%80%20%D8%B3%D9%87%D8%B1%D8%AA%20%D9%85%D9%86%D9%87%20%D8%A7%D9%84%D9%84%D9%8A%D8%A7%D9%84%D9%8A.mp3"},{"t":"عاشق الروح","u":"https://archive.org/download/gha5552_yahoo_20190221/%D9%85%D8%AD%D9%85%D8%AF%20%D8%B9%D8%A8%D8%AF%20%D8%A7%D9%84%D9%88%D9%87%D8%A7%D8%A8%20%D8%B9%D8%A7%D8%B4%D9%82%20%D8%A7%D9%84%D8%B1%D9%88%D8%AD.mp3"}],"warda":[{"t":"بلاش تفارق","u":"https://archive.org/download/WardaAlJazairiaBalashTefarek/%D8%A7%D8%AC%D9%85%D9%84%20%D8%A7%D8%BA%D8%A7%D9%86%D9%8A%20%D9%88%D8%B1%D8%AF%D8%A9%20%D8%A7%D9%84%D8%AC%D8%B2%D8%A7%D8%A6%D8%B1%D9%8A%D8%A9%20-%20%D8%A8%D9%84%D8%A7%D8%B4%20%D8%AA%D9%81%D8%A7%D8%B1%D9%82%20-%20%D8%AD%D9%81%D9%84%20%D8%B1%D8%A7%D8%A6%D8%B9%20%D9%83%D8%A7%D9%85%D9%84%20%20warda%20Al%20Jazairia%20-%20Balash%20Tefarek.mp3"},{"t":"خليك هنا","u":"https://archive.org/download/Album_WardaAlJazairia_Ahla_Songs_Original_Quality/Khalek.Hena.mp3"},{"t":"وحشتوني","u":"https://archive.org/download/Album_WardaAlJazairia_Ahla_Songs_Original_Quality/Wahshtony.mp3"},{"t":"لولا الملامة","u":"https://archive.org/download/Album_WardaAlJazairia_Ahla_Songs_Original_Quality/Lola.El.Mlama.mp3"},{"t":"بودعك","u":"https://archive.org/download/Album_WardaAlJazairia_Ahla_Songs_Original_Quality/Bawad3k.mp3"},{"t":"العيون السود","u":"https://archive.org/download/Album_WardaAlJazairia_Ahla_Songs_Original_Quality/El3yon.Elsood.mp3"},{"t":"أوقاتي بتحلو","u":"https://archive.org/download/Album_WardaAlJazairia_Ahla_Songs_Original_Quality/Aw2aty.Bt7lw.mp3"},{"t":"اسمعوني","u":"https://archive.org/download/Album_WardaAlJazairia_Ahla_Songs_Original_Quality/Esm3ony.mp3"},{"t":"بتونس بيك","u":"https://archive.org/download/Album_WardaAlJazairia_Ahla_Songs_Original_Quality/Batwanes.Beek.mp3"},{"t":"أكذب عليك","u":"https://archive.org/download/Album_WardaAlJazairia_Ahla_Songs_Original_Quality/Akdb.3aleek.mp3"},{"t":"في يوم وليلة","u":"https://archive.org/download/Album_WardaAlJazairia_Ahla_Songs_Original_Quality/Fe.Youm.W.Leila.mp3"},{"t":"حنين — وردة","u":"https://archive.org/download/hanin-tessgilette-zemene/%D8%AD%D9%86%D9%8A%D9%86.mp3"},{"t":"أكدب عليك","u":"https://archive.org/download/20210411_20210411_2006/%D8%A3%D9%83%D8%AF%D8%A8%20%D8%B9%D9%84%D9%8A%D9%83%20%D8%B5%D8%AF%D9%89.mp3"},{"t":"حرمت أحبك","u":"https://archive.org/download/20200407_20200407_0708/%D8%AD%D8%B1%D9%85%D8%AA%20%D8%A3%D8%AD%D8%A8%D9%83%20%D9%80%20%D9%88%D8%B1%D8%AF%D8%A9%20%D9%80%20%D8%B9%D9%85%D8%B1%20%D8%A8%D8%B7%D9%8A%D8%B4%D8%A9%20%D9%80%20%D8%B5%D9%84%D8%A7%D8%AD%20%D8%A7%D9%84%D8%B4%D8%B1%D9%86%D9%88%D8%A8%D9%89%20%D9%80%20%D8%A3%D8%B9%D8%B0%D8%A8%20%D8%A7%D9%84%D9%86%D8%BA%D9%85%D8%A7%D8%AA%20%D9%85%D8%B9%20%D8%A3.%20%D8%AD%D9%86%D8%A7%D9%86%20%D8%B3%D8%B1%D9%88%D8%B1.mp3"}],"najah":[{"t":"وصلة حفل أضواء المدينة","u":"https://archive.org/download/NajehSellem/54.mp3"},{"t":"قصيدة سل نجوم الليل عني","u":"https://archive.org/download/NajehSellem/42.mp3"},{"t":"عايز جواباتك","u":"https://archive.org/download/ayez-gawabatak/Ayez%20Gawabatak.mp3"},{"t":"برهوم حاكيني","u":"https://archive.org/download/barhom-hakiny/Barhom%20Hakiny.mp3"},{"t":"يا سيدى ما اشطرك","u":"https://archive.org/download/NajehSellem/79.mp3"},{"t":"أنا في انتظارك","u":"https://archive.org/download/NajehSellem/AnaFiIntidarak-C.mp3"},{"t":"عيونك فيهم جلا","u":"https://archive.org/download/NajehSellem/38.mp3"},{"t":"من غير ندم","u":"https://archive.org/download/NajehSellem/61.mp3"},{"t":"حبينا وبنينا قصور","u":"https://archive.org/download/NajehSellem/52-.mp3"},{"t":"ليالي الهوا كانت ليالي الهنا","u":"https://archive.org/download/NajehSellem/70.mp3"},{"t":"ياريم وادي ثقيف","u":"https://archive.org/download/NajehSellem/84.mp3"},{"t":"سبحان علام الغيوب","u":"https://archive.org/download/NajehSellem/28.mp3"},{"t":"شــاب الأسمر","u":"https://archive.org/download/NajehSellem/30.mp3"},{"t":"صبح الصباح","u":"https://archive.org/download/NajehSellem/31.mp3"},{"t":"قصة الكوخ","u":"https://archive.org/download/NajehSellem/41.mp3"},{"t":"يا قدسنا","u":"https://archive.org/download/NajehSellem/YaQudsena.mp3"},{"t":"يا زمان الوفا","u":"https://archive.org/download/NajehSellem/78.mp3"},{"t":"عجايب خصامك","u":"https://archive.org/download/NajehSellem/35.mp3"},{"t":"يا مالكا قلبي","u":"https://archive.org/download/NajehSellem/81.mp3"},{"t":"بالسلامة يا حبيبى","u":"https://archive.org/download/NajehSellem/16.mp3"},{"t":"قصيد عدت والأشواق في قلبي تنادي لنجاح سلاّم","u":"https://archive.org/download/NajehSellem/43.mp3"},{"t":"من نظرتك يازين","u":"https://archive.org/download/NajehSellem/62.mp3"},{"t":"ياجارحه قلبي","u":"https://archive.org/download/NajehSellem/83_.mp3"},{"t":"عـا الا لا ولا لا","u":"https://archive.org/download/NajehSellem/34.mp3"},{"t":"فيها وفيها و مافيها","u":"https://archive.org/download/NajehSellem/40.mp3"},{"t":"يانى منك يانى","u":"https://archive.org/download/NajehSellem/87.mp3"},{"t":"رجوع رمضان","u":"https://archive.org/download/NajehSellem/67-.mp3"},{"t":"المعجبانى","u":"https://archive.org/download/NajehSellem/12.mp3"},{"t":"خي تستاهل","u":"https://archive.org/download/NajehSellem/24.mp3"},{"t":"ياماشالله","u":"https://archive.org/download/NajehSellem/86.mp3"},{"t":"الله يا لبنان ما أجملك","u":"https://archive.org/download/NajehSellem/AllahYaLubnanMaAjmalak.mp3"},{"t":"دمعتي","u":"https://archive.org/download/NajehSellem/26.mp3"},{"t":"محتار بقلبي","u":"https://archive.org/download/NajehSellem/Me7tarBeAlbiMe7tar.mp3"},{"t":"ميّـل ياغزيّل","u":"https://archive.org/download/NajehSellem/64.mp3"},{"t":"سورية يا حبيبتي","u":"https://archive.org/download/NajehSellem/29.mp3"}],"mayada":[{"t":"ذهبيات","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Dhhbyat_59101.mp3"},{"t":"اول ماشوفتك","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Aol_Mashoftk_59183.mp3"},{"t":"ساعه زمن","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Sa3h_Zmn_59106.mp3"},{"t":"رجعنا للبدايه","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Rg3na_Llbdaeh_59116.mp3"},{"t":"اول واخر حبيب","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Aol_Oakhr_7beb_59178.mp3"},{"t":"سيدي انا","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Sede_Ana_59108.mp3"},{"t":"تلج ونار","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Tlg_Onar_59146.mp3"},{"t":"حبك ماينتهيش","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_7bk_Maenthesh_59175.mp3"},{"t":"اكتر من حب","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Aktr_Mn_7b_59123.mp3"},{"t":"اكتر من الحب","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Aktr_Mn_Al-7b_59180.mp3"},{"t":"الحل الوحيد","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Al-7l_Al-o7ed_59167.mp3"},{"t":"غنيت لك","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Ghnet_Lk_59174.mp3"},{"t":"حكايه حب","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_7kaeh_7b_59173%20%281%29.mp3"},{"t":"عندي كلام","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Ande_Klam_59153.mp3"},{"t":"احلو عمري","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_A7lo_Amre_59122.mp3"},{"t":"ايش قيمتك ياحب","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Aesh_Qemtk_Ya7b_59135.mp3"},{"t":"محلي الغرام","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_M7le_Al-ghram_59130.mp3"},{"t":"نسيت ايامي","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Nset_Ayame_59169.mp3"},{"t":"اسمع عتابي","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Asm3_Atabe_59164.mp3"},{"t":"نعمة النسيان","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_N3mtulnsyan_59110.mp3"},{"t":"مش عوايدك","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Msh_Aoaedk_59104.mp3"},{"t":"فاتت سنه","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Fatt_Snh_59100.mp3"},{"t":"اشواق","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Ashoaq_59143.mp3"},{"t":"دعوه للحب","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_D3oh_Ll7b_59187.mp3"},{"t":"الحب اللي كان","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Al-7b_Al-le_Kan_59097.mp3"},{"t":"كان ياما كان","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Kan_Yama_Kan_59098.mp3"},{"t":"جبت قلب منين","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Gbt_Qlb_Mnen_59160.mp3"},{"t":"الحب بتاع زمان","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Al-7b_Bta3_Zman_59176.mp3"},{"t":"زي الربيع","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Ze_Al-rbe3_59171.mp3"},{"t":"انا بعشقك","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Ana_B3shqk_59185.mp3"},{"t":"حبينا واتحبينا","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_7bena_Oat7bena_59181.mp3"},{"t":"ثوره الشوق","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Thorh_Al-shoq_59184.mp3"},{"t":"غزا قلبي","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Ghza_Qlbe_59166.mp3"},{"t":"وقدرت ازاي","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Oqdrt_Azae_59117.mp3"},{"t":"بتحلف ليه","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Bt7lf_Leh_59162%20%281%29.mp3"},{"t":"انا اعمل ايه","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Ana_A3ml_Aeh_59099.mp3"},{"t":"انت الحبيب","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Ant_Al-7beb_59136.mp3"},{"t":"لك اغني","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Lk_Aghne_59131%20%281%29.mp3"},{"t":"صراع مع الياس","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_9ra3_M3_Al-yas_59197.mp3"},{"t":"اعلان الحب","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_A3lan_Al-7b_59165%20%281%29.mp3"},{"t":"بكاء الحبيب","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Bka2_Al-7beb_59182.mp3"},{"t":"الليالي","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Al-lyale_59138.mp3"},{"t":"ليه يابنفسج","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Leh_Yabnfsg_59188.mp3"},{"t":"قالولي الناس","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_Net_Qalole_Al-nas_89657.mp3"},{"t":"ياقمر ميل","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Yaqmr_Mel_59154.mp3"},{"t":"قدمت الروح","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_Net_Qdmt_Al-ro7_89660.mp3"},{"t":"ماتجرحوش فينا","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_Net_Matgr7osh_Fena_89653.mp3"},{"t":"لايمين","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Laemen_59141.mp3"},{"t":"من غير تفكير","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Mn_Gher_Tfker_59152.mp3"},{"t":"دور ع اللي يحبك","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Dor_A_Al-le_E7bk_59137.mp3"},{"t":"مستغربين","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Mstghrben_59115.mp3"},{"t":"الشمس","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_Net_Al-shms_89634.mp3"},{"t":"الفرق بينا","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Al-frq_Bena_59150.mp3"},{"t":"سيبولي قلبي","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_Net_Sebole_Qlbe_89638.mp3"},{"t":"مين اداك الحق","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Men_Adak_Al-7q_59121.mp3"},{"t":"ياشوق","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Yashoq_59113.mp3"},{"t":"تصوروا","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_Net_T9oroa_89655.mp3"},{"t":"الا النسيان","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Al-a_Al-nsyan_59119.mp3"},{"t":"الحلم","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Al-7lm_59190.mp3"},{"t":"انا مغرمه","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_Net_Ana_Mghrmh_89654.mp3"},{"t":"انا مخلصالك","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_Net_Ana_Mkhl9alk_89635.mp3"},{"t":"هو مش انا","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Ho_Msh_Ana_59147%20%281%29.mp3"},{"t":"كبريائي","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Kbrya2ee_59102.mp3"},{"t":"انت هنا","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Ant_Hna_59159.mp3"},{"t":"طيب ياليل","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_Net_6eb_Yalel_89639.mp3"},{"t":"اخر رساله","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_Net_Akhr_Rsalh_89649.mp3"},{"t":"ليه حق عندك","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_Net_Leh_7q_Andk_89650.mp3"},{"t":"قاصد تسهرني","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_Net_Qa9d_Tshrne_89637.mp3"},{"t":"ماتجربنيش","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Matgrbnesh_59140.mp3"},{"t":"احبني كما انت","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_net_110683.mp3"},{"t":"غلاوه العشاق","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Ghlaoh_Al-3shaq_59142.mp3"},{"t":"دوا عيني","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/ArabMelody_Net_Doa_Aene_89670.mp3"},{"t":"كده الهوي","u":"https://archive.org/download/l-7n-me-dhhbyat-59101/L7n_me_Kdh_Al-hoe_59156%20%281%29.mp3"}],"farid":[{"t":"الربيع","u":"https://archive.org/download/aderabe3-tessgilette-zemene/%D9%81%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A3%D8%B7%D8%B1%D8%B4%20%D9%80%20%D8%A7%D9%84%D8%B1%D8%A8%D9%8A%D8%B9%20%28%D8%AA%D8%B3%D8%AC%D9%8A%D9%84%20%D8%A5%D8%B0%D8%A7%D8%B9%D9%8A%20%D9%85%D8%B7%D9%88%D9%84%29.mp3"},{"t":"أول همسة","u":"https://archive.org/download/farid_alatrach_awwel_hamsa_vinyl_lp_studio/%D8%A7%D9%88%D9%84%20%D9%87%D9%85%D8%B3%D8%A9%20%D8%AA%D8%B3%D8%AC%D9%8A%D9%84%20%D8%A3%D8%B3%D8%AA%D9%88%D8%AF%D9%8A%D9%88%20%D8%A3%D8%B3%D8%B7%D9%88%D8%A7%D9%86%D8%A9.mp3"},{"t":"نجوم الليل","u":"https://archive.org/download/farid_alatrach_negoum_ellil_vinyl_lp_studio/%D9%86%D8%AC%D9%88%D9%85%20%D8%A7%D9%84%D9%84%D9%8A%D9%84%20%D8%A3%D8%B3%D8%B7%D9%88%D8%A7%D9%86%D8%A9%20.mp3"},{"t":"حكاية غرامي","u":"https://archive.org/download/HIKEYET-GKRAMI-TESSGILETTE-ZENE/%D8%AD%D9%83%D8%A7%D9%8A%D8%A9%20%D8%BA%D8%B1%D8%A7%D9%85%D9%8A.mp3"},{"t":"يا حبايبي يا غايبين","u":"https://archive.org/download/farid_alatrach_ya_habaibi_ya_ghaleen_vinyl_lp_live/%D9%8A%D8%A7%D8%AD%D8%A8%D8%A7%D9%8A%D8%A8%D9%89%20%D9%8A%D8%A7%D8%BA%D8%A7%D9%8A%D8%A8%D9%8A%D9%86.mp3"},{"t":"عش أنت","u":"https://archive.org/download/farid_alatrach_esh_anta_vinyl_lp_live/%D8%B9%D8%B4%20%D8%A3%D9%86%D8%AA%20%D8%AD%D9%81%D9%84%20%D8%A7%D9%84%D9%82%D8%A7%D9%87%D8%B1%D8%A9.mp3"},{"t":"لكتب ع وراق الشجر","u":"https://archive.org/download/LAKTEB-FOGHOSNEK-TESSGILETTE-ZEMENE/%D9%84%D8%A7%D9%83%D8%AA%D8%A8%20%D8%B9%20%D9%88%D8%B1%D8%A7%D9%82%20%D8%A7%D9%84%D8%B4%D8%AC%D8%B1.mp3"},{"t":"فوق غصنك يا لمونة","u":"https://archive.org/download/LAKTEB-FOGHOSNEK-TESSGILETTE-ZEMENE/%D9%81%D9%88%D9%82%20%D8%BA%D8%B5%D9%86%D9%83%20%D9%8A%D8%A7%D9%84%D9%85%D9%88%D9%86%D9%87.mp3"},{"t":"زمان يا حب","u":"https://archive.org/download/muhammad_khalaf_yahoo/%D9%81%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A3%D8%B7%D8%B1%D8%B4%20-%20%D8%B2%D9%85%D8%A7%D9%86%20%D9%8A%D8%A7%20%D8%AD%D8%A8.mp3"},{"t":"وياك","u":"https://archive.org/download/farid_alatrach_wayyak_vinyl_lp/mix_12m49s%20%28audio-joiner.com%29.mp3"},{"t":"ليه أنا بحبك","u":"https://archive.org/download/y-2mate.com-leah-ana-bahebak-farid-al-atrash/y2mate.com%20-%20Leah%20Ana%20Bahebak%20%20Farid%20AlAtrash%20%D9%84%D9%8A%D9%87%20%D8%A3%D9%86%D8%A7%20%D8%A8%D8%AD%D8%A8%D9%83%20%20%D9%81%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A3%D8%B7%D8%B1%D8%B4.mp3"},{"t":"يا جميل يا جميل","u":"https://archive.org/download/yagamil-tessgilette-zemenne/%D9%8A%D8%A7%20%D8%AC%D9%85%D9%8A%D9%84%20%D8%AC%D9%85%D8%B9%D9%8A%D8%A9%20%D9%85%D8%AD%D8%A8%D9%8A%D9%87%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D9%83%D9%86%D8%AF%D8%B1%D9%8A%D8%A9%20%D8%A7%D9%84%D8%AE%D9%85%D8%B3%D9%8A%D9%86%D8%A7%D8%AA.mp3"}],"najat":[{"t":"عيون القلب","u":"https://archive.org/download/eion-el-alb/Eion%20El%20Alb.mp3"},{"t":"متى ستعرف","u":"https://archive.org/download/ela-habiby/Ela%20Habiby.mp3"},{"t":"في وسط الطريق","u":"https://archive.org/download/nagat_fi_wist_el_tarik_vinyl_lp/%D9%81%D9%89%20%D9%88%D8%B3%D8%B7%20%D8%A7%D9%84%D8%B7%D8%B1%D9%8A%D9%82%20%D8%A3%D8%B3%D8%B7%D9%88%D8%A7%D9%86%D8%A9%20%D8%A3%D8%B3%D8%AA%D9%88%D8%AF%D9%8A%D9%88.mp3"},{"t":"أما براوة","u":"https://archive.org/download/ama-barawa/Ama%20Barawa.mp3"},{"t":"دوبنا يا حبايبنا","u":"https://archive.org/download/dobna-habayebna/Dobna%20Habayebna.mp3"},{"t":"الطير المسافر","u":"https://archive.org/download/el-teer-el-mesafer/El%20Teer%20El%20Mesafer.mp3"},{"t":"إلا فراق الأحباب","u":"https://archive.org/download/y-2mate.com-ela-foraa-el-ahbab-nagat/y2mate.com%20-%20%D8%A5%D9%84%D8%A7%20%D9%81%D8%B1%D8%A7%D9%82%20%D8%A7%D9%84%D8%A3%D8%AD%D8%A8%D8%A7%D8%A8%20%20%D9%86%D8%AC%D8%A7%D8%A9%20Ela%20Foraa%20El%20Ahbab%20%20Nagat.mp3"},{"t":"شكل تاني","u":"https://archive.org/download/shakl-tany-nagat/Shakl%20Tany%20-%20Nagat.mp3"},{"t":"لا تكذبي","u":"https://archive.org/download/la-takziby/La%20Takziby.mp3"},{"t":"القريب منك بعيد","u":"https://archive.org/download/el-areeb-mnak-beeid/El%20Areeb%20Mnak%20Beeid.mp3"},{"t":"ساكن قصادي","u":"https://archive.org/download/y-2mate.com-najat-al-saghira/y2mate.com%20-%20Najat%20Al%20Saghira%20%D9%86%D8%AC%D8%A7%D8%A9%20%D8%A7%D9%84%D8%B5%D8%BA%D9%8A%D8%B1%D8%A9%20%20%20%D8%B3%D8%A7%D9%83%D9%86%20%D9%82%D8%B5%D8%A7%D8%AF%D9%8A%20%D9%80%20%D9%82%D8%B5%D8%A9%20%D8%A7%D9%84%D8%AD%D8%A8%20%D8%A7%D9%84%D8%AE%D8%AC%D9%88%D9%84.mp3"},{"t":"يا مسافر وحدك","u":"https://archive.org/download/y-2mate.com-ya-mesafer-wahdak-nagat/y2mate.com%20-%20%D9%8A%D8%A7%20%D9%85%D8%B3%D8%A7%D9%81%D8%B1%20%D9%88%D8%AD%D8%AF%D9%83%20%20%D9%86%D8%AC%D8%A7%D8%A9%20%20Ya%20Mesafer%20Wahdak%20%20Nagat.mp3"},{"t":"إسأل روحك","u":"https://archive.org/download/issal-rou7ek-tessgilette-zemene/%D8%A5%D8%B3%D8%A3%D9%84%20%D8%B1%D9%88%D8%AD%D9%83%2030%20%D8%A3%D8%A8%D8%B1%D9%8A%D9%84%201970%20%D8%AD%D9%81%D9%84%D9%87%20%D8%AE%D9%8A%D8%B1%D9%8A%D9%87.mp3"}],"asmahan":[{"t":"ليالي الأنس في فيينا","u":"https://archive.org/download/as-ma-han-tessgilette-zemene/01%20%D9%84%D9%8A%D8%A7%D9%84%D9%8A%20%D8%A7%D9%84%D8%A7%D9%94%D9%86%D8%B3.mp3"},{"t":"يا حبيبي تعالى","u":"https://archive.org/download/as-ma-han-tessgilette-zemene/05%20%D9%8A%D8%A7%20%D8%AD%D8%A8%D9%8A%D8%A8%D9%8A%20%D8%AA%D8%B9%D8%A7%D9%84%D9%89.mp3"},{"t":"امتى هتعرف امتى","u":"https://archive.org/download/as-ma-han-tessgilette-zemene/01%20%D8%A7%D9%85%D8%AA%D9%89%20%D8%AD%D8%AA%D8%B9%D8%B1%D9%81.mp3"},{"t":"أهوى","u":"https://archive.org/download/as-ma-han-tessgilette-zemene/02%20%D8%A7%D9%94%D9%87%D9%88%D9%89.mp3"},{"t":"يا طيور","u":"https://archive.org/download/as-ma-han-tessgilette-zemene/01%20%D9%8A%D8%A7%20%D8%B7%D9%8A%D9%88%D8%B1.mp3"},{"t":"ليت للبراق عيناً","u":"https://archive.org/download/LEYTALELBARRA93AYNA/555.mp3"},{"t":"يا ديرتي","u":"https://archive.org/download/as-ma-han-tessgilette-zemene/03%20%D9%8A%D8%A7%20%D8%AF%D9%8A%D8%B1%D8%AA%D9%8A.mp3"},{"t":"عليك صلاة الله وسلامه","u":"https://archive.org/download/as-ma-han-tessgilette-zemene/%D8%B9%D9%84%D9%8A%D9%83%20%D8%B5%D9%84%D8%A7%D8%A9%20%D8%A2%D9%84%D9%84%D9%87%20%D9%88%D8%B3%D9%84%D8%A7%D9%85%D9%87-%D8%A3%D8%B3%D9%85%D9%87%D8%A7%D9%86.mp3"},{"t":"نويت أداري آلامي","u":"https://archive.org/download/as-ma-han-tessgilette-zemene/08%20%D9%86%D9%88%D9%8A%D8%AA%20%D8%A7%D8%AF%D8%A7%D8%B1%D9%8A.mp3"},{"t":"دخلت مرة في جنينة","u":"https://archive.org/download/dakhlt-mara-genina/Dakhlt%20Mara%20Genina.mp3"},{"t":"أنا اللي أستاهل","u":"https://archive.org/download/ana-ely-astahel/Ana%20Ely%20Astahel.mp3"}],"fairuz":[{"t":"مسرحية ميس الريم (كاملة)","u":"https://archive.org/download/20251202_20251202_1542/%D9%85%D8%B3%D8%B1%D8%AD%D9%8A%D8%A9%20%D9%85%D9%8A%D8%B3%20%D8%A7%D9%84%D8%B1%D9%8A%D9%85%20%D9%80%20%D8%A7%D9%84%D8%B3%D9%8A%D8%AF%D8%A9%20%D9%81%D9%8A%D8%B1%D9%88%D8%B2.mp3"},{"t":"مسرحية لولو (كاملة)","u":"https://archive.org/download/20251202_20251202_1542/%D9%85%D8%B3%D8%B1%D8%AD%D9%8A%D8%A9%20%D9%84%D9%80%D9%80%D9%80%D9%80%D9%88%D9%84%D9%80%D9%88%20%D9%80%20%D8%AC%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D9%82%D9%85%D8%B1%20%D9%81%D9%8A%D8%B1%D9%88%D8%B2.mp3"},{"t":"مسرحية جسر القمر (كاملة)","u":"https://archive.org/download/20251202_20251202_1542/%D9%85%D8%B3%D8%B1%D8%AD%D9%8A%D8%A9%20%D8%AC%D8%B3%D8%B1%20%D8%A7%D9%84%D9%82%D9%85%D8%B1%20%20%D9%80%20%D8%AC%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D9%82%D9%85%D8%B1%20%D9%80%20%D9%81%D9%8A%D8%B1%D9%88%D8%B2%20.mp3"},{"t":"زهرة المدائن","u":"https://archive.org/download/caderbay_yahoo_201511/%D8%B2%D9%87%D8%B1%D8%A9%20%D8%A7%D9%84%D9%85%D8%AF%D8%A7%D8%A6%D9%86-%D9%81%D9%8A%D8%B1%D9%88%D8%B2.mp3"},{"t":"يا جارة الوادي","u":"https://archive.org/download/yagaratelwedi-tessgiletteaemene/%D9%8A%D8%A7%20%D8%AC%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D9%88%D8%A7%D8%AF%D9%8A%20%D9%85%D8%AD%D9%85%D8%AF%20%D8%B9%D8%A8%D8%AF%20%D8%A7%D9%84%D9%88%D9%87%D8%A7%D8%A8.mp3"}],"darwish":[{"t":"أنا هويت وانتهيت","u":"https://archive.org/download/sayed-darwish/01%20%D8%AF%D9%88%D8%B1%20%D8%A2%D9%86%D8%A7%20%D9%87%D9%88%D9%8A%D8%AA.mp3"},{"t":"دور أنا عشقت","u":"https://archive.org/download/sayed-darwish/05%20%D8%AF%D9%88%D8%B1%20%D8%A2%D9%86%D8%A7%20%D8%B9%D8%B4%D9%82%D8%AA.mp3"},{"t":"البحر بيضحك","u":"https://archive.org/download/sayed-darwish/02%20%D8%A7%D9%84%D8%A8%D8%AD%D8%B1%20%D8%A8%D9%8A%D8%B6%D8%AD%D9%83.mp3"},{"t":"والله تستاهل يا قلبي","u":"https://archive.org/download/sayed-darwish/03%20%D8%B1%D8%A7%D9%84%D9%84%D9%87%20%D8%AA%D8%B3%D8%AA%D8%A7%D9%87%D9%84%20%D9%8A%D8%A7%20%D9%82%D9%84%D8%A8%D9%8A.mp3"},{"t":"هيلا ها لله","u":"https://archive.org/download/sayed-darwish/04%20%20%D9%87%D9%8A%D9%84%D8%A7%20%D9%87%D8%A7%20%D9%84%D9%84%D9%87.mp3"},{"t":"بصارة براجة","u":"https://archive.org/download/sayed-darwish/06%20%D8%A8%D8%B5%D8%A7%D8%B1%D8%A9%20%D8%A8%D8%B1%D8%A7%D8%AC%D8%A9%20%D8%AA%D8%B4%D9%88%D9%81%20%D8%A7%D9%84%D8%A8%D8%AD%D8%AB.mp3"},{"t":"حرج علي بابا","u":"https://archive.org/download/sayed-darwish/07%20%D8%AD%D8%B1%D8%AC%20%D8%B9%D9%84%D9%8A%20%D8%A8%D8%A7%D8%A8%D8%A7%20%D9%85%D8%A7%D8%B1%D9%88%D8%AD%D8%B4%20%D8%A7%D9%84%D8%B3%D9%8A%D9%85%D8%A7.mp3"}],"bahr":[{"t":"El Wada3 الوداع","u":"https://archive.org/download/moharram1965_gmail_Illl/Bahr%20Abou%20Gresha%20-%20El%20Wada3%20%20%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9%20-%20%D8%A7%D9%84%D9%88%D8%AF%D8%A7%D8%B9.mp3"},{"t":"Gharaba غرابة","u":"https://archive.org/download/moharram1965_gmail_Illl/Bahr%20Abou%20Gresha%20-%20Gharaba%20%20%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9%20-%20%D8%BA%D8%B1%D8%A7%D8%A8%D8%A9.mp3"},{"t":"Magrouh مجروح","u":"https://archive.org/download/moharram1965_gmail_Illl/Bahr%20Abou%20Gresha%20-%20Magrouh%20%20%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9%20-%20%D9%85%D8%AC%D8%B1%D9%88%D8%AD.mp3"},{"t":"Meghnawy مغناوى","u":"https://archive.org/download/moharram1965_gmail_Illl/Bahr%20Abou%20Gresha%20-%20Meghnawy%20%20%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9%20-%20%D9%85%D8%BA%D9%86%D8%A7%D9%88%D9%89.mp3"},{"t":"Ya Alby El 3atof يا قلبى العطوف","u":"https://archive.org/download/moharram1965_gmail_Illl/Bahr%20Abou%20Gresha%20-%20Ya%20Alby%20El%203atof%20%20%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9%20-%20%D9%8A%D8%A7%20%D9%82%D9%84%D8%A8%D9%89%20%D8%A7%D9%84%D8%B9%D8%B7%D9%88%D9%81.mp3"},{"t":"Ya Askandria يا اسكندرية","u":"https://archive.org/download/moharram1965_gmail_Illl/Bahr%20Abou%20Gresha%20-%20Ya%20Askandria%20%20%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9%20-%20%D9%8A%D8%A7%20%D8%A7%D8%B3%D9%83%D9%86%D8%AF%D8%B1%D9%8A%D8%A9.mp3"},{"t":"El Youm Yemor اليوم يمر","u":"https://archive.org/download/moharram1965_gmail_Illl/Bahr%20abo%20Gresha-%20El%20Youm%20Yemor%20%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9%20-%20%D8%A7%D9%84%D9%8A%D9%88%D9%85%20%D9%8A%D9%85%D8%B1.mp3"},{"t":"أبو جريشة - امشي يا قلبي","u":"https://archive.org/download/moharram1965_gmail_Illl/%D8%A3%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9%20-%20%D8%A7%D9%85%D8%B4%D9%8A%20%D9%8A%D8%A7%20%D9%82%D9%84%D8%A8%D9%8A.mp3"},{"t":"الرحال","u":"https://archive.org/download/moharram1965_gmail_Illl/%D8%A7%D9%84%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D9%87%20%20%20%D8%B1%D8%AD%D8%A7%D9%84%20%20%20YouTube.mp3"},{"t":"ابو الحبايب","u":"https://archive.org/download/moharram1965_gmail_Illl/%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9%20%20%20%20%D8%A7%D8%A8%D9%88%20%D8%A7%D9%84%D8%AD%D8%A8%D8%A7%D9%8A%D8%A8.mp3"},{"t":"ايــــــــــوب","u":"https://archive.org/download/moharram1965_gmail_Illl/%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9%20%20%D8%A7%D9%8A%D9%80%D9%80%D9%80%D9%80%D9%80%D9%80%D9%80%D9%80%D9%80%D9%80%D9%88%D8%A8.mp3"},{"t":"فينك ياحبيبى يادنيتنا","u":"https://archive.org/download/moharram1965_gmail_Illl/%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9%20%20%D9%81%D9%8A%D9%86%D9%83%20%D9%8A%D8%A7%D8%AD%D8%A8%D9%8A%D8%A8%D9%89%20%D9%8A%D8%A7%D8%AF%D9%86%D9%8A%D8%AA%D9%86%D8%A7.mp3"},{"t":"حبيبي حبيبي","u":"https://archive.org/download/moharram1965_gmail_Illl/%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9%20%D8%AD%D8%A8%D9%8A%D8%A8%D9%8A%20%D8%AD%D8%A8%D9%8A%D8%A8%D9%8A.wmv.mp3"},{"t":"بحر ابو جريـشه - كفايـه بعـاد","u":"https://archive.org/download/moharram1965_gmail_Illl/%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D9%80%D8%B4%D9%87%20-%20%D9%83%D9%81%D8%A7%D9%8A%D9%80%D9%87%20%D8%A8%D8%B9%D9%80%D8%A7%D8%AF.mp3"},{"t":"بحار","u":"https://archive.org/download/moharram1965_gmail_Illl/%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%D8%AC%D8%B1%D9%8A%D8%B4%D9%87%20%D8%A8%D8%AD%D8%A7%D8%B1.mp3"},{"t":"بحــر ابـو جريشــه - مـالـو مـالـو","u":"https://archive.org/download/moharram1965_gmail_Illl/%D8%A8%D8%AD%D9%80%D9%80%D8%B1%20%D8%A7%D8%A8%D9%80%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D9%80%D9%80%D9%87%20-%20%D9%85%D9%80%D8%A7%D9%84%D9%80%D9%88%20%D9%85%D9%80%D8%A7%D9%84%D9%80%D9%88.mp3"},{"t":"بـحـر ابـو جريشـه - طـال الطـريـق","u":"https://archive.org/download/moharram1965_gmail_Illl/%D8%A8%D9%80%D8%AD%D9%80%D8%B1%20%D8%A7%D8%A8%D9%80%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D9%80%D9%87%20-%20%D8%B7%D9%80%D8%A7%D9%84%20%D8%A7%D9%84%D8%B7%D9%80%D8%B1%D9%8A%D9%80%D9%82.mp3"},{"t":"حبيبى راح - بَحر أبو جريشه","u":"https://archive.org/download/moharram1965_gmail_Illl/%D8%AD%D8%A8%D9%8A%D8%A8%D9%89%20%D8%B1%D8%A7%D8%AD%20-%20%D8%A8%D9%8E%D8%AD%D8%B1%20%D8%A3%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D9%87.wmv.mp3"},{"t":"رحـــــــــــالة بحر أبوجريشة","u":"https://archive.org/download/moharram1965_gmail_Illl/%D8%B1%D8%AD%D9%80%D9%80%D9%80%D9%80%D9%80%D9%80%D9%80%D9%80%D9%80%D9%80%D9%80%D8%A7%D9%84%D8%A9%20%20%20%D8%A8%D8%AD%D8%B1%20%D8%A3%D8%A8%D9%88%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9.mp3"},{"t":"غريب - ال","u":"https://archive.org/download/moharram1965_gmail_Illl/%D8%BA%D8%B1%D9%8A%D8%A8%20-%20%D8%A7%D9%84%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9.mp3"},{"t":"قالولى انساها","u":"https://archive.org/download/moharram1965_gmail_Illl/%D9%82%D8%A7%D9%84%D9%88%D9%84%D9%89%20%D8%A7%D9%86%D8%B3%D8%A7%D9%87%D8%A7%20%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9.mp3"},{"t":"ليه يازمن بحر أبو جريشة","u":"https://archive.org/download/moharram1965_gmail_Illl/%D9%84%D9%8A%D9%87%20%D9%8A%D8%A7%D8%B2%D9%85%D9%86%20%20%20%D8%A8%D8%AD%D8%B1%20%D8%A3%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9.mp3"},{"t":"مش مصدق يالي كنت في يوم حبيبي مع تحيات يحي الملواني","u":"https://archive.org/download/moharram1965_gmail_Illl/%D9%85%D8%B4%20%D9%85%D8%B5%D8%AF%D9%82%20%D9%8A%D8%A7%D9%84%D9%8A%20%D9%83%D9%86%D8%AA%20%D9%81%D9%8A%20%D9%8A%D9%88%D9%85%20%D8%AD%D8%A8%D9%8A%D8%A8%D9%8A%20%D8%A8%D8%AD%D8%B1%20%D8%A7%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D9%87%20%D9%85%D8%B9%20%D8%AA%D8%AD%D9%8A%D8%A7%D8%AA%20%D9%8A%D8%AD%D9%8A%20%D8%A7%D9%84%D9%85%D9%84%D9%88%D8%A7%D9%86%D9%8A.mp3"},{"t":"مقادير . بحر أبو جريشه","u":"https://archive.org/download/moharram1965_gmail_Illl/%D9%85%D9%82%D8%A7%D8%AF%D9%8A%D8%B1%20.....%20%D8%A8%D8%AD%D8%B1%20%D8%A3%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D9%87.wmv.mp3"},{"t":"يا طير ياللي طاير البحر أبو جريشة","u":"https://archive.org/download/moharram1965_gmail_Illl/%D9%8A%D8%A7%20%D8%B7%D9%8A%D8%B1%20%D9%8A%D8%A7%D9%84%D9%84%D9%8A%20%D8%B7%D8%A7%D9%8A%D8%B1%20..%20%D8%A7%D9%84%D8%A8%D8%AD%D8%B1%20%D8%A3%D8%A8%D9%88%20%D8%AC%D8%B1%D9%8A%D8%B4%D8%A9.mp3"}],"dabka":[{"t":"01-Najwa.Karam-Allah.Yeshghelo.Balo","u":"https://archive.org/download/www.shbab-star.com---Dabka2011/01-Najwa.Karam-Allah.Yeshghelo.Balo.mp3"},{"t":"02-Amal.Hijazy-Dag.El.May","u":"https://archive.org/download/www.shbab-star.com---Dabka2011/02-Amal.Hijazy-Dag.El.May.mp3"},{"t":"03-Mel7em-Zein-Gheby-Ya-Shams","u":"https://archive.org/download/www.shbab-star.com---Dabka2011/03-Mel7em-Zein-Gheby-Ya-Shams.mp3"},{"t":"04-Grace.Deeb-Gheneyat","u":"https://archive.org/download/www.shbab-star.com---Dabka2011/04-Grace.Deeb-Gheneyat.mp3"},{"t":"Ishsar ishdawa","u":"https://archive.org/download/www.shbab-star.com---Dabka2011/05-Kazem.El.Saher-Eish.Sar.mp3"},{"t":"06-Rayan-Khatar.El.Mawt","u":"https://archive.org/download/www.shbab-star.com---Dabka2011/06-Rayan-Khatar.El.Mawt.mp3"},{"t":"07-Majed.EL.Mohandes-Mejna","u":"https://archive.org/download/www.shbab-star.com---Dabka2011/07-Majed.EL.Mohandes-Mejna.mp3"},{"t":"08-Ayman.Zebib-Men.Hal.Layla","u":"https://archive.org/download/www.shbab-star.com---Dabka2011/08-Ayman.Zebib-Men.Hal.Layla.mp3"},{"t":"Nadran Alaya","u":"https://archive.org/download/www.shbab-star.com---Dabka2011/09-Assi.El.Helany-Nadren.3alaya.mp3"},{"t":"10-Wesam.El.Amir-3etr.El.Sabona","u":"https://archive.org/download/www.shbab-star.com---Dabka2011/10-Wesam.El.Amir-3etr.El.Sabona.mp3"},{"t":"11-Fares.Karam-Retany","u":"https://archive.org/download/www.shbab-star.com---Dabka2011/11-Fares.Karam-Retany.mp3"},{"t":"12-Zein.EL.Omar-Walha","u":"https://archive.org/download/www.shbab-star.com---Dabka2011/12-Zein.EL.Omar-Walha.mp3"},{"t":"مجوز 2019 انت لي راحه - رائد كشكوش دبكة شوف العب مع المجوز 2019","u":"https://archive.org/download/2019-2019-192-kbps_202106/%D9%85%D8%AC%D9%88%D8%B2%202019%20%D8%A7%D9%86%D8%AA%20%D9%84%D9%8A%20%D8%B1%D8%A7%D8%AD%D9%87%20-%20%D8%B1%D8%A7%D8%A6%D8%AF%20%D9%83%D8%B4%D9%83%D9%88%D8%B4%20%D8%AF%D8%A8%D9%83%D8%A9%20%D8%B4%D9%88%D9%81%20%D8%A7%D9%84%D8%B9%D8%A8%20%D9%85%D8%B9%20%D8%A7%D9%84%D9%85%D8%AC%D9%88%D8%B2%202019%20%28192%20kbps%29.mp3"},{"t":"مجوز آخر يوم الخميس 2019 رائد كشكوش - لا لا بس توبه   مجوز تكسير الخشب 2019 (192 kbps)","u":"https://archive.org/download/2019-2019-192-kbps_202106/%D9%85%D8%AC%D9%88%D8%B2%20%D8%A2%D8%AE%D8%B1%20%D9%8A%D9%88%D9%85%20%D8%A7%D9%84%D8%AE%D9%85%D9%8A%D8%B3%202019%20%D8%B1%D8%A7%D8%A6%D8%AF%20%D9%83%D8%B4%D9%83%D9%88%D8%B4%20-%20%D9%84%D8%A7%20%D9%84%D8%A7%20%D8%A8%D8%B3%20%D8%AA%D9%88%D8%A8%D9%87%20_%20%D9%85%D8%AC%D9%88%D8%B2%20%D8%AA%D9%83%D8%B3%D9%8A%D8%B1%20%D8%A7%D9%84%D8%AE%D8%B4%D8%A8%202019%20%28192%20kbps%29.mp3"},{"t":"مجوز شدها 2019 رائد كشكوش - قومي العبي والعبي - | مجوز آخر موضه 2019","u":"https://archive.org/download/2019-2019-192-kbps_202106/%D9%85%D8%AC%D9%88%D8%B2%20%D8%B4%D8%AF%D9%87%D8%A7%202019%20%D8%B1%D8%A7%D8%A6%D8%AF%20%D9%83%D8%B4%D9%83%D9%88%D8%B4%20-%20%D9%82%D9%88%D9%85%D9%8A%20%D8%A7%D9%84%D8%B9%D8%A8%D9%8A%20%D9%88%D8%A7%D9%84%D8%B9%D8%A8%D9%8A%20-%20-%20%D9%85%D8%AC%D9%88%D8%B2%20%20%D8%A2%D8%AE%D8%B1%20%D9%85%D9%88%D8%B6%D9%87%202019%20%28192%20kbps%29.mp3"},{"t":"دبكات أردنية — مجوز","u":"https://archive.org/download/dabka-dabke-jordan-192-kbps/Dabka_Dabke%20Jordan%20%D8%AF%D8%A8%D9%83%D8%A7%D8%AA%20%D8%A7%D8%B1%D8%AF%D9%86%D9%8A%D8%A9%20%28192%20kbps%29.mp3"},{"t":"دبكات مجوز زمر فلسطيني أردني — حمزة الفلسطيني","u":"https://archive.org/download/hamzaadma_hotmail/%D8%AF%D8%A8%D9%83%D8%A7%D8%AA%20%D9%85%D8%AC%D9%88%D8%B2%20%D8%B2%D9%85%D8%B1%20%D9%81%D9%84%D8%B3%D8%B7%D9%8A%D9%86%D9%8A%20%D8%A7%D8%B1%D8%AF%D9%86%D9%8A%20-%20%D8%AD%D9%85%D8%B2%D8%A9%20%D8%A7%D9%84%D9%81%D9%84%D8%B3%D8%B7%D9%8A%D9%86%D9%8A.mp3"},{"t":"دبكات فلسطينية — دبكة ودحية باسل جبارين","u":"https://archive.org/download/Hamza-Ladadwa-palestin/%D8%AF%D8%A8%D9%83%D8%A7%D8%AA%20%D9%81%D9%84%D8%B3%D8%B7%D9%8A%D9%86%D9%8A%D8%A9%202018%20%D8%AF%D8%A8%D9%83%D8%A9%20%D9%88%D8%AF%D8%AD%D9%8A%D8%A9%20%D8%A8%D8%A7%D8%B3%D9%84%20%D8%AC%D8%A8%D8%A7%D8%B1%D9%8A%D9%86%20%D8%AC%D8%AF%D9%8A%D8%AF%20%D9%84%D9%88%20%D8%B2%D8%BA%D8%B1%D8%AA%20%D8%B5%D9%88%D8%AA%20%D8%A7%D9%84%D8%A8%D8%A7%D8%B1%D9%88%D8%AF.mp3"},{"t":"دبكات فلسطينية — تيسير الديك","u":"https://archive.org/download/20182018_20180304_2140/%D8%AF%D8%A8%D9%83%D8%A7%D8%AA%20%D9%81%D9%84%D8%B3%D8%B7%D9%8A%D9%86%D9%8A%D8%A9%202018%20%D8%A7%D8%AD%D9%84%D9%89%20%D8%AF%D8%A8%D9%83%D8%A9%20%D8%AA%D9%8A%D8%B3%D9%8A%D8%B1%20%D8%A7%D9%84%D8%AF%D9%8A%D9%83%202018%20%D8%AF%D8%B2%D9%8A%D8%AA%D9%84%D9%83%20%D8%AF%D8%B2%D9%84%D9%8A%20%D8%B2%D9%85%D8%B1%20%D8%A7%D9%83%D8%B4%D9%86.mp3"},{"t":"دبكات سورية — عيسى عباس وأيهم بشارة","u":"https://archive.org/download/hamzaadma_hotmail_201802/%D8%A7%D8%AD%D9%84%D9%89%20%D8%AF%D8%A8%D9%83%D8%A7%D8%AA%20%D8%B3%D9%88%D8%B1%D9%8A%D8%A9%20%D8%B9%D9%8A%D8%B3%D9%89%20%D8%B9%D8%A8%D8%A7%D8%B3%20%D9%88%D8%A7%D9%8A%D9%87%D9%85%20%D8%A8%D8%B4%D8%A7%D8%B1%D8%A9%20%D8%AC%D8%AF%D9%8A%D8%AF%20%D8%B2%D9%85%D8%B1%20%D8%A7%D9%8A%D9%87%D9%85%20%D8%A8%D8%B4%D8%A7%D8%B1%D8%A9.mp3"},{"t":"دبكات أردنية — لعب المجوز غزل سلامة","u":"https://archive.org/download/2018-192-kbps_20210629/%D8%AF%D8%A8%D9%83%D8%A7%D8%AA%20%D8%A3%D8%B1%D8%AF%D9%86%D9%8A%D9%87%20-%20%D9%84%D8%B9%D8%A8%20%D8%A7%D9%84%D9%85%D8%AC%D9%88%D8%B2%20-%20%D8%BA%D8%B2%D9%84%20%D8%B3%D9%84%D8%A7%D9%85%D9%87%202018%20-%20%D8%B3%D9%87%D8%B1%D8%A7%D8%AA%20%D8%A7%D9%84%D8%B9%D8%A7%D8%B5%D9%85%D8%A9%20%D8%A7%D9%84%D8%A7%D8%B1%D8%AF%D9%86%D9%8A%D9%87%20%D8%B9%D9%85%D9%91%D8%A7%D9%86%20%28192%20kbps%29.mp3"},{"t":"أحلى دبكة — وسيم نور (زمر)","u":"https://archive.org/download/20182018_201802/%D8%A7%D8%AD%D9%84%D9%89%20%D8%AF%D8%A8%D9%83%D8%A9%202018%20%D8%AF%D8%A8%D9%83%D8%A7%D8%AA%20%D9%88%D8%B3%D9%8A%D9%85%20%D9%86%D9%88%D8%B1%20%D8%AD%D8%B5%D8%B1%D9%8A%D8%A7%20%D9%8A%D8%B1%D8%AD%D9%85%20%D8%AC%D8%AF%D9%83%20%D8%B2%D9%85%D8%B1%202018.mp3"},{"t":"دبكات مطلوبة — ضليت أدق على الراح","u":"https://archive.org/download/2021_20211024_202110/%D8%AF%D8%A8%D9%83%D8%A7%D8%AA%20%D9%85%D8%B7%D9%84%D9%88%D8%A8%D8%A9%20-%20%D8%B6%D9%84%D9%8A%D8%AA%20%D8%A7%D8%AF%D9%82%20%D8%B9%D9%84%D9%89%20%D8%A7%D9%84%D8%B1%D8%A7%D8%AD%20-%20%D8%A7%D9%86%D9%83%D8%B3%D8%B1%D8%AA%20%D8%A7%D9%84%D8%B4%D9%8A%D8%B4%D8%A9%20-%202021%20-%20%D8%A8%D8%B7%D9%8A%D8%A1%20.mp3"}],"boneym":[{"t":"Rasputin","u":"https://archive.org/download/boney-m.-rasputin-lover-of-the-russian-queen/01%20-%20Rasputin.mp3"},{"t":"Daddy Cool","u":"https://archive.org/download/boney-m.-rasputin-lover-of-the-russian-queen/02%20-%20Daddy%20Cool.mp3"},{"t":"Ma Baker","u":"https://archive.org/download/boney-m.-rasputin-lover-of-the-russian-queen/04%20-%20Ma%20Baker.mp3"},{"t":"Rasputin (Club Mix)","u":"https://archive.org/download/boney-m.-rasputin-lover-of-the-russian-queen/05%20-%20Rasputin%20%28Club%20Mix%29.mp3"},{"t":"Rivers of Babylon","u":"https://archive.org/download/boney-m.-rasputin-lover-of-the-russian-queen/06%20-%20Rivers%20of%20Babylon.mp3"},{"t":"Rasputin (Single Version)","u":"https://archive.org/download/boney-m.-rasputin-lover-of-the-russian-queen/07%20-%20Rasputin%20%28Single%20Version%29.mp3"},{"t":"Barbra Streisand - Boney M. Mega Mashup-Mix (128 BPM)","u":"https://archive.org/download/boney-m.-rasputin-lover-of-the-russian-queen/08%20-%20Barbra%20Streisand%20-%20Boney%20M.%20Mega%20Mashup-Mix%20%28128%20BPM%29.mp3"},{"t":"Sunny","u":"https://archive.org/download/boney-m.-rasputin-lover-of-the-russian-queen/09%20-%20Sunny.mp3"},{"t":"Rasputin (Maxi Version)","u":"https://archive.org/download/boney-m.-rasputin-lover-of-the-russian-queen/10%20-%20Rasputin%20%28Maxi%20Version%29.mp3"},{"t":"Mega Mix","u":"https://archive.org/download/boney-m.-rasputin-lover-of-the-russian-queen/11%20-%20Mega%20Mix.mp3"},{"t":"Rasputin (Bassflow 4.0 Mix)","u":"https://archive.org/download/boney-m.-rasputin-lover-of-the-russian-queen/12%20-%20Rasputin%20%28Bassflow%204.0%20Mix%29.mp3"},{"t":"Cherish (The Life) (feat. Yanina)","u":"https://archive.org/download/boney-m.-rasputin-lover-of-the-russian-queen/13%20-%20Cherish%20%28The%20Life%29%20%28feat.%20Yanina%29.mp3"},{"t":"Cherish (The Life) / Rivers of Babylon (feat. Yanina, Boney M. & No Mercy) (MashUp Mix)","u":"https://archive.org/download/boney-m.-rasputin-lover-of-the-russian-queen/14%20-%20Cherish%20%28The%20Life%29%20_%20Rivers%20of%20Babylon%20%28feat.%20Yanina%2C%20Boney%20M.%20%26%20No%20Mercy%29%20%28MashUp%20Mix%29.mp3"}],"mixman":[{"t":"Mix Is The Man — Bass Boosted Club Banger","u":"https://muons2002.github.io/radio-station/mix-is-the-man.mp3"}],"kulthum":[{"t":"الأطلال","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---El-Atlal.mp3"},{"t":"أنت عمري","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Inta-Omry.mp3"},{"t":"دارت الأيام","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Darat-El-Ayam.mp3"},{"t":"فات الميعاد","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Fat-El-Meead.mp3"},{"t":"بعيد عنك","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Baaed-Anak.mp3"},{"t":"أغداً ألقاك","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Ghadan-Alkak.mp3"},{"t":"جددت حبك ليه","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Jaddat-Hobak.mp3"},{"t":"سيرة الحب","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Siret-El-Hob.mp3"},{"t":"هذه ليلتي","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Hathehe-Laylate.mp3"},{"t":"أمل حياتي","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Amal-Hayate.mp3"},{"t":"ألف ليلة وليلة","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Alf-Lela-Welela.mp3"},{"t":"رباعيات الخيام","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Robaaeat-El-Khyam.mp3"},{"t":"يا ظالمني","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Ya-Zalemne.mp3"},{"t":"سلوا قلبي","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Salo-Albe.mp3"},{"t":"هو صحيح الهوى غلاب","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Howa-Saheh.mp3"},{"t":"هجرتك","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Hajartak.mp3"},{"t":"لسه فاكر","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Lessa-Faker.mp3"},{"t":"ذكريات","u":"https://archive.org/download/20210227_20210227_2332/Um_Kalthom---Zekrayat.mp3"}],"shadia":[{"t":"خدني معاك","u":"https://archive.org/download/shadia_khodni_maak_vinyl_lp/14%20%D8%AE%D8%AF%D9%86%D9%8A%20%D9%85%D8%B9%D8%A7%D9%83%20.mp3"}],"sabah":[{"t":"يا صباح الخير","u":"https://archive.org/download/yasaba7elkhir-tessgilette-zemene_201601/%D9%8A%D8%A7%20%D8%B5%D8%A8%D8%A7%D8%AD%20%D8%A7%D9%84%D8%AE%D9%8A%D8%B1.mp3"},{"t":"أهلا بهالطلة","u":"https://archive.org/download/sabah_ahla_behattaleh_ahla_vinyl_lp/%D8%A7%D9%94%D9%87%D9%84%D8%A7%20%D8%A8%D9%87%D8%A7%D9%84%D8%B7%D9%84%D8%A9%20%D8%A7%D9%94%D9%87%D9%84%D8%A7.mp3"}]};
+const SINGERS = [
+ {sec:"⭐ عمالقة الطرب"},
+ {id:"halim", nm:"عبد الحليم حافظ", em:"🎙️", g:"linear-gradient(135deg,#7b2d8b,#c0392b)"},
+ {id:"kulthum", nm:"أم كلثوم", em:"👑", g:"linear-gradient(135deg,#1a237e,#c9a227)"},
+ {id:"layla", nm:"ليلى مراد", em:"🌙", g:"linear-gradient(135deg,#b03a6b,#e88bb0)"},
+ {id:"souad", nm:"سعاد محمد", em:"🎤", g:"linear-gradient(135deg,#0e7a6d,#39c2a5)"},
+ {id:"wahab", nm:"محمد عبد الوهاب", em:"🎼", g:"linear-gradient(135deg,#8a6d1f,#e8b64c)"},
+ {id:"warda", nm:"وردة الجزائرية", em:"🌹", g:"linear-gradient(135deg,#a31621,#e05260)"},
+ {id:"najah", nm:"نجاح سلام", em:"🌺", g:"linear-gradient(135deg,#b8860b,#e8b64c)"},
+ {id:"mayada", nm:"ميادة الحناوي", em:"✨", g:"linear-gradient(135deg,#5b2a86,#a86bd8)"},
+ {id:"farid", nm:"فريد الأطرش", em:"🎻", g:"linear-gradient(135deg,#6a1b9a,#ab47bc)"},
+ {id:"najat", nm:"نجاة الصغيرة", em:"🕊️", g:"linear-gradient(135deg,#00695c,#26a69a)"},
+ {id:"asmahan", nm:"أسمهان", em:"⭐", g:"linear-gradient(135deg,#ad1457,#ec407a)"},
+ {id:"fairuz", nm:"فيروز", em:"🌄", g:"linear-gradient(135deg,#2e7d32,#66bb6a)"},
+ {id:"darwish", nm:"سيد درويش", em:"🪕", g:"linear-gradient(135deg,#4e342e,#a1887f)"},
+ {id:"shadia", nm:"شادية", em:"🎬", g:"linear-gradient(135deg,#e65100,#ff9800)"},
+ {id:"sabah", nm:"صباح", em:"☀️", g:"linear-gradient(135deg,#d84315,#ff8a65)"},
+ {sec:"🎻 شعبيات الزمن الجميل"},
+ {id:"bahr", nm:"بحر أبو جريشة", em:"🌊", g:"linear-gradient(135deg,#14508c,#2fb9d8)"},
+ {sec:"🥁 دبكات وأفراح"},
+ {id:"dabka", nm:"دبكات فلسطينية وشامية", em:"🥁", g:"linear-gradient(135deg,#1e7a34,#7ac74f)"},
+ {sec:"🪩 ميكس أجنبي — ديسكو وحفلات"},
+ {id:"boneym", nm:"Boney M", em:"🪩", g:"linear-gradient(135deg,#f39c12,#8e44ad)"},
+ {id:"mixman", nm:"Mix Is The Man", em:"🎧", g:"linear-gradient(135deg,#8e44ad,#2fb9d8)"}
+];
+const byId = {}; SINGERS.forEach(s=>{ if(s.id) byId[s.id]=s; });
+const au = document.getElementById('au');
+let cur = null;            // current singer object (view)
+let queue = [];            // array of {sid, idx}
+let qi = -1;
+let shuffle = false, repeat = 0; // 0 off, 1 all, 2 one
+const favs = new Set();    // "sid:idx" — session only
+let homeFilter = 'all';
+
+function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2200); }
+
+/* ---------- THEMES ---------- */
+document.querySelectorAll('[data-settheme]').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    document.body.dataset.theme = b.dataset.settheme;
+    document.querySelectorAll('[data-settheme]').forEach(x=>x.classList.toggle('on', x===b));
+    toast(b.dataset.settheme==='spotify' ? 'التصميم الأساسي 🎧' : b.dataset.settheme==='layali' ? 'ليالي الطرب الذهبية 🌙' : 'سهرة ذهبية 🪔');
+  });
+});
+
+/* ---------- HOME ---------- */
+function renderHome(){
+  const h = document.getElementById('home');
+  const nav = document.getElementById('secNav');
+  if(nav){
+    nav.innerHTML = SINGERS.filter(x=>x.sec).map((x,i)=>'<button type="button" data-sec="'+i+'">'+esc(x.sec)+'</button>').join('');
+    nav.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>gotoSec(+b.dataset.sec)));
+  }
+  let s = '<div class="chips">'
+    + '<button class="chip'+(homeFilter==='all'?' on':'')+'" data-f="all">الكل</button>'
+    + '<button class="chip'+(homeFilter==='fav'?' on':'')+'" data-f="fav">❤️ المفضلة ('+favs.size+')</button></div>';
+  if(homeFilter==='fav'){
+    s += '<h2 class="sec">❤️ أغانيك المفضلة</h2>';
+    if(!favs.size){ s += '<div class="empty">لسه مفيش مفضلة — دوس ❤️ على أي أغنية وانت بتسمعها</div>'; }
+    else { s += '<div id="favList"></div>'; }
+    h.innerHTML = s; bindChips();
+    if(favs.size){
+      const items = [...favs].map(k=>{ const [sid,idx]=k.split(':'); return {sid, idx:+idx}; });
+      document.getElementById('favList').innerHTML = items.map((it,i)=>rowHTML(it.sid,it.idx,i)).join('');
+      bindRows(document.getElementById('favList'), items);
+    }
+    return;
+  }
+  let open=false, secIdx=0;
+  for(const it of SINGERS){
+    if(it.sec){ if(open) s+='</div>'; s+='<h2 class="sec" id="sec-'+(secIdx++)+'">'+esc(it.sec)+'</h2><div class="grid">'; open=true; continue; }
+    const n=(DATA[it.id]||[]).length;
+    s+='<div class="card" role="button" tabindex="0" aria-label="'+esc(it.nm)+'" data-open="'+it.id+'"><div class="tile" style="background:'+it.g+'">'+it.em+'</div><div class="nm">'+esc(it.nm)+'</div><div class="ct">'+n+' أغنية</div><span class="play-hint">▶ استمع الآن</span></div>';
+  }
+  if(open) s+='</div>';
+  h.innerHTML=s; bindChips();
+  h.querySelectorAll('[data-open]').forEach(c=>{ c.addEventListener('click',()=>openSinger(c.dataset.open)); c.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openSinger(c.dataset.open); } }); });
+}
+function bindChips(){
+  document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{ homeFilter=c.dataset.f; renderHome(); }));
+}
+function gotoSec(i){
+  if(homeFilter!=='all'){ homeFilter='all'; renderHome(); }
+  const el=document.getElementById('sec-'+i);
+  if(el) setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),60);
+}
+
+/* ---------- RANDOM PLAY ---------- */
+document.getElementById('randBtn').addEventListener('click', ()=>{
+  const ids=SINGERS.filter(s=>s.id&&(DATA[s.id]||[]).length).map(s=>s.id);
+  if(!ids.length) return;
+  const sid=ids[Math.floor(Math.random()*ids.length)];
+  const items=(DATA[sid]||[]).map((x,i)=>({sid,idx:i}));
+  const start=Math.floor(Math.random()*items.length);
+  playFromList(items,start);
+  toast('🎲 '+byId[sid].nm+' — '+DATA[sid][start].t);
+});
+
+/* ---------- ROWS ---------- */
+function isCur(sid,idx){ return qi>=0 && queue[qi] && queue[qi].sid===sid && queue[qi].idx===idx; }
+function rowHTML(sid,idx,num){
+  const tr=DATA[sid][idx], sg=byId[sid], key=sid+':'+idx, on=isCur(sid,idx);
+  const mark = on ? '<span class="eq"><i></i><i></i><i></i><i></i></span>' : '<span class="p">▶</span>';
+  return '<div class="row'+(on?' on':'')+'" data-sid="'+sid+'" data-idx="'+idx+'">'
+    +'<span class="n">'+(num+1)+'</span>'+mark
+    +'<span class="t">'+esc(tr.t)+'<span class="s">'+esc(sg.nm)+'</span></span>'
+    +'<span class="acts">'
+    +'<button class="iconbtn favbtn'+(favs.has(key)?' fav':'')+'" data-key="'+key+'" title="مفضلة">'+(favs.has(key)?'❤️':'🤍')+'</button>'
+    +'<a class="iconbtn" href="'+esc(tr.u)+'" download title="تحميل MP3">⬇</a>'
+    +'</span></div>';
+}
+function bindRows(container, items){
+  container.querySelectorAll('.row').forEach(r=>{
+    r.addEventListener('click', e=>{
+      if(e.target.closest('.favbtn') || e.target.closest('a')) return;
+      const sid=r.dataset.sid, idx=+r.dataset.idx;
+      playFromList(items, items.findIndex(x=>x.sid===sid&&x.idx===idx));
+    });
+  });
+  container.querySelectorAll('.favbtn').forEach(b=>{
+    b.addEventListener('click', e=>{ e.stopPropagation(); toggleFav(b.dataset.key); });
+  });
+}
+function toggleFav(key){
+  if(favs.has(key)){ favs.delete(key); toast('اتشالت من المفضلة'); } else { favs.add(key); toast('اتضافت للمفضلة ❤️'); }
+  refreshViews(); updatePfav();
+}
+
+/* ---------- SINGER VIEW ---------- */
+function show(el){ ['home','view','searchView'].forEach(id=>document.getElementById(id).style.display = id===el?'block':'none'); }
+function openSinger(id){
+  cur = byId[id];
+  document.getElementById('vTile').style.background = cur.g;
+  document.getElementById('vTile').textContent = cur.em;
+  document.getElementById('vName').textContent = cur.nm;
+  document.getElementById('vCount').textContent = (DATA[id]||[]).length + ' أغنية';
+  document.getElementById('q').value='';
+  show('view'); renderTracks();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function curList(){
+  const q=document.getElementById('q').value.trim();
+  const all=DATA[cur.id]||[];
+  return q ? all.map((x,i)=>({x,i})).filter(o=>o.x.t.includes(q)) : all.map((x,i)=>({x,i}));
+}
+function renderTracks(){
+  const list=curList(), el=document.getElementById('list');
+  if(!list.length){ el.innerHTML='<div class="empty">لا توجد نتائج مطابقة</div>'; return; }
+  const items=list.map(o=>({sid:cur.id, idx:o.i}));
+  el.innerHTML=items.map((it,i)=>rowHTML(it.sid,it.idx,i)).join('');
+  bindRows(el, items);
+}
+document.getElementById('q').addEventListener('input', renderTracks);
+document.getElementById('backBtn').addEventListener('click', ()=>{ show('home'); renderHome(); });
+document.getElementById('backBtn2').addEventListener('click', ()=>{ show('home'); renderHome(); document.getElementById('gq').value=''; });
+document.getElementById('playAllBtn').addEventListener('click', ()=>{
+  const items=curList().map(o=>({sid:cur.id,idx:o.i}));
+  if(items.length) playFromList(items,0);
+});
+document.getElementById('shuffleBtn').addEventListener('click', ()=>{
+  let items=curList().map(o=>({sid:cur.id,idx:o.i}));
+  items.sort(()=>Math.random()-.5);
+  if(items.length){ playFromList(items,0); toast('تشغيل عشوائي 🔀'); }
+});
+
+/* ---------- GLOBAL SEARCH ---------- */
+document.getElementById('gq').addEventListener('input', e=>{
+  const q=e.target.value.trim();
+  if(!q){ show(cur?'view':'home'); if(!cur) renderHome(); return; }
+  const res=[];
+  for(const sid in DATA){ DATA[sid].forEach((tr,idx)=>{ if(tr.t.includes(q)||byId[sid].nm.includes(q)) res.push({sid,idx}); }); }
+  document.getElementById('searchTitle').textContent='نتائج البحث عن «'+q+'» — '+res.length+' أغنية';
+  const el=document.getElementById('searchList');
+  el.innerHTML = res.length ? res.slice(0,120).map((it,i)=>rowHTML(it.sid,it.idx,i)).join('') : '<div class="empty">لا توجد نتائج مطابقة</div>';
+  if(res.length) bindRows(el, res.slice(0,120));
+  show('searchView');
+});
+
+/* ---------- PLAYER ---------- */
+function playFromList(items, start){
+  queue=items.slice(); qi=start; startTrack();
+}
+function startTrack(){
+  const it=queue[qi]; if(!it) return;
+  const tr=DATA[it.sid][it.idx], sg=byId[it.sid];
+  au.src=tr.u;
+  au.play().catch(()=>{});
+  document.getElementById('ptitle').textContent=tr.t;
+  document.getElementById('psinger').textContent=sg.nm;
+  const th=document.getElementById('pthumb'); th.style.background=sg.g; th.textContent=sg.em;
+  updatePfav(); refreshViews();
+  if('mediaSession' in navigator){ try{ navigator.mediaSession.metadata=new MediaMetadata({title:tr.t, artist:sg.nm, album:'أغاني الزمن الجميل — جنود الخفاء'}); }catch(e){} }
+}
+function refreshViews(){
+  if(cur && document.getElementById('view').style.display!=='none') renderTracks();
+  if(document.getElementById('searchView').style.display!=='none'){ /* keep results, just refresh marks */ const q=document.getElementById('gq').value.trim(); if(q){ document.getElementById('gq').dispatchEvent(new Event('input')); } }
+  if(document.getElementById('home').style.display!=='none' && homeFilter==='fav') renderHome();
+}
+function updatePfav(){
+  const b=document.getElementById('pfav');
+  if(qi<0||!queue[qi]){ b.style.display='none'; return; }
+  b.style.display='inline-flex';
+  const key=queue[qi].sid+':'+queue[qi].idx;
+  b.textContent=favs.has(key)?'❤️':'🤍'; b.classList.toggle('fav',favs.has(key));
+  b.onclick=()=>toggleFav(key);
+}
+function step(d){
+  if(!queue.length) return;
+  if(shuffle && queue.length>1){ let n; do{ n=Math.floor(Math.random()*queue.length); }while(n===qi); qi=n; }
+  else { qi=(qi+d+queue.length)%queue.length; }
+  startTrack();
+}
+const playBtn=document.getElementById('playBtn');
+function togglePlay(){
+  if(qi<0){ // nothing yet: start with Halim
+    const items=(DATA.halim||[]).map((x,i)=>({sid:'halim',idx:i})); playFromList(items,0); return;
+  }
+  if(au.paused) au.play().catch(()=>{}); else au.pause();
+}
+playBtn.addEventListener('click', togglePlay);
+document.getElementById('nextBtn').addEventListener('click', ()=>step(1));
+document.getElementById('prevBtn').addEventListener('click', ()=>{ if(au.currentTime>4){ au.currentTime=0; } else step(-1); });
+document.getElementById('shufBtn').addEventListener('click', function(){ shuffle=!shuffle; this.classList.toggle('on',shuffle); toast(shuffle?'العشوائي شغال 🔀':'العشوائي وقف'); });
+document.getElementById('repBtn').addEventListener('click', function(){ repeat=(repeat+1)%3; this.classList.toggle('on',repeat>0); this.textContent=repeat===2?'🔂':'🔁'; toast(repeat===0?'التكرار وقف':repeat===1?'تكرار القائمة 🔁':'تكرار الأغنية 🔂'); });
+au.addEventListener('play', ()=>{ playBtn.textContent='⏸'; document.body.classList.add('playing'); });
+au.addEventListener('pause', ()=>{ playBtn.textContent='▶'; document.body.classList.remove('playing'); });
+au.addEventListener('ended', ()=>{ if(repeat===2){ au.currentTime=0; au.play().catch(()=>{}); } else if(qi<queue.length-1||repeat===1) step(1); });
+au.addEventListener('error', ()=>{ if(qi>=0) toast('الأغنية دي ما اشتغلتش — بنعدي للي بعدها'); if(queue.length&&qi<queue.length-1) setTimeout(()=>step(1),600); });
+function fmt(s){ if(!isFinite(s)) s=0; s=Math.floor(s); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+au.addEventListener('timeupdate', ()=>{
+  const sk=document.getElementById('seek');
+  if(au.duration) sk.value=Math.floor(au.currentTime/au.duration*1000);
+  document.getElementById('time').textContent=fmt(au.currentTime)+' / '+fmt(au.duration);
+});
+document.getElementById('seek').addEventListener('input', function(){ if(au.duration) au.currentTime=this.value/1000*au.duration; });
+document.getElementById('vol').addEventListener('input', function(){ au.volume=this.value/100; });
+document.addEventListener('keydown', e=>{
+  if(e.target.tagName==='INPUT') return;
+  if(document.body.classList.contains('locked')) return;
+  if(e.code==='Space'){ e.preventDefault(); togglePlay(); }
+  if(e.code==='ArrowLeft') step(1);
+  if(e.code==='ArrowRight') step(-1);
+});
+/* ---------- LIVE UPDATE PORTAL ---------- */
+const SOURCE_URL='https://muons2002.dpdns.org/aghani-zaman.html';
+let updBusy=false, lastCheck=null;
+function totalSongs(){ return Object.values(DATA).reduce((a,v)=>a+v.length,0); }
+function singerCount(){ return SINGERS.filter(s=>s.id).length; }
+function refreshCounts(){
+  const ss=document.getElementById('statSongs'); if(ss) ss.textContent=totalSongs();
+  const sg=document.getElementById('statSingers'); if(sg) sg.textContent=singerCount();
+  const meta=document.getElementById('updMeta');
+  if(meta) meta.textContent='المكتبة دلوقتي: '+totalSongs()+' أغنية عند '+singerCount()+' مطرب وقسم'+(lastCheck?' • آخر فحص: '+lastCheck:' • لسه ما فحصتش من ساعة ما فتحت');
+  if(qi<0){ const ps=document.getElementById('psinger'); if(ps) ps.textContent=totalSongs()+' أغنية من الزمن الجميل'; }
+}
+function setUpdStatus(kind,msg){
+  const el=document.getElementById('updStatus');
+  el.hidden=false; el.className='upd-status '+kind; el.textContent=msg;
+}
+function extractRemote(html){
+  const dStart=html.indexOf('const DATA');
+  const sStart=html.indexOf('const SINGERS', dStart);
+  if(dStart<0||sStart<0) throw new Error('parse');
+  let dTxt=html.slice(dStart, sStart);
+  dTxt=dTxt.slice(dTxt.indexOf('{')).trim().replace(/;\s*$/,'');
+  const remoteData=JSON.parse(dTxt);
+  let sTxt=html.slice(sStart);
+  const sEnd=sTxt.indexOf('];');
+  if(sEnd>0) sTxt=sTxt.slice(0,sEnd+1);
+  const singers={};
+  const re=/\{id:"([^"]+)",\s*nm:"([^"]+)",\s*em:"([^"]*)",\s*g:"([^"]*)"\}/g;
+  let m; while((m=re.exec(sTxt))){ singers[m[1]]={id:m[1],nm:m[2],em:m[3]||'🎵',g:m[4]||'linear-gradient(135deg,#546e7a,#90a4ae)'}; }
+  return {remoteData:remoteData, singers:singers};
+}
+async function checkUpdates(){
+  if(updBusy) return;
+  updBusy=true;
+  const b1=document.getElementById('updBtn'), b2=document.getElementById('updBtnTop');
+  [b1,b2].forEach(b=>{ if(b) b.disabled=true; });
+  const orig=b1.innerHTML;
+  b1.innerHTML='<span class="spin" aria-hidden="true">🔄</span> جاري الاتصال بموقعك…';
+  document.getElementById('updNew').hidden=true;
+  setUpdStatus('busy','بنكلم موقع «أغاني الزمن الجميل» وبندور على أغاني جديدة…');
+  try{
+    const res=await fetch(SOURCE_URL+'?t='+Date.now(), {cache:'no-store'});
+    if(!res.ok) throw new Error('http '+res.status);
+    const html=await res.text();
+    const parsed=extractRemote(html);
+    const remoteData=parsed.remoteData, singers=parsed.singers;
+    let added=0; const perSinger=[]; let addedHeader=false;
+    for(const sid in remoteData){
+      const tracks=Array.isArray(remoteData[sid])?remoteData[sid].filter(tr=>tr&&typeof tr.t==='string'&&typeof tr.u==='string'&&/^https?:\/\//.test(tr.u)):[];
+      if(!tracks.length) continue;
+      if(!byId[sid]){
+        const meta=singers[sid]||{id:sid,nm:sid,em:'🎵',g:'linear-gradient(135deg,#546e7a,#90a4ae)'};
+        if(!addedHeader){ SINGERS.push({sec:'🆕 وصل حديثاً'}); addedHeader=true; }
+        SINGERS.push(meta); byId[sid]=meta; DATA[sid]=[];
+      }
+      if(!DATA[sid]) DATA[sid]=[];
+      const have=new Set(DATA[sid].map(tr=>tr.u));
+      let n=0;
+      for(const tr of tracks){ if(!have.has(tr.u)){ DATA[sid].push({t:tr.t,u:tr.u}); have.add(tr.u); n++; } }
+      if(n){ added+=n; perSinger.push({nm:byId[sid].nm, n:n}); }
+    }
+    lastCheck=new Date().toLocaleTimeString('ar-EG',{hour:'numeric',minute:'2-digit'});
+    refreshCounts();
+    if(document.getElementById('home').style.display!=='none') renderHome();
+    if(cur && document.getElementById('view').style.display!=='none'){ document.getElementById('vCount').textContent=(DATA[cur.id]||[]).length+' أغنية'; renderTracks(); }
+    if(added>0){
+      setUpdStatus('ok','✅ وصل '+added+' أغنية جديدة واتضافت للقايمة خلاص — اسمعها دلوقتي!');
+      const ul=document.getElementById('updNew');
+      ul.innerHTML=perSinger.map(p=>'<li>'+esc(p.nm)+' <b>+'+p.n+'</b></li>').join('');
+      ul.hidden=false;
+      toast('وصل '+added+' أغنية جديدة 🎉');
+    } else {
+      setUpdStatus('ok','✔ مكتبتك محدّثة — مفيش أغاني جديدة على الموقع دلوقتي. ضيف جديد هناك ودوس الزر تاني.');
+    }
+  }catch(err){
+    setUpdStatus('err','⚠️ ما قدرناش نوصل لموقعك دلوقتي — اتأكد من النت وحاول تاني. ولو ضفت أغاني من ثواني، استنى دقيقة (الموقع بيحدّث نسخته) ودوس تاني.');
+  }finally{
+    updBusy=false;
+    [b1,b2].forEach(b=>{ if(b) b.disabled=false; });
+    b1.innerHTML=orig;
+  }
+}
+document.getElementById('updBtn').addEventListener('click', checkUpdates);
+document.getElementById('updBtnTop').addEventListener('click', ()=>{ window.scrollTo({top:0,behavior:'smooth'}); checkUpdates(); });
+refreshCounts();
+
+/* ---------- GATE / LOGIN ---------- */
+const gate=document.getElementById('gate'), gateCard=gate.querySelector('.gate-card'),
+  gateForm=document.getElementById('gateForm'), gateUser=document.getElementById('gateUser'),
+  gatePass=document.getElementById('gatePass'), gateEye=document.getElementById('gateEye'),
+  gateError=document.getElementById('gateError');
+function setEye(showPass){
+  gateEye.textContent = showPass ? '🙈' : '👁️';
+  gateEye.setAttribute('aria-label', showPass ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور');
+  gateEye.setAttribute('aria-pressed', showPass ? 'true' : 'false');
+}
+gateEye.addEventListener('click', ()=>{
+  const showPass = gatePass.type==='password';
+  gatePass.type = showPass ? 'text' : 'password';
+  setEye(showPass);
+  gatePass.focus();
+});
+function gateFail(msg, field){
+  gateError.textContent=msg; gateError.hidden=false;
+  gateCard.classList.remove('shake'); void gateCard.offsetWidth; gateCard.classList.add('shake');
+  field.focus();
+}
+const GATE_USER='junudalkhafa', GATE_PASS='khafa';
+const PASS_KEY='jk_custom_pass';
+function storedPass(){ try{ return localStorage.getItem(PASS_KEY)||''; }catch(e){ return ''; } }
+function effectivePass(){ return storedPass() || GATE_PASS; }
+function normCred(s){ return s.trim().toLowerCase().replace(/[\s\-_]+/g,''); }
+gateForm.addEventListener('submit', e=>{
+  e.preventDefault();
+  const u=gateUser.value.trim(), p=gatePass.value;
+  if(!u && !p){ gateFail('من فضلك اكتب اسم المستخدم وكلمة المرور', gateUser); return; }
+  if(!u){ gateFail('من فضلك اكتب اسم المستخدم', gateUser); return; }
+  if(!p){ gateFail('من فضلك اكتب كلمة المرور', gatePass); return; }
+  if(normCred(u)!==GATE_USER){ gateFail('اسم المستخدم غير صحيح — اكتبه بالإنجليزية: Junud Al Khafa', gateUser); return; }
+  if(normCred(p)!==effectivePass()){ gateFail('كلمة المرور غير صحيحة — جرّب تاني', gatePass); return; }
+  gateError.hidden=true;
+  gate.classList.add('hidden');
+  document.body.classList.remove('locked');
+  toast('أهلاً بيك 🎵');
+});
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  au.pause();
+  gatePass.value=''; gatePass.type='password'; setEye(false);
+  gateError.hidden=true;
+  gate.classList.remove('hidden');
+  document.body.classList.add('locked');
+  window.scrollTo({top:0});
+  gateUser.focus();
+});
+/* ---------- SETTINGS / CHANGE PASSWORD ---------- */
+const settings=document.getElementById('settings'), setCard=document.getElementById('setCard'),
+  setForm=document.getElementById('setForm'), setError=document.getElementById('setError'),
+  setOk=document.getElementById('setOk'),
+  curPass=document.getElementById('curPass'), newPass=document.getElementById('newPass'),
+  confPass=document.getElementById('confPass');
+function resetSetEyes(){
+  document.querySelectorAll('.set-eye').forEach(btn=>{
+    const inp=document.getElementById(btn.dataset.for);
+    if(inp) inp.type='password';
+    btn.textContent='👁️'; btn.setAttribute('aria-pressed','false');
+  });
+}
+document.querySelectorAll('.set-eye').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const inp=document.getElementById(btn.dataset.for);
+    const show=inp.type==='password';
+    inp.type=show?'text':'password';
+    btn.textContent=show?'🙈':'👁️';
+    btn.setAttribute('aria-pressed', show?'true':'false');
+    inp.focus();
+  });
+});
+function openSettings(){
+  setForm.reset(); resetSetEyes();
+  setError.hidden=true; setOk.hidden=true;
+  settings.classList.remove('hidden');
+  document.body.classList.add('locked');
+  curPass.focus();
+}
+function closeSettings(){
+  settings.classList.add('hidden');
+  if(gate.classList.contains('hidden')) document.body.classList.remove('locked');
+}
+document.getElementById('settingsBtn').addEventListener('click', openSettings);
+document.getElementById('setClose').addEventListener('click', closeSettings);
+settings.addEventListener('click', e=>{ if(e.target===settings) closeSettings(); });
+function setFail(msg, field){
+  setOk.hidden=true;
+  setError.textContent=msg; setError.hidden=false;
+  setCard.classList.remove('shake'); void setCard.offsetWidth; setCard.classList.add('shake');
+  if(field) field.focus();
+}
+setForm.addEventListener('submit', e=>{
+  e.preventDefault();
+  const cur=curPass.value, nw=newPass.value, cf=confPass.value;
+  if(!cur){ setFail('من فضلك اكتب كلمة السر الحالية', curPass); return; }
+  if(!nw){ setFail('من فضلك اكتب كلمة السر الجديدة', newPass); return; }
+  if(!cf){ setFail('من فضلك أكّد كلمة السر الجديدة', confPass); return; }
+  if(normCred(cur)!==effectivePass()){ setFail('كلمة السر الحالية غير صحيحة — جرّب تاني', curPass); return; }
+  if(nw!==cf){ setFail('كلمة السر الجديدة وتأكيدها مش متطابقين — راجعهم وحاول تاني', confPass); return; }
+  if(normCred(nw)===effectivePass()){ setFail('كلمة السر الجديدة هي نفس الحالية — اختر واحدة مختلفة', newPass); return; }
+  try{ localStorage.setItem(PASS_KEY, normCred(nw)); }
+  catch(err){ setFail('المتصفح منع حفظ كلمة السر على الجهاز ده — افتح التطبيق من المتصفح نفسه وجرّب تاني', null); return; }
+  setError.hidden=true;
+  setOk.textContent='✅ اتغيّرت كلمة السر بنجاح — من دلوقتي ادخل بكلمة السر الجديدة على الجهاز ده';
+  setOk.hidden=false;
+  setForm.reset(); resetSetEyes();
+  toast('اتغيّرت كلمة السر ✅');
+});
+
+gateUser.focus();
+
+renderHome();
+</script>
+</body>
+</html>
