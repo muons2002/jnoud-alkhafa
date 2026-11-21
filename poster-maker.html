@@ -6,9 +6,9 @@
 <meta name="color-scheme" content="dark" />
 <link rel="icon" href="data:," />
 <title>صانع بوسترات بالاسم — جنود الخفاء</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
+
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Changa:wght@600;700;800&display=swap" rel="stylesheet" />
+
 <style>
   :root{
     color-scheme: dark;
@@ -21,7 +21,7 @@
   *{box-sizing:border-box}
   body{
     margin:0; color:var(--ink);
-    font-family:"Cairo", system-ui, sans-serif;
+    font-family:'Segoe UI',Tahoma,Arial,sans-serif;
     background:
       radial-gradient(1100px 480px at 85% -120px, rgba(47,185,216,.05), transparent 60%),
       linear-gradient(160deg,#081426 0%,#0D2B45 55%,#0A3A56 100%);
@@ -37,7 +37,7 @@
     background:linear-gradient(150deg,#FFC65C,#F08A2E 60%,#E86F1E);
     box-shadow:0 12px 26px rgba(240,138,46,.3);
   }
-  .brand h1{font-family:"Changa","Cairo",sans-serif; font-size:1.5rem; font-weight:700; margin:0; color:var(--gold2); line-height:1.25}
+  .brand h1{font-family:'Segoe UI',Tahoma,Arial,sans-serif; font-size:1.5rem; font-weight:700; margin:0; color:var(--gold2); line-height:1.25}
   .brand p{margin:.15rem 0 0; color:var(--muted); font-size:.9rem}
   .lbl{font-weight:800; color:var(--gold2); margin:1.1rem 0 .5rem; font-size:1rem}
   input[type="text"]{
@@ -161,7 +161,7 @@ function text(str,x,y,font,color){
   ctx.fillText(str,x,y);
 }
 function brand(y,size){
-  text('جنود الخفاء 🛡️ حب الخير للغير', 540, y, '800 ' + size + 'px Cairo, sans-serif', '#2FB9D8');
+  text('جنود الخفاء 🛡️ حب الخير للغير', 540, y, '800 ' + size + 'px 'Segoe UI',Tahoma,Arial,sans-serif', '#2FB9D8');
 }
 function draw(){
   const o = OCC[state.occ];
@@ -172,9 +172,9 @@ function draw(){
     glow(140,80,420,'rgba(47,185,216,.20)');
     glow(980,1020,420,'rgba(47,185,216,.12)');
     tile(390,130,300,o.c1,o.c2,o.e,175);
-    text(o.g, 540, 600, '800 126px Changa, Cairo, sans-serif', '#FFFFFF');
-    text(nameLine, 540, 712, '700 80px Changa, Cairo, sans-serif', '#7FD4EA');
-    text(o.dua, 540, 812, '600 40px Cairo, sans-serif', '#BEE9F5');
+    text(o.g, 540, 600, '800 126px 'Segoe UI',Tahoma,Arial,sans-serif', '#FFFFFF');
+    text(nameLine, 540, 712, '700 80px 'Segoe UI',Tahoma,Arial,sans-serif', '#7FD4EA');
+    text(o.dua, 540, 812, '600 40px 'Segoe UI',Tahoma,Arial,sans-serif', '#BEE9F5');
     brand(985, 34);
   } else if (state.style === 'b'){
     const gr = ctx.createLinearGradient(0,0,0,480);
@@ -185,22 +185,22 @@ function draw(){
     ctx.font = '205px ' + EMOJI_FONT; ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillText(o.e, 540, 250);
     ctx.fillStyle = '#2FB9D8'; ctx.fillRect(0,478,1080,4);
-    text(o.g, 540, 636, '800 112px Changa, Cairo, sans-serif', '#FFFFFF');
-    text(nameLine, 540, 742, '700 76px Changa, Cairo, sans-serif', '#7FD4EA');
-    text(o.dua, 540, 828, '600 38px Cairo, sans-serif', '#BEE9F5');
+    text(o.g, 540, 636, '800 112px 'Segoe UI',Tahoma,Arial,sans-serif', '#FFFFFF');
+    text(nameLine, 540, 742, '700 76px 'Segoe UI',Tahoma,Arial,sans-serif', '#7FD4EA');
+    text(o.dua, 540, 828, '600 38px 'Segoe UI',Tahoma,Arial,sans-serif', '#BEE9F5');
     brand(985, 32);
   } else {
     glow(540,60,460,'rgba(47,185,216,.14)');
     rr(40,40,1000,1000,36); ctx.strokeStyle = 'rgba(47,185,216,.85)'; ctx.lineWidth = 3; ctx.stroke();
     tile(455,118,170,o.c1,o.c2,o.e,100);
-    text(o.g, 540, 452, '800 118px Changa, Cairo, sans-serif', '#FFFFFF');
-    ctx.font = '700 74px Changa, Cairo, sans-serif';
+    text(o.g, 540, 452, '800 118px 'Segoe UI',Tahoma,Arial,sans-serif', '#FFFFFF');
+    ctx.font = '700 74px 'Segoe UI',Tahoma,Arial,sans-serif';
     const tw = ctx.measureText(nameLine).width;
     rr(540-(tw+96)/2, 540, tw+96, 116, 58);
     ctx.fillStyle = '#123656'; ctx.fill();
     ctx.strokeStyle = '#1D4E66'; ctx.lineWidth = 2; ctx.stroke();
-    text(nameLine, 540, 600, '700 74px Changa, Cairo, sans-serif', '#7FD4EA');
-    text(o.dua, 540, 748, '600 38px Cairo, sans-serif', '#BEE9F5');
+    text(nameLine, 540, 600, '700 74px 'Segoe UI',Tahoma,Arial,sans-serif', '#7FD4EA');
+    text(o.dua, 540, 748, '600 38px 'Segoe UI',Tahoma,Arial,sans-serif', '#BEE9F5');
     brand(950, 32);
   }
 }
@@ -241,8 +241,8 @@ document.getElementById('shareBtn').addEventListener('click', () => {
 
 if (document.fonts && document.fonts.load) {
   Promise.all([
-    document.fonts.load('800 126px Changa'), document.fonts.load('700 80px Changa'),
-    document.fonts.load('600 40px Cairo'), document.fonts.load('800 34px Cairo')
+    document.fonts.load('800 126px "Segoe UI"'), document.fonts.load('700 80px Changa'),
+    document.fonts.load('600 40px "Segoe UI"'), document.fonts.load('800 34px Cairo')
   ]).then(redraw).catch(redraw);
   document.fonts.ready.then(redraw);
 }
