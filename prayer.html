@@ -184,6 +184,25 @@
         .loading .dots::after { animation: none; content: "..."; }
       }
 
+      .city-card h2 { font-size: 1.05rem; color: var(--gold-bright); margin: 0 0 10px; }
+      .city-card input[type="text"], .city-card select {
+        width: 100%; background: var(--row); color: var(--ink); border: 1px solid var(--row-border);
+        border-radius: 10px; padding: 11px 13px; font-family: inherit; font-size: 1rem; margin-bottom: 10px;
+      }
+      .city-results button {
+        display: block; width: 100%; text-align: start; background: var(--row); color: var(--ink);
+        border: 1px solid var(--row-border); border-radius: 10px; padding: 10px 13px; margin-bottom: 6px;
+        font-family: inherit; font-size: 0.98rem; cursor: pointer;
+      }
+      .city-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+      .city-chips button {
+        background: var(--gold-soft); color: var(--ink); border: 1px solid var(--row-border); border-radius: 999px;
+        padding: 7px 14px; font-family: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer;
+      }
+      .city-card label { display: block; font-size: 0.88rem; color: var(--muted); margin-bottom: 6px; }
+      .city-current { font-size: 0.92rem; color: var(--muted); margin-bottom: 10px; }
+      .city-current b { color: var(--gold-bright); }
+
       .footer { text-align: center; font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
     </style>
   </head>
@@ -198,13 +217,23 @@
           </svg>
         </span>
         <h1>جنود الخفاء</h1>
-        <p>مواقيت الصلاة — القاهرة • حب الخير للغير</p>
+        <p>مواقيت الصلاة — <span id="brand-city">القاهرة</span> • حب الخير للغير</p>
       </div>
 
       <div class="card clock">
         <div id="time">--:--:--</div>
         <div class="date-line" id="greg-date">—</div>
         <div class="hijri-line" id="hijri-date">—</div>
+      </div>
+
+      <div class="card city-card">
+        <h2>📍 مدينتك</h2>
+        <div class="city-current">المواقيت الآن لمدينة: <b id="cur-city">القاهرة</b></div>
+        <input type="text" id="city-search" placeholder="ابحث عن مدينة… مثال: وهران، الرباط، جدة" autocomplete="off" />
+        <div class="city-results" id="city-results"></div>
+        <div class="city-chips" id="city-chips"></div>
+        <label for="method-sel">طريقة حساب المواقيت</label>
+        <select id="method-sel"></select>
       </div>
 
       <div class="error" id="error-box">
@@ -225,14 +254,41 @@
         <ul class="prayer-list" id="prayer-list"></ul>
       </div>
 
-      <div class="footer">مواقيت الصلاة بتوقيت القاهرة — المصدر: Aladhan API</div>
+      <div class="footer" id="foot-note">مواقيت الصلاة — المصدر: Aladhan API</div>
     </div>
 
     <script>
-      var API_BASE = "https://api.aladhan.com/v1/timingsByCity";
-      var CITY = "Cairo";
-      var COUNTRY = "Egypt";
-      var METHOD = 5; // الهيئة المصرية العامة للمساحة
+      function loadJSON(k, dflt) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : dflt; } catch (e) { return dflt; } }
+      function saveJSON(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+      var METHODS = [
+        { id: 5, name: "الهيئة المصرية العامة للمساحة" }, { id: 19, name: "وزارة الشؤون الدينية — الجزائر" },
+        { id: 21, name: "وزارة الأوقاف — المغرب" }, { id: 18, name: "تونس" },
+        { id: 4, name: "أم القرى — مكة المكرمة" }, { id: 3, name: "رابطة العالم الإسلامي" },
+        { id: 9, name: "الكويت" }, { id: 10, name: "قطر" }, { id: 16, name: "دبي" },
+        { id: 23, name: "الأردن" }, { id: 12, name: "فرنسا" }, { id: 13, name: "تركيا (الشؤون الدينية)" }
+      ];
+      var CC_METHOD = { EG: 5, DZ: 19, MA: 21, TN: 18, SA: 4, KW: 9, QA: 10, AE: 16, JO: 23, FR: 12, TR: 13 };
+      var QUICK = [
+        { name: "القاهرة", country: "مصر", cc: "EG", lat: 30.0444, lng: 31.2357, tz: "Africa/Cairo" },
+        { name: "الإسكندرية", country: "مصر", cc: "EG", lat: 31.2001, lng: 29.9187, tz: "Africa/Cairo" },
+        { name: "الجزائر", country: "الجزائر", cc: "DZ", lat: 36.7323, lng: 3.0875, tz: "Africa/Algiers" },
+        { name: "وهران", country: "الجزائر", cc: "DZ", lat: 35.6897, lng: -0.6308, tz: "Africa/Algiers" },
+        { name: "الدار البيضاء", country: "المغرب", cc: "MA", lat: 33.5992, lng: -7.6200, tz: "Africa/Casablanca" },
+        { name: "الرباط", country: "المغرب", cc: "MA", lat: 34.0133, lng: -6.8326, tz: "Africa/Casablanca" },
+        { name: "تونس", country: "تونس", cc: "TN", lat: 36.8002, lng: 10.1860, tz: "Africa/Tunis" },
+        { name: "جدة", country: "السعودية", cc: "SA", lat: 21.5433, lng: 39.1728, tz: "Asia/Riyadh" }
+      ];
+      var place = loadJSON("jnoud_prayer_place", QUICK[0]);
+      var methodSelVal = loadJSON("jnoud_prayer_method", "auto");
+      function effMethod() {
+        if (methodSelVal !== "auto") return parseInt(methodSelVal, 10);
+        return CC_METHOD[place.cc] || 3;
+      }
+      function methodName() {
+        var m = effMethod();
+        for (var i = 0; i < METHODS.length; i++) if (METHODS[i].id === m) return METHODS[i].name;
+        return "رابطة العالم الإسلامي";
+      }
 
       var PRAYERS = [
         { key: "Fajr", name: "الفجر" },
@@ -252,7 +308,7 @@
 
       function cairoParts() {
         var fmt = new Intl.DateTimeFormat("en-GB", {
-          timeZone: "Africa/Cairo",
+          timeZone: place.tz,
           hour12: false,
           year: "numeric", month: "2-digit", day: "2-digit",
           hour: "2-digit", minute: "2-digit", second: "2-digit"
@@ -287,10 +343,9 @@
         return pad(h) + ":" + pad(m) + ":" + pad(s);
       }
       function apiUrl(dateStr) {
-        return API_BASE + (dateStr ? "/" + dateStr : "") +
-          "?city=" + encodeURIComponent(CITY) +
-          "&country=" + encodeURIComponent(COUNTRY) +
-          "&method=" + METHOD;
+        if (!dateStr) { var p = cairoParts(); dateStr = pad(p.day) + "-" + pad(p.month) + "-" + p.year; }
+        return "https://api.aladhan.com/v1/timings/" + dateStr +
+          "?latitude=" + place.lat + "&longitude=" + place.lng + "&method=" + effMethod();
       }
       function validate(data) {
         if (!data || data.code !== 200 || !data.data || !data.data.timings) {
@@ -511,6 +566,66 @@
           }
         });
       }
+
+      function refreshPlaceLabels() {
+        document.getElementById("brand-city").textContent = place.name;
+        document.getElementById("cur-city").textContent = place.name + (place.country ? " — " + place.country : "");
+        document.getElementById("foot-note").textContent =
+          "مواقيت " + place.name + " — طريقة الحساب: " + methodName() + " — المصدر: Aladhan API";
+      }
+      function setPlace(q) {
+        place = q; saveJSON("jnoud_prayer_place", place);
+        timingsToday = null; timingsTomorrow = null; currentCairoDateKey = "";
+        document.getElementById("city-results").innerHTML = "";
+        document.getElementById("city-search").value = "";
+        document.getElementById("next-box").style.display = "none";
+        document.getElementById("prayer-list").innerHTML = "";
+        document.getElementById("loading").style.display = "block";
+        refreshPlaceLabels();
+        loadToday(); tick();
+      }
+      (function buildCityUI() {
+        var chips = document.getElementById("city-chips");
+        QUICK.forEach(function (q) {
+          var b = document.createElement("button");
+          b.type = "button"; b.textContent = q.name;
+          b.addEventListener("click", function () { setPlace(q); });
+          chips.appendChild(b);
+        });
+        var sel = document.getElementById("method-sel");
+        var o0 = document.createElement("option"); o0.value = "auto"; o0.textContent = "تلقائي حسب البلد"; sel.appendChild(o0);
+        METHODS.forEach(function (m) {
+          var o = document.createElement("option"); o.value = m.id; o.textContent = m.name; sel.appendChild(o);
+        });
+        sel.value = String(methodSelVal);
+        sel.addEventListener("change", function () {
+          methodSelVal = sel.value; saveJSON("jnoud_prayer_method", methodSelVal);
+          setPlace(place);
+        });
+        var timer = null;
+        document.getElementById("city-search").addEventListener("input", function () {
+          var q = this.value.trim();
+          if (timer) clearTimeout(timer);
+          if (q.length < 2) { document.getElementById("city-results").innerHTML = ""; return; }
+          timer = setTimeout(function () {
+            fetch("https://geocoding-api.open-meteo.com/v1/search?name=" + encodeURIComponent(q) + "&count=6&language=ar&format=json")
+              .then(function (r) { return r.json(); })
+              .then(function (d) {
+                var box = document.getElementById("city-results"); box.innerHTML = "";
+                (d.results || []).forEach(function (r) {
+                  var b = document.createElement("button");
+                  b.type = "button";
+                  b.textContent = r.name + " — " + (r.admin1 ? r.admin1 + "، " : "") + (r.country || "");
+                  b.addEventListener("click", function () {
+                    setPlace({ name: r.name, country: r.country || "", cc: r.country_code || "", lat: r.latitude, lng: r.longitude, tz: r.timezone });
+                  });
+                  box.appendChild(b);
+                });
+              }).catch(function () {});
+          }, 450);
+        });
+        refreshPlaceLabels();
+      })();
 
       document.getElementById("retry-btn").addEventListener("click", function () {
         document.getElementById("error-box").style.display = "none";
