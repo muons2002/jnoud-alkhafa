@@ -80,6 +80,10 @@ body.locked{overflow:hidden}
 [data-theme="layali"] .upd-btn,[data-theme="sahra"] .upd-btn{color:#1a1206}
 .upd-btn:hover{background:var(--acc2)}
 .upd-btn:disabled{opacity:.65;cursor:wait}
+.upd-row{display:flex;gap:10px;flex-wrap:wrap}
+.upd-row .upd-btn{flex:1;min-width:180px}
+.apk-btn{background:transparent;border:1.5px solid var(--acc);color:var(--acc);font-weight:900;border-radius:999px;padding:12px 18px;font-size:15.5px;min-height:3rem;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;flex:1;min-width:180px}
+.apk-btn:hover{background:var(--acc-soft)}
 .upd-meta{color:var(--mut);font-size:12.5px;line-height:1.7}
 .upd-status{border-radius:var(--radius);padding:10px 13px;font-size:13.5px;font-weight:700;line-height:1.8;border:1px solid var(--line);background:var(--bg2)}
 .upd-status.ok{border-color:var(--acc);background:var(--acc-soft)}
@@ -89,6 +93,16 @@ body.locked{overflow:hidden}
 .upd-new li b{color:var(--acc)}
 .spin{display:inline-block;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============ SETTINGS ============ */
+.settings{position:fixed;inset:0;z-index:190;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px 16px;overflow-y:auto}
+.settings.hidden{display:none}
+.set-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.set-head h2{font-family:var(--hfont);font-size:22px;font-weight:900}
+.set-close{background:var(--bg2);border:1px solid var(--line);color:var(--txt);border-radius:50%;width:38px;height:38px;min-width:38px;min-height:38px;font-size:16px;display:inline-flex;align-items:center;justify-content:center}
+.set-close:hover{border-color:var(--acc);color:var(--acc)}
+.set-ok{background:var(--acc-soft);border:1px solid var(--acc);color:var(--txt);border-radius:var(--radius);padding:9px 13px;font-size:13.5px;font-weight:700;line-height:1.7}
+.set-note{color:var(--mut);font-size:12.5px;line-height:1.9;text-align:start}
 
 /* ============ HEADER ============ */
 .topbar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
@@ -222,6 +236,43 @@ body:not(.playing) .eq i{animation-play-state:paused;height:5px}
   </div>
 </div>
 
+<div class="settings hidden" id="settings" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+  <div class="gate-card" id="setCard">
+    <div class="set-head">
+      <h2 id="setTitle">⚙️ الإعدادات</h2>
+      <button class="set-close" id="setClose" type="button" aria-label="إغلاق الإعدادات">✖</button>
+    </div>
+    <p class="gate-sub" style="text-align:start;margin-bottom:18px">من هنا تقدر تغيّر كلمة سر الدخول بتاعتك.</p>
+    <form class="gate-form" id="setForm" novalidate>
+      <div class="gate-field">
+        <label for="curPass">كلمة السر الحالية</label>
+        <div class="gate-input pass-input">
+          <input id="curPass" type="password" autocomplete="current-password" placeholder="Password" dir="ltr" lang="en" autocapitalize="off" autocorrect="off" spellcheck="false" style="text-align:left">
+          <button class="eye-btn set-eye" type="button" data-for="curPass" aria-label="إظهار كلمة السر الحالية" aria-pressed="false" title="إظهار / إخفاء">👁️</button>
+        </div>
+      </div>
+      <div class="gate-field">
+        <label for="newPass">كلمة السر الجديدة</label>
+        <div class="gate-input pass-input">
+          <input id="newPass" type="password" autocomplete="new-password" placeholder="New password" dir="ltr" lang="en" autocapitalize="off" autocorrect="off" spellcheck="false" style="text-align:left">
+          <button class="eye-btn set-eye" type="button" data-for="newPass" aria-label="إظهار كلمة السر الجديدة" aria-pressed="false" title="إظهار / إخفاء">👁️</button>
+        </div>
+      </div>
+      <div class="gate-field">
+        <label for="confPass">تأكيد كلمة السر الجديدة</label>
+        <div class="gate-input pass-input">
+          <input id="confPass" type="password" autocomplete="new-password" placeholder="Repeat new password" dir="ltr" lang="en" autocapitalize="off" autocorrect="off" spellcheck="false" style="text-align:left">
+          <button class="eye-btn set-eye" type="button" data-for="confPass" aria-label="إظهار تأكيد كلمة السر" aria-pressed="false" title="إظهار / إخفاء">👁️</button>
+        </div>
+      </div>
+      <p class="gate-error" id="setError" role="alert" hidden></p>
+      <p class="set-ok" id="setOk" role="status" hidden></p>
+      <button class="gate-btn" type="submit">🔑 تغيير كلمة السر</button>
+      <p class="set-note">التغيير بيتحفظ على الجهاز ده بس (الموبايل اللي في إيدك) ومش بيأثّر على دخول باقي الأعضاء من أجهزتهم. ولو مسحت بيانات التطبيق هترجع كلمة السر الأصلية: <b>Khafa</b>.</p>
+    </form>
+  </div>
+</div>
+
 <div class="topbar"><div class="topbar-in">
   <div class="brand"><span class="shield">🛡️</span><span>جنود الخفاء<small>حب الخير للغير</small></span></div>
   <div class="themes" role="group" aria-label="اختيار التصميم">
@@ -230,6 +281,7 @@ body:not(.playing) .eq i{animation-play-state:paused;height:5px}
     <button data-settheme="sahra">🪔 سهرة ذهبية</button>
   </div>
   <button class="update-btn" id="updBtnTop" type="button">🔄 تحديث الأغاني</button>
+  <button class="logout-btn" id="settingsBtn" type="button">⚙️ الإعدادات</button>
   <button class="logout-btn" id="logoutBtn" type="button">🚪 خروج</button>
 </div></div>
 
@@ -243,8 +295,11 @@ body:not(.playing) .eq i{animation-play-state:paused;height:5px}
   </div>
   <div class="upd-panel" id="updPanel">
     <div class="upd-title">🔄 بوابة التحديث المباشر</div>
-    <p class="upd-desc">ضيف أغاني جديدة على <a href="https://muons2002.dpdns.org/aghani-zaman.html" target="_blank" rel="noopener">موقعك «أغاني الزمن الجميل»</a>، وبعدين دوس الزر ده — الأغاني الجديدة هتوصل هنا فوراً وتتضاف للقايمة، من غير ما تنزّل أو تثبّت تطبيق جديد.</p>
-    <button class="upd-btn" id="updBtn" type="button">🔄 هات الأغاني الجديدة</button>
+    <p class="upd-desc">ضيف أغاني جديدة على <a href="https://muons2002.dpdns.org/aghani-zaman.html" target="_blank" rel="noopener">موقعك «أغاني الزمن الجميل»</a>، وبعدين دوس الزر ده — الأغاني الجديدة هتوصل هنا فوراً وتتضاف للقايمة، من غير ما تنزّل أو تثبّت تطبيق جديد. ولو عاوز أحدث نسخة من التطبيق نفسه، دوس زر «آخر إصدار من التطبيق» وهينزّل أحدث ملف APK من موقعك على طول.</p>
+    <div class="upd-row">
+      <button class="upd-btn" id="updBtn" type="button">🔄 هات الأغاني الجديدة</button>
+      <a class="apk-btn" href="https://muons2002.dpdns.org/aghani-junud-al-khafa.apk" download>⬇️ آخر إصدار من التطبيق</a>
+    </div>
     <div class="upd-meta" id="updMeta">المكتبة دلوقتي: 384 أغنية • لسه ما فحصتش من ساعة ما فتحت</div>
     <div class="upd-status" id="updStatus" role="status" hidden></div>
     <ul class="upd-new" id="updNew" hidden></ul>
@@ -627,6 +682,9 @@ function gateFail(msg, field){
   field.focus();
 }
 const GATE_USER='junudalkhafa', GATE_PASS='khafa';
+const PASS_KEY='jk_custom_pass';
+function storedPass(){ try{ return localStorage.getItem(PASS_KEY)||''; }catch(e){ return ''; } }
+function effectivePass(){ return storedPass() || GATE_PASS; }
 function normCred(s){ return s.trim().toLowerCase().replace(/[\s\-_]+/g,''); }
 gateForm.addEventListener('submit', e=>{
   e.preventDefault();
@@ -635,7 +693,7 @@ gateForm.addEventListener('submit', e=>{
   if(!u){ gateFail('من فضلك اكتب اسم المستخدم', gateUser); return; }
   if(!p){ gateFail('من فضلك اكتب كلمة المرور', gatePass); return; }
   if(normCred(u)!==GATE_USER){ gateFail('اسم المستخدم غير صحيح — اكتبه بالإنجليزية: Junud Al Khafa', gateUser); return; }
-  if(normCred(p)!==GATE_PASS){ gateFail('كلمة المرور غير صحيحة — جرّب تاني', gatePass); return; }
+  if(normCred(p)!==effectivePass()){ gateFail('كلمة المرور غير صحيحة — جرّب تاني', gatePass); return; }
   gateError.hidden=true;
   gate.classList.add('hidden');
   document.body.classList.remove('locked');
@@ -650,6 +708,67 @@ document.getElementById('logoutBtn').addEventListener('click', ()=>{
   window.scrollTo({top:0});
   gateUser.focus();
 });
+/* ---------- SETTINGS / CHANGE PASSWORD ---------- */
+const settings=document.getElementById('settings'), setCard=document.getElementById('setCard'),
+  setForm=document.getElementById('setForm'), setError=document.getElementById('setError'),
+  setOk=document.getElementById('setOk'),
+  curPass=document.getElementById('curPass'), newPass=document.getElementById('newPass'),
+  confPass=document.getElementById('confPass');
+function resetSetEyes(){
+  document.querySelectorAll('.set-eye').forEach(btn=>{
+    const inp=document.getElementById(btn.dataset.for);
+    if(inp) inp.type='password';
+    btn.textContent='👁️'; btn.setAttribute('aria-pressed','false');
+  });
+}
+document.querySelectorAll('.set-eye').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const inp=document.getElementById(btn.dataset.for);
+    const show=inp.type==='password';
+    inp.type=show?'text':'password';
+    btn.textContent=show?'🙈':'👁️';
+    btn.setAttribute('aria-pressed', show?'true':'false');
+    inp.focus();
+  });
+});
+function openSettings(){
+  setForm.reset(); resetSetEyes();
+  setError.hidden=true; setOk.hidden=true;
+  settings.classList.remove('hidden');
+  document.body.classList.add('locked');
+  curPass.focus();
+}
+function closeSettings(){
+  settings.classList.add('hidden');
+  if(gate.classList.contains('hidden')) document.body.classList.remove('locked');
+}
+document.getElementById('settingsBtn').addEventListener('click', openSettings);
+document.getElementById('setClose').addEventListener('click', closeSettings);
+settings.addEventListener('click', e=>{ if(e.target===settings) closeSettings(); });
+function setFail(msg, field){
+  setOk.hidden=true;
+  setError.textContent=msg; setError.hidden=false;
+  setCard.classList.remove('shake'); void setCard.offsetWidth; setCard.classList.add('shake');
+  if(field) field.focus();
+}
+setForm.addEventListener('submit', e=>{
+  e.preventDefault();
+  const cur=curPass.value, nw=newPass.value, cf=confPass.value;
+  if(!cur){ setFail('من فضلك اكتب كلمة السر الحالية', curPass); return; }
+  if(!nw){ setFail('من فضلك اكتب كلمة السر الجديدة', newPass); return; }
+  if(!cf){ setFail('من فضلك أكّد كلمة السر الجديدة', confPass); return; }
+  if(normCred(cur)!==effectivePass()){ setFail('كلمة السر الحالية غير صحيحة — جرّب تاني', curPass); return; }
+  if(nw!==cf){ setFail('كلمة السر الجديدة وتأكيدها مش متطابقين — راجعهم وحاول تاني', confPass); return; }
+  if(normCred(nw)===effectivePass()){ setFail('كلمة السر الجديدة هي نفس الحالية — اختر واحدة مختلفة', newPass); return; }
+  try{ localStorage.setItem(PASS_KEY, normCred(nw)); }
+  catch(err){ setFail('المتصفح منع حفظ كلمة السر على الجهاز ده — افتح التطبيق من المتصفح نفسه وجرّب تاني', null); return; }
+  setError.hidden=true;
+  setOk.textContent='✅ اتغيّرت كلمة السر بنجاح — من دلوقتي ادخل بكلمة السر الجديدة على الجهاز ده';
+  setOk.hidden=false;
+  setForm.reset(); resetSetEyes();
+  toast('اتغيّرت كلمة السر ✅');
+});
+
 gateUser.focus();
 
 renderHome();
