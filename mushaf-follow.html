@@ -59,6 +59,8 @@ button:hover,select:hover{border-color:#F5C451}
 .qbar button{background:linear-gradient(145deg,#8a6a1f,#c39a2e);border:1px solid #F5C451;color:#fff;border-radius:10px;padding:9px 16px;cursor:pointer;font-size:14.5px;font-family:inherit}
 #qres{margin-top:10px;display:none}
 #qres .qr span{font-family:'Amiri Quran','Segoe UI',Tahoma,Arial,serif;font-size:1.12em}
+body.devfont #reader{font-family:'Segoe UI',Tahoma,Arial,sans-serif}
+body.devfont #qres .qr span{font-family:inherit;font-size:1em}
 #qres .qr{display:block;width:100%;text-align:right;background:rgba(255,255,255,.05);border:1px solid rgba(47,185,216,.22);border-radius:10px;color:#EAF4F9;padding:9px 12px;margin-bottom:7px;cursor:pointer;font-family:inherit;font-size:14px;line-height:1.9}
 #qres .qr b{color:#F5C451}
 #qres .qr span{color:#CFE6F5}
@@ -103,6 +105,10 @@ footer{text-align:center;color:#7fb6c9;font-size:12px;padding:0 12px 26px}
     </select>
     <button id="fontMinus">أ−</button>
     <button id="fontPlus">أ+</button>
+    <select id="qfont" title="خط نص الآيات">
+      <option value="quran">خط قرآني</option>
+      <option value="device">خط الجهاز</option>
+    </select>
     <button id="resume"></button>
   </div>
   <div class="status" id="status">اختر سورة من الفهرس بالأسفل</div>
@@ -124,13 +130,13 @@ footer{text-align:center;color:#7fb6c9;font-size:12px;padding:0 12px 26px}
 
 <audio id="au" preload="auto"></audio>
 <script>
-var S = {surah:0, ayah:0, ayahs:[], playing:false, repLeft:1, font:26, meta:[], hasBas:false, onBas:false, sleepSurah:false};
+var S = {surah:0, ayah:0, ayahs:[], playing:false, repLeft:1, font:26, meta:[], hasBas:false, onBas:false, sleepSurah:false, qfont:'quran'};
 var au = document.getElementById('au');
 var reader = document.getElementById('reader');
 var statusEl = document.getElementById('status');
 function $(i){return document.getElementById(i)}
 function pad(n){return ('00'+n).slice(-3)}
-function save(){try{localStorage.setItem('jnoud_mushaf', JSON.stringify({s:S.surah,a:S.ayah,r:$('reciter').value,f:S.font}))}catch(e){}}
+function save(){try{localStorage.setItem('jnoud_mushaf', JSON.stringify({s:S.surah,a:S.ayah,r:$('reciter').value,f:S.font,qf:S.qfont}))}catch(e){}}
 function load(){try{return JSON.parse(localStorage.getItem('jnoud_mushaf')||'null')}catch(e){return null}}
 function setStatus(t){statusEl.textContent=t}
 function buildGrid(list){
@@ -280,6 +286,8 @@ $('sleep').onchange=function(){
     sleepTO=setTimeout(function(){ au.pause(); S.playing=false; $('playBtn').textContent='▶ تشغيل'; setStatus('🌙 توقّف التشغيل بمؤقت النوم — تصبح على خير'); $('sleep').value='0'; sleepTO=null; }, m*60000);
   }
 };
+function applyQFont(){ document.body.classList.toggle('devfont', S.qfont==='device'); var q=$('qfont'); if(q) q.value=S.qfont; }
+$('qfont').onchange=function(){ S.qfont=$('qfont').value; applyQFont(); save(); };
 $('search').oninput=function(){ buildGrid(filterMeta()); };
 var QDATA=null, QBUILD=false;
 function buildQIndex(done){
@@ -328,6 +336,8 @@ function doQSearch(){
 $('qbtn').onclick=doQSearch;
 $('q').addEventListener('keydown', function(e){ if(e.key==='Enter') doQSearch(); });
 var sv0=load(); if(sv0&&sv0.f){ S.font=sv0.f; reader.style.fontSize=sv0.f+'px'; }
+if(sv0&&sv0.qf){ S.qfont=sv0.qf; }
+applyQFont();
 loadMeta();
 </script>
 </body>
