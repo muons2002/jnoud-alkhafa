@@ -15,7 +15,6 @@ header .shield{font-size:56px;line-height:1}
 h1{font-size:24px;margin-top:8px;color:#fff}
 h1 b{color:#d4af37}
 .sub{color:#9fd8e8;font-size:13.5px;margin-top:4px}
-.warn{display:none;max-width:920px;margin:14px auto 0;padding:10px 14px;background:rgba(245,196,81,.12);border:1px solid #d4af37;color:#ffe9a8;border-radius:12px;font-size:13.5px;line-height:1.7;text-align:center}
 .player-box{margin:16px auto 0;background:#000;border:1px solid rgba(14,165,233,.4);border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.45)}
 video{width:100%;aspect-ratio:16/9;display:block;background:#000}
 .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:space-between;padding:10px 12px;background:rgba(8,20,38,.95);border-top:1px solid rgba(14,165,233,.25)}
@@ -59,8 +58,6 @@ footer{text-align:center;color:#7fb6c9;font-size:12px;padding:18px 12px 0}
     <h1>قنوات <b>beIN Sports</b></h1>
     <div class="sub">بث مباشر — beIN Sports 1 إلى 9 HD · جنود الخفاء</div>
   </header>
-
-  <div class="warn" id="httpsWarn">⚠️ تنبيه: هذه الصفحة مفتوحة عبر <b>https</b> والقنوات على <b>http</b> — المتصفح قد يمنع تشغيل البث (محتوى مختلط). إذا ظهر خطأ في التشغيل، افتح الصفحة عبر http أو من ملف محلي.</div>
 
   <div class="player-box" id="playerWrap">
     <video id="player" controls playsinline preload="auto"></video>
@@ -310,9 +307,6 @@ function boot(){
 }
 
 document.addEventListener('DOMContentLoaded', function(){
-  if (location.protocol === 'https:') {
-    document.getElementById('httpsWarn').style.display = 'block';
-  }
   /* جرّب القائمة البعيدة أولاً؛ ولو فشل الجلب نبقى على المضمّنة */
   try {
     fetchRemoteChannels(5000).then(function(list){
