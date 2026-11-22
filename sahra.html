@@ -8,7 +8,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="جنود الخفاء">
 <meta property="og:title" content="سهرة جنود الخفاء">
-<meta property="og:description" content="بنسمع مع بعض في نفس اللحظة — حكاية كل ليلة ٩:٣٠ مساءً، وسورة الكهف صباح كل جمعة، بتوقيت القاهرة.">
+<meta property="og:description" content="بنسمع مع بعض في نفس اللحظة — حكاية كل ليلة ١٠:٠٠ مساءً، وسورة الكهف صباح كل جمعة، بتوقيت القاهرة.">
 <meta property="og:url" content="https://muons2002.dpdns.org/sahra.html">
 <meta property="og:image" content="https://muons2002.dpdns.org/og-sahra.jpg">
 <meta property="og:image:width" content="1200">
@@ -121,7 +121,7 @@
     </div>
     <div class="srow">
       <div class="sico">🌙</div>
-      <div><b>حكاية الليلة — من حكايات عبد العزيز العروي</b><span>كل ليلة، الساعة ٩:٣٠ مساءً — حكاية جديدة من التراث التونسي الأصيل، حوالي عشر دقايق قبل النوم.</span></div>
+      <div><b>حكاية الليلة — من حكايات عبد العزيز العروي</b><span>كل ليلة، الساعة ١٠:٠٠ مساءً — حكاية جديدة من التراث التونسي الأصيل، حوالي عشر دقايق قبل النوم.</span></div>
     </div>
     <div class="note" style="text-align:center">الأوقات بتتظبط لوحدها حسب القاهرة، والصفحة بتقولك الميعاد بتوقيت بلدك كمان.</div>
   </div>
@@ -179,7 +179,7 @@ function sessionsFor(offsetDays) {
   var wd = base.getUTCDay(); // weekday of that Cairo date (date-only math)
   var out = [];
   var tale = TALES[dayOfYear(y, mo, d) % TALES.length];
-  out.push({ start: cairoToEpoch(y, mo, d, 21, 30), dur: tale.s, url: TALE_BASE + tale.f,
+  out.push({ start: cairoToEpoch(y, mo, d, 22, 0), dur: tale.s, url: TALE_BASE + tale.f,
              title: "حكاية «" + tale.t + "»", kind: "🌙 حكاية الليلة — عبد العزيز العروي" });
   if (wd === 5) out.push({ start: cairoToEpoch(y, mo, d, 9, 0), dur: KAHF.dur, url: KAHF.url, title: KAHF.title, kind: KAHF.kind });
   return out;
