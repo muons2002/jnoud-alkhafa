@@ -51,6 +51,16 @@ button:hover,select:hover{border-color:#F5C451}
 .hint{text-align:center;color:#9fd8e8;font-size:12.5px;padding:0 14px 18px}
 #resume{display:none;background:rgba(245,196,81,.15);border:1px solid #F5C451;color:#ffe9a8;border-radius:10px;padding:8px 14px;cursor:pointer;font-size:13.5px}
 .err{color:#ffb3b3;text-align:center;padding:16px;font-size:14px}
+#reader .basmala{display:block;text-align:center;color:#ffe9a8;font-size:1.18em;font-weight:bold;margin:2px 0 14px;cursor:pointer;border-radius:10px;padding:4px 6px}
+#reader .basmala.cur{background:rgba(245,196,81,.32);box-shadow:0 0 0 1px rgba(245,196,81,.55)}
+.qbar{display:flex;gap:8px;margin-top:10px}
+.qbar input{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(47,185,216,.35);border-radius:10px;color:#fff;padding:9px 12px;font-size:14.5px;font-family:inherit}
+.qbar button{background:linear-gradient(145deg,#8a6a1f,#c39a2e);border:1px solid #F5C451;color:#fff;border-radius:10px;padding:9px 16px;cursor:pointer;font-size:14.5px;font-family:inherit}
+#qres{margin-top:10px;display:none}
+#qres .qr{display:block;width:100%;text-align:right;background:rgba(255,255,255,.05);border:1px solid rgba(47,185,216,.22);border-radius:10px;color:#EAF4F9;padding:9px 12px;margin-bottom:7px;cursor:pointer;font-family:inherit;font-size:14px;line-height:1.9}
+#qres .qr b{color:#F5C451}
+#qres .qr span{color:#CFE6F5}
+#qres .qmsg{color:#9fd8e8;font-size:13px;text-align:center;padding:6px}
 footer{text-align:center;color:#7fb6c9;font-size:12px;padding:0 12px 26px}
 </style>
 </head>
@@ -88,6 +98,11 @@ footer{text-align:center;color:#7fb6c9;font-size:12px;padding:0 12px 26px}
 <div class="panel">
   <input id="search" type="text" placeholder="🔍 ابحث باسم السورة…">
   <div class="grid" id="grid"></div>
+  <div class="qbar">
+    <input id="q" type="text" placeholder="🔎 ابحث بنص الآية… مثال: غلبت الروم">
+    <button id="qbtn">ابحث</button>
+  </div>
+  <div id="qres"></div>
 </div>
 
 <div id="reader" style="font-size:26px"><div class="hint">نص السورة يظهر هنا — دوس على أي آية لتبدأ التلاوة منها</div></div>
@@ -96,7 +111,7 @@ footer{text-align:center;color:#7fb6c9;font-size:12px;padding:0 12px 26px}
 
 <audio id="au" preload="auto"></audio>
 <script>
-var S = {surah:0, ayah:0, ayahs:[], playing:false, repLeft:1, font:26, meta:[]};
+var S = {surah:0, ayah:0, ayahs:[], playing:false, repLeft:1, font:26, meta:[], hasBas:false, onBas:false};
 var au = document.getElementById('au');
 var reader = document.getElementById('reader');
 var statusEl = document.getElementById('status');
@@ -131,12 +146,23 @@ function loadSurah(n, startAyah, autoplay){
   fetch('https://api.alquran.cloud/v1/surah/'+n+'/quran-uthmani').then(function(r){return r.json()}).then(function(j){
     S.ayahs=j.data.ayahs;
     reader.innerHTML='';
+    S.hasBas=false;
+    if(n!==1&&n!==9&&S.ayahs.length){
+      var rest=stripBasmala(S.ayahs[0].text);
+      if(rest){ S.hasBas=true; S.ayahs[0].dispText=rest; }
+    }
+    if(S.hasBas){
+      var bd=document.createElement('div'); bd.className='basmala'; bd.id='basmala';
+      bd.textContent='بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
+      bd.onclick=function(){ startAt(0); };
+      reader.appendChild(bd);
+    }
     S.ayahs.forEach(function(a,i){
       var sp=document.createElement('span'); sp.className='ayah'; sp.id='ay'+i;
-      sp.textContent=a.text.replace(/﻿/g,'');
+      sp.textContent=(a.dispText||a.text).replace(/\uFEFF/g,'');
       var mk=document.createElement('span'); mk.className='mk'; mk.textContent=' ﴿'+a.numberInSurah+'﴾ ';
       sp.appendChild(mk);
-      sp.onclick=function(){playFrom(i)};
+      sp.onclick=function(){startAt(i)};
       reader.appendChild(sp);
     });
     buildGrid(S.meta.length?filterMeta():[]);
@@ -144,19 +170,46 @@ function loadSurah(n, startAyah, autoplay){
     var nm=j.data.name.replace('سُورَةُ ','سورة ');
     setStatus(nm+' — '+S.ayahs.length+' آية · الآية '+S.ayah);
     save();
-    if(autoplay) playFrom(S.ayah-1);
+    if(autoplay) startAt(S.ayah-1);
   }).catch(function(){ reader.innerHTML='<div class="err">تعذّر تحميل نص السورة — تأكد من الإنترنت وحاول مجدداً</div>' });
 }
+function normAr(t){ return (t||'').replace(/[\u064B-\u0655\u0670\u0640\uFEFF]/g,'').replace(/[ٱآإأ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/\s+/g,' ').trim(); }
 function filterMeta(){
   var q=$('search').value.trim();
   if(!q) return S.meta;
-  return S.meta.filter(function(m){return m.name.indexOf(q)>-1||m.englishName.toLowerCase().indexOf(q.toLowerCase())>-1||String(m.number)===q});
+  var nq=normAr(q);
+  return S.meta.filter(function(m){return m.name.indexOf(q)>-1||normAr(m.name).indexOf(nq)>-1||m.englishName.toLowerCase().indexOf(q.toLowerCase())>-1||String(m.number)===q});
 }
 function highlight(scroll){
-  var old=reader.querySelector('.ayah.cur'); if(old) old.classList.remove('cur');
-  var el=$('ay'+(S.ayah-1));
+  var old=reader.querySelector('.cur'); if(old) old.classList.remove('cur');
+  var el=S.onBas?$('basmala'):$('ay'+(S.ayah-1));
   if(el){ el.classList.add('cur'); if(scroll!==false) el.scrollIntoView({block:'center',behavior:'smooth'}); }
 }
+var BAS_TARGET='بسماللهالرحمنالرحيم';
+function isDia(ch){ var c=ch.charCodeAt(0); return (c>=0x064B&&c<=0x0655)||c===0x0670||c===0x0640||c===0xFEFF||c===0x06DD||c===0x06DE||c===0x06E9; }
+function stripBasmala(t){
+  var cnt=0, i=0;
+  while(i<t.length&&cnt<BAS_TARGET.length){ var ch=t.charAt(i); if(!isDia(ch)&&ch!==' ') cnt++; i++; }
+  if(cnt<BAS_TARGET.length) return null;
+  var letters='';
+  for(var k=0;k<i;k++){ var c2=t.charAt(k); if(!isDia(c2)&&c2!==' ') letters+=c2; }
+  letters=letters.replace(/[ٱآإأ]/g,'ا');
+  if(letters!==BAS_TARGET) return null;
+  while(i<t.length&&isDia(t.charAt(i))) i++;
+  return t.slice(i).replace(/^\s+/,'');
+}
+function basmalaUrl(){ return 'https://everyayah.com/data/'+$('reciter').value+'/001001.mp3' }
+function playBasmala(){
+  if(!S.hasBas){ playFrom(0); return; }
+  S.onBas=true; S.ayah=1; S.repLeft=parseInt($('repeat').value,10);
+  au.src=basmalaUrl();
+  au.play().then(function(){ S.playing=true; $('playBtn').textContent='⏸ إيقاف'; }).catch(function(){});
+  highlight(true);
+  var nm=(S.meta[S.surah-1]||{}).name||'';
+  setStatus(nm.replace('سُورَةُ ','سورة ')+' — البسملة');
+  save();
+}
+function startAt(i){ if(i===0&&S.hasBas) playBasmala(); else playFrom(i); }
 function ayahUrl(){ return 'https://everyayah.com/data/'+$('reciter').value+'/'+pad(S.surah)+pad(S.ayah)+'.mp3' }
 function playFrom(i){
   if(!S.ayahs.length) return;
@@ -170,6 +223,7 @@ function playFrom(i){
 }
 au.addEventListener('ended', function(){
   var now=Date.now(); if(S.lastEnd&&now-S.lastEnd<400) return; S.lastEnd=now;
+  if(S.onBas){ S.onBas=false; playFrom(0); return; }
   var rep=parseInt($('repeat').value,10);
   if(rep===0){ au.currentTime=0; au.play(); return; }
   S.repLeft--;
@@ -180,6 +234,11 @@ au.addEventListener('ended', function(){
 });
 au.addEventListener('error', function(){
   if(!S.playing||!au.src) return;
+  if(S.onBas){
+    if(S.errKey!==au.src){ S.errKey=au.src; setTimeout(function(){ if(S.playing){ au.load(); au.play().catch(function(){}); } }, 900); }
+    else { S.onBas=false; playFrom(0); }
+    return;
+  }
   if(S.errKey!==au.src){ S.errKey=au.src; setTimeout(function(){ if(S.playing){ au.load(); au.play().catch(function(){}); } }, 900); }
   else if(S.ayah<S.ayahs.length){ playFrom(S.ayah); }
 });
@@ -187,15 +246,61 @@ $('playBtn').onclick=function(){
   if(!S.ayahs.length){ if(S.meta.length) loadSurah(1,1,true); return; }
   if(S.playing){ au.pause(); S.playing=false; $('playBtn').textContent='▶ تشغيل'; }
   else if(au.src){ au.play(); S.playing=true; $('playBtn').textContent='⏸ إيقاف'; }
-  else playFrom(S.ayah-1);
+  else startAt(S.ayah-1);
 };
-$('prevBtn').onclick=function(){ if(S.ayah>1) playFrom(S.ayah-2); };
-$('nextBtn').onclick=function(){ if(S.ayah<S.ayahs.length) playFrom(S.ayah); };
-$('reciter').onchange=function(){ save(); if(S.playing) playFrom(S.ayah-1); };
+$('prevBtn').onclick=function(){ if(S.onBas) return; if(S.ayah===1&&S.hasBas) playBasmala(); else if(S.ayah>1) startAt(S.ayah-2); };
+$('nextBtn').onclick=function(){ if(S.onBas){ S.onBas=false; playFrom(0); } else if(S.ayah<S.ayahs.length) playFrom(S.ayah); };
+$('reciter').onchange=function(){ save(); if(S.onBas) playBasmala(); else if(S.playing) playFrom(S.ayah-1); };
 $('repeat').onchange=function(){ S.repLeft=parseInt($('repeat').value,10); };
 $('fontPlus').onclick=function(){ S.font=Math.min(42,S.font+2); reader.style.fontSize=S.font+'px'; save(); };
 $('fontMinus').onclick=function(){ S.font=Math.max(19,S.font-2); reader.style.fontSize=S.font+'px'; save(); };
 $('search').oninput=function(){ buildGrid(filterMeta()); };
+var QDATA=null, QBUILD=false;
+function buildQIndex(done){
+  if(QDATA){ done(); return; }
+  if(QBUILD) return;
+  QBUILD=true;
+  fetch('https://api.alquran.cloud/v1/quran/quran-uthmani').then(function(r){return r.json()}).then(function(j){
+    QDATA=j.data.surahs.map(function(s){
+      return { n:s.number, name:s.name, ayahs:s.ayahs.map(function(a,ai){
+        var txt=a.text.replace(/\uFEFF/g,'');
+        if(s.number!==1&&s.number!==9&&ai===0){ var rest=stripBasmala(txt); if(rest) txt=rest; }
+        var proj='', map=[];
+        for(var i=0;i<txt.length;i++){ var ch=txt.charAt(i); if(isDia(ch)) continue; proj+=ch; map.push(i); }
+        return { t:txt, proj:normAr(proj), map:map };
+      })};
+    });
+    QBUILD=false; done();
+  }).catch(function(){ QBUILD=false; $('qres').style.display='block'; $('qres').innerHTML='<div class="qmsg">تعذّر تحميل نص المصحف للبحث — تأكد من الإنترنت وحاول مجدداً</div>'; });
+}
+function doQSearch(){
+  var q=normAr($('q').value);
+  var box=$('qres'); box.style.display='block';
+  if(q.length<3){ box.innerHTML='<div class="qmsg">اكتب ٣ حروف على الأقل من الآية</div>'; return; }
+  box.innerHTML='<div class="qmsg">جارٍ تجهيز البحث في المصحف كله…</div>';
+  buildQIndex(function(){
+    var hits=[];
+    QDATA.forEach(function(s){ s.ayahs.forEach(function(a,ai){
+      var pos=a.proj.indexOf(q);
+      if(pos>-1) hits.push({s:s, ai:ai, a:a, pos:pos});
+    });});
+    if(!hits.length){ box.innerHTML='<div class="qmsg">لا توجد آية مطابقة — جرّب كلمات أقل أو من غير همزات</div>'; return; }
+    box.innerHTML='';
+    var note=document.createElement('div'); note.className='qmsg';
+    note.textContent='لقينا '+hits.length+' آية مطابقة'+(hits.length>40?' — بنعرض أول ٤٠':'')+' · دوس على أي آية عشان تروح لها';
+    box.appendChild(note);
+    hits.slice(0,40).forEach(function(h){
+      var oi=h.a.map[Math.min(h.pos, h.a.map.length-1)]||0;
+      var snip=h.a.t.slice(Math.max(0,oi-10), oi+80);
+      var b=document.createElement('button'); b.className='qr';
+      b.innerHTML='<b>'+h.s.name.replace('سُورَةُ ','سورة ')+' — الآية '+(h.ai+1)+'</b><br><span>…'+snip+'…</span>';
+      b.onclick=function(){ box.style.display='none'; loadSurah(h.s.n, h.ai+1, true); };
+      box.appendChild(b);
+    });
+  });
+}
+$('qbtn').onclick=doQSearch;
+$('q').addEventListener('keydown', function(e){ if(e.key==='Enter') doQSearch(); });
 var sv0=load(); if(sv0&&sv0.f){ S.font=sv0.f; reader.style.fontSize=sv0.f+'px'; }
 loadMeta();
 </script>
