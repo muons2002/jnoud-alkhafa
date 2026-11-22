@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سهرة جنود الخفاء</title>
+<!-- OG -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="جنود الخفاء">
+<meta property="og:title" content="سهرة جنود الخفاء">
+<meta property="og:description" content="بنسمع مع بعض في نفس اللحظة — حكاية كل ليلة ٩:٣٠ مساءً، وسورة الكهف صباح كل جمعة، بتوقيت القاهرة.">
+<meta property="og:url" content="https://muons2002.dpdns.org/sahra.html">
+<meta property="og:image" content="https://muons2002.dpdns.org/og-sahra.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="https://muons2002.dpdns.org/fav-sahra-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://muons2002.dpdns.org/fav-sahra-180.png">
+<!-- /OG -->
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  [hidden] { display: none !important; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background: linear-gradient(160deg, #081426 0%, #0D2B45 55%, #0A3A56 100%);
+    color: #fff; min-height: 100vh; padding: 22px 14px 40px;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; }
+  .hero { text-align: center; padding: 10px 0 18px; }
+  .tile {
+    width: 84px; height: 84px; margin: 0 auto 12px; border-radius: 22px;
+    background: linear-gradient(145deg, #2FB9D8, #1668A8);
+    display: flex; align-items: center; justify-content: center; font-size: 44px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.45);
+  }
+  h1 { font-size: 30px; font-weight: 800; }
+  .sub { color: #F5C451; font-size: 16px; margin-top: 6px; font-weight: 700; }
+  .tagline { color: rgba(255,255,255,.75); font-size: 14px; margin-top: 6px; line-height: 1.8; }
+  .card {
+    background: rgba(255,255,255,.06); border: 1px solid rgba(245,196,81,.35);
+    border-radius: 18px; padding: 20px 18px; margin-top: 16px; text-align: center;
+  }
+  .live-dot { display: none; color: #ff5a5a; font-weight: 800; font-size: 15px; }
+  .live-dot.on { display: block; animation: blink 1.2s infinite; }
+  @keyframes blink { 50% { opacity: .35; } }
+  .sess-kind { color: #2FB9D8; font-weight: 800; font-size: 15px; }
+  .sess-title { font-size: 24px; font-weight: 800; margin: 8px 0 4px; line-height: 1.5; }
+  .sess-when { color: rgba(255,255,255,.8); font-size: 14px; line-height: 1.9; }
+  .count { font-size: 44px; font-weight: 800; letter-spacing: 2px; margin: 14px 0 4px; direction: ltr; }
+  .count-lab { color: rgba(255,255,255,.65); font-size: 13px; }
+  .bar { height: 10px; background: rgba(255,255,255,.15); border-radius: 99px; overflow: hidden; margin: 16px 0 8px; }
+  .bar > div { height: 100%; width: 0%; background: linear-gradient(90deg, #2FB9D8, #F5C451); border-radius: 99px; transition: width .6s linear; }
+  .times { display: flex; justify-content: space-between; color: rgba(255,255,255,.7); font-size: 13px; direction: ltr; }
+  .btn {
+    display: inline-block; border: none; cursor: pointer; margin-top: 16px;
+    background: linear-gradient(145deg, #2FB9D8, #1668A8); color: #fff;
+    font-family: inherit; font-size: 19px; font-weight: 800;
+    padding: 14px 34px; border-radius: 99px; box-shadow: 0 8px 22px rgba(0,0,0,.4);
+  }
+  .btn:active { transform: scale(.97); }
+  .btn.gold { background: linear-gradient(145deg, #F5C451, #C9932B); color: #231a04; }
+  .btn.small { font-size: 15px; padding: 10px 22px; margin-top: 10px; }
+  .btn[hidden] { display: none; }
+  .pulse { animation: pulse 1.6s infinite; }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 12px rgba(47,185,216,.18); } }
+  .note { color: rgba(255,255,255,.65); font-size: 13px; margin-top: 12px; line-height: 1.9; }
+  .presence { display: none; margin-top: 12px; color: #F5C451; font-weight: 700; font-size: 15px; }
+  .sched { text-align: right; }
+  .sched h2 { font-size: 19px; text-align: center; margin-bottom: 12px; }
+  .srow { display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px dashed rgba(255,255,255,.15); }
+  .srow:last-child { border-bottom: none; }
+  .sico { width: 46px; height: 46px; flex: 0 0 46px; border-radius: 13px; font-size: 23px;
+    background: linear-gradient(145deg, #2FB9D8, #1668A8); display: flex; align-items: center; justify-content: center; }
+  .srow b { font-size: 16px; display: block; }
+  .srow span { color: rgba(255,255,255,.7); font-size: 13px; line-height: 1.7; display: block; }
+  .foot { text-align: center; margin-top: 22px; color: rgba(255,255,255,.55); font-size: 13px; line-height: 2; }
+  .foot a { color: #2FB9D8; font-weight: 700; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="tile">🌙</div>
+    <h1>سهرة جنود الخفاء</h1>
+    <div class="sub">بنسمع مع بعض… في نفس اللحظة</div>
+    <div class="tagline">حكاية كل ليلة، وسورة الكهف صباح الجمعة — تشتغل عند الكل في نفس الثانية،<br>واللي يدخل متأخر يلاقيها شغالة في نصها، زي الراديو الحقيقي.</div>
+  </div>
+
+  <div class="card">
+    <div class="live-dot" id="livedot">🔴 السهرة شغالة دلوقتي</div>
+    <div class="sess-kind" id="skind">السهرة الجاية</div>
+    <div class="sess-title" id="stitle">…</div>
+    <div class="sess-when" id="swhen">…</div>
+    <div class="count" id="count">--:--:--</div>
+    <div class="count-lab" id="countlab">باقي على بداية السهرة</div>
+    <div class="bar" id="barwrap" hidden><div id="bar"></div></div>
+    <div class="times" id="times" hidden><span id="telapsed">0:00</span><span id="tremain">-0:00</span></div>
+    <button class="btn pulse" id="enter" hidden>🎧 ادخل السهرة</button>
+    <button class="btn gold" id="backlive" hidden>⏪ ارجع للبث المباشر</button>
+    <button class="btn small" id="pausebtn" hidden>⏸ وقّف عندي</button>
+    <div class="presence" id="presence"></div>
+    <div class="note" id="note">خليك في الصفحة دي، وأول ما الميعاد ييجي دوس «ادخل السهرة» هتلاقي نفسك في قلب الحكاية مع الكل.</div>
+  </div>
+
+  <div class="card sched">
+    <h2>📅 مواعيد السهرة — بتوقيت القاهرة</h2>
+    <div class="srow">
+      <div class="sico">🕌</div>
+      <div><b>سورة الكهف — بصوت الشيخ مشاري العفاسي</b><span>صباح كل جمعة، الساعة ٩:٠٠ — نور ما بين الجمعتين، بنقراها وبنسمعها مع بعض.</span></div>
+    </div>
+    <div class="srow">
+      <div class="sico">🌙</div>
+      <div><b>حكاية الليلة — من حكايات عبد العزيز العروي</b><span>كل ليلة، الساعة ٩:٣٠ مساءً — حكاية جديدة من التراث التونسي الأصيل، حوالي عشر دقايق قبل النوم.</span></div>
+    </div>
+    <div class="note" style="text-align:center">الأوقات بتتظبط لوحدها حسب القاهرة، والصفحة بتقولك الميعاد بتوقيت بلدك كمان.</div>
+  </div>
+
+  <div class="foot">
+    🌙 سهرة جنود الخفاء — حب الخير للغير<br>
+    <a href="https://muons2002.dpdns.org/">بوابة جنود الخفاء</a>
+  </div>
+</div>
+
+<audio id="audio" preload="none"></audio>
+
+<script>
+"use strict";
+var TALE_BASE = "https://archive.org/download/7ikeyetAl3eroui/";
+var KAHF = { url: "https://server8.mp3quran.net/afs/018.mp3", title: "سورة الكهف — بصوت الشيخ مشاري العفاسي", dur: 1996, kind: "🕌 سورة الكهف" };
+var TALES = [{"f": "AlAarabiWelJamal.mp3", "t": "الأعرابي والجمل", "s": 494}, {"f": "AlAmanaSawwditOuejhLighraab.mp3", "t": "الأمانة سوّدت وجه الغراب", "s": 623}, {"f": "EjjnanOuCharitElKhoukh.mp3", "t": "الجنان وشجرة الخوخ", "s": 528}, {"f": "ElHajj.mp3", "t": "الحاج", "s": 435}, {"f": "ElHattabOuKassamLarzaak.mp3", "t": "الحطاب وقسّام الأرزاق", "s": 683}, {"f": "ElJoudWelKramAndElArab.mp3", "t": "الجود والكرم عند العرب", "s": 438}, {"f": "ElKhammasssWelKinz.mp3", "t": "الخمّاس والكنز", "s": 685}, {"f": "ElliYaakilArakJebine.mp3", "t": "اللي ياكل عرق جبينه", "s": 742}, {"f": "ErrizkWelBarka.mp3", "t": "الرزق والبركة", "s": 822}, {"f": "ElAzouzaWelMallakh.mp3", "t": "عزوزة والملّاخ", "s": 658}, {"f": "ElHmaWelKnayenEthalatha.mp3", "t": "الحماة والكناين الثلاثة", "s": 594}, {"f": "ElJorhYabraaYaJabra.mp3", "t": "الجرح يبرى يا جبرة", "s": 681}, {"f": "ElWaliyyEddajjal.mp3", "t": "الولي الدجّال", "s": 697}, {"f": "ErrajilElBedwiWelOuzirHassoud.mp3", "t": "الرجل البدوي والوزير الحسود", "s": 528}];
+var PRESENCE_URL = "https://jnoud-sahra.m-uons2002.workers.dev";
+var TZ = "Africa/Cairo";
+
+var $ = function (id) { return document.getElementById(id); };
+var audio = $("audio");
+var S = { sess: null, mode: "wait", joined: false, paused: false };
+
+/* ---- Cairo wall-clock helpers ---- */
+var dtf = new Intl.DateTimeFormat("en-US", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+function cairoParts(epoch) {
+  var p = {}, arr = dtf.formatToParts(new Date(epoch));
+  for (var i = 0; i < arr.length; i++) p[arr[i].type] = parseInt(arr[i].value, 10);
+  if (p.hour === 24) p.hour = 0;
+  return p;
+}
+function cairoToEpoch(y, mo, d, h, mi) {
+  var guess = Date.UTC(y, mo - 1, d, h, mi, 0);
+  for (var i = 0; i < 3; i++) {
+    var p = cairoParts(guess);
+    var shown = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
+    var diff = Date.UTC(y, mo - 1, d, h, mi, 0) - shown;
+    if (diff === 0) break;
+    guess += diff;
+  }
+  return guess;
+}
+function dayOfYear(y, mo, d) {
+  var days = [31,28,31,30,31,30,31,31,30,31,30,31];
+  if ((y % 4 === 0 && y % 100 !== 0) || y % 400 === 0) days[1] = 29;
+  var n = d; for (var i = 0; i < mo - 1; i++) n += days[i];
+  return n;
+}
+/* Build sessions around a Cairo date (offset in days from today's Cairo date) */
+function sessionsFor(offsetDays) {
+  var nowP = cairoParts(Date.now());
+  var base = new Date(Date.UTC(nowP.year, nowP.month - 1, nowP.day + offsetDays));
+  var y = base.getUTCFullYear(), mo = base.getUTCMonth() + 1, d = base.getUTCDate();
+  var wd = base.getUTCDay(); // weekday of that Cairo date (date-only math)
+  var out = [];
+  var tale = TALES[dayOfYear(y, mo, d) % TALES.length];
+  out.push({ start: cairoToEpoch(y, mo, d, 21, 30), dur: tale.s, url: TALE_BASE + tale.f,
+             title: "حكاية «" + tale.t + "»", kind: "🌙 حكاية الليلة — عبد العزيز العروي" });
+  if (wd === 5) out.push({ start: cairoToEpoch(y, mo, d, 9, 0), dur: KAHF.dur, url: KAHF.url, title: KAHF.title, kind: KAHF.kind });
+  return out;
+}
+function findSessions() {
+  var all = [];
+  for (var o = -1; o <= 3; o++) all = all.concat(sessionsFor(o));
+  all.sort(function (a, b) { return a.start - b.start; });
+  var now = Date.now(), live = null, next = null;
+  for (var i = 0; i < all.length; i++) {
+    var s = all[i];
+    if (now >= s.start && now < s.start + s.dur * 1000) live = s;
+    if (s.start > now && !next) next = s;
+  }
+  return { live: live, next: next };
+}
+/* ---- demo mode: ?demo starts a tale 15s after load ---- */
+var DEMO = /[?&]demo\b/.test(location.search);
+var demoStart = Date.now() + 15000;
+function currentView() {
+  if (DEMO) {
+    var t = TALES[0];
+    var s = { start: demoStart, dur: t.s, url: TALE_BASE + t.f, title: "حكاية «" + t.t + "»", kind: "🌙 حكاية الليلة — عبد العزيز العروي" };
+    if (Date.now() < s.start) return { mode: "wait", sess: s };
+    if (Date.now() < s.start + s.dur * 1000) return { mode: "live", sess: s };
+    return { mode: "wait", sess: findSessions().next };
+  }
+  var f = findSessions();
+  if (f.live) return { mode: "live", sess: f.live };
+  return { mode: "wait", sess: f.next };
+}
+/* ---- formatting ---- */
+function pad(n) { return (n < 10 ? "0" : "") + n; }
+function fmtHMS(sec) {
+  sec = Math.max(0, Math.floor(sec));
+  return pad(Math.floor(sec / 3600)) + ":" + pad(Math.floor(sec / 60) % 60) + ":" + pad(sec % 60);
+}
+function fmtMS(sec) {
+  sec = Math.max(0, Math.floor(sec));
+  return Math.floor(sec / 60) + ":" + pad(sec % 60);
+}
+function whenText(s) {
+  var cairoDay = new Intl.DateTimeFormat("ar-EG", { timeZone: TZ, weekday: "long", day: "numeric", month: "long" }).format(new Date(s.start));
+  var cairoTime = new Intl.DateTimeFormat("ar-EG", { timeZone: TZ, hour: "2-digit", minute: "2-digit" }).format(new Date(s.start));
+  var localTime = new Date(s.start).toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" });
+  var localDay = new Date(s.start).toLocaleDateString("ar-EG", { weekday: "long" });
+  var t = cairoDay + " — الساعة " + cairoTime + " بتوقيت القاهرة";
+  if (localDay + localTime !== cairoDay + cairoTime) t += "<br>عندك في بلدك: " + localDay + " — " + localTime;
+  return t;
+}
+/* ---- rendering ---- */
+function render() {
+  var v = currentView();
+  var s = v.sess; if (!s) return;
+  var changed = !S.sess || S.sess.start !== s.start || S.mode !== v.mode;
+  S.sess = s; S.mode = v.mode;
+  if (changed) {
+    $("stitle").textContent = s.title;
+    $("swhen").innerHTML = whenText(s);
+    if (v.mode === "live") {
+      $("livedot").classList.add("on");
+      $("skind").textContent = s.kind;
+      $("countlab").textContent = "فات من السهرة — والباقي";
+      $("barwrap").hidden = false; $("times").hidden = false;
+      $("enter").hidden = S.joined;
+      $("note").textContent = S.joined ? "" : "السهرة شغالة دلوقتي — دوس «ادخل السهرة» هتلاقي نفسك في نفس الحتة اللي الكل سامعها.";
+      if (S.joined) syncAudio(true);
+    } else {
+      $("livedot").classList.remove("on");
+      $("skind").textContent = "السهرة الجاية — " + s.kind;
+      $("countlab").textContent = "باقي على بداية السهرة";
+      $("barwrap").hidden = true; $("times").hidden = true;
+      $("enter").hidden = true; $("backlive").hidden = true; $("pausebtn").hidden = true;
+      $("note").textContent = "خليك في الصفحة دي، وأول ما الميعاد ييجي دوس «ادخل السهرة» هتلاقي نفسك في قلب الحكاية مع الكل.";
+      if (S.joined) { audio.pause(); S.joined = false; S.paused = false; }
+    }
+  }
+  var now = Date.now();
+  if (v.mode === "wait") {
+    $("count").textContent = fmtHMS((s.start - now) / 1000);
+  } else {
+    var el = (now - s.start) / 1000, rem = s.dur - el;
+    $("count").textContent = fmtHMS(rem);
+    $("bar").style.width = Math.min(100, el / s.dur * 100) + "%";
+    $("telapsed").textContent = fmtMS(el);
+    $("tremain").textContent = "-" + fmtMS(rem);
+  }
+}
+/* ---- audio sync ---- */
+function syncAudio(force) {
+  var s = S.sess; if (!s) return;
+  var el = (Date.now() - s.start) / 1000;
+  if (el < 0 || el >= s.dur) return;
+  if (audio.src !== s.url) audio.src = s.url;
+  var drift = Math.abs(audio.currentTime - el);
+  if (force || drift > 3) {
+    try { audio.currentTime = el; } catch (e) {}
+  }
+}
+$("enter").addEventListener("click", function () {
+  S.joined = true; S.paused = false;
+  $("enter").hidden = true; $("pausebtn").hidden = false;
+  $("note").textContent = "أنت معانا في السهرة دلوقتي 🎧 — اللي بتسمعه هو اللي الكل سامعه في نفس اللحظة.";
+  syncAudio(true);
+  audio.play().catch(function () {});
+});
+$("pausebtn").addEventListener("click", function () {
+  audio.pause(); S.paused = true;
+  $("pausebtn").hidden = true; $("backlive").hidden = false;
+  $("note").textContent = "أنت واقف عندك — بس السهرة ماشية عند الكل. دوس «ارجع للبث المباشر» هترجع لنفس الحتة اللي وصلوا لها.";
+});
+$("backlive").addEventListener("click", function () {
+  S.paused = false;
+  $("backlive").hidden = true; $("pausebtn").hidden = false;
+  $("note").textContent = "رجعت للبث المباشر 🎧 — أنت دلوقتي في نفس الحتة مع الكل.";
+  syncAudio(true);
+  audio.play().catch(function () {});
+});
+audio.addEventListener("loadedmetadata", function () { if (S.joined && !S.paused) syncAudio(true); });
+setInterval(function () { if (S.joined && !S.paused && !audio.paused) syncAudio(false); }, 10000);
+setInterval(render, 500);
+render();
+/* ---- presence counter (lights up when the counter service is on) ---- */
+var cid = localStorage.getItem("jnoud_sahra_id");
+if (!cid) { cid = "c" + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem("jnoud_sahra_id", cid); }
+function ping() {
+  fetch(PRESENCE_URL + "/ping", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: cid }) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (j && typeof j.count === "number") {
+        $("presence").style.display = "block";
+        $("presence").textContent = j.count > 1 ? ("👥 بيسمع وموجود في الصفحة دلوقتي " + j.count + " من جنود الخفاء") : "";
+      }
+    })
+    .catch(function () { $("presence").style.display = "none"; });
+}
+ping(); setInterval(ping, 30000);
+</script>
+</body>
+</html>
