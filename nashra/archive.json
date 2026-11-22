@@ -1,12 +1,1 @@
-[
-  {
-    "date": "2026-11-20",
-    "label": "الجمعة 20 نوفمبر 2026",
-    "files": {
-      "dz": "nashra/2026-11-20-dz.mp3",
-      "eg": "nashra/2026-11-20-eg.mp3",
-      "maghreb": "nashra/2026-11-20-maghreb.mp3",
-      "general": "nashra/2026-11-20-general.mp3"
-    }
-  }
-]
+[{"date":"2026-11-21","files":{"dz":"nashra/2026-11-21-dz.mp3","eg":"nashra/2026-11-21-eg.mp3","general":"nashra/2026-11-21-general.mp3","maghreb":"nashra/2026-11-21-maghreb.mp3"},"label":"السبت 21 نوفمبر 2026"},{"date":"2026-11-20","files":{"dz":"nashra/2026-11-20-dz.mp3","eg":"nashra/2026-11-20-eg.mp3","general":"nashra/2026-11-20-general.mp3","maghreb":"nashra/2026-11-20-maghreb.mp3"},"label":"الجمعة 20 نوفمبر 2026"}]
