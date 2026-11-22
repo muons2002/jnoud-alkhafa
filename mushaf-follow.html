@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<!-- OG -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://muons2002.dpdns.org/fav-mushaf-follow-32.png">
+<link rel="apple-touch-icon" href="https://muons2002.dpdns.org/fav-mushaf-follow-180.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="جنود الخفاء">
+<meta property="og:title" content="المصحف بالمتابعة الصوتية — جنود الخفاء">
+<meta property="og:description" content="اقرأ واسمع آية بآية — تظليل ومتابعة تلقائية مع ٤ قرّاء">
+<meta property="og:url" content="https://muons2002.dpdns.org/mushaf-follow.html">
+<meta property="og:image" content="https://muons2002.dpdns.org/og-mushaf-follow.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="المصحف بالمتابعة الصوتية — جنود الخفاء">
+<meta name="twitter:description" content="اقرأ واسمع آية بآية — تظليل ومتابعة تلقائية مع ٤ قرّاء">
+<meta name="twitter:image" content="https://muons2002.dpdns.org/og-mushaf-follow.jpg">
+<!-- /OG -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المصحف بالمتابعة الصوتية — جنود الخفاء</title>
+<meta name="description" content="اقرأ واسمع آية بآية: تلاوة مع تظليل الآية الجارية ومتابعة تلقائية — مصحف جنود الخفاء">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(160deg,#081426,#0D2B45 55%,#0A3A56);color:#EAF4F9;min-height:100vh}
+header{text-align:center;padding:22px 14px 8px}
+.tile{display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:18px;background:linear-gradient(145deg,#123c5e,#2FB9D8);font-size:32px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+h1{font-size:24px;margin-top:10px;color:#fff}
+.sub{color:#9fd8e8;font-size:13.5px;margin-top:4px}
+.bar{position:sticky;top:0;z-index:20;background:rgba(8,20,38,.94);backdrop-filter:blur(6px);border-bottom:1px solid rgba(245,196,81,.35);padding:10px 12px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}
+button,select{font-family:inherit;font-size:14px;color:#EAF4F9;background:#123c5e;border:1px solid rgba(47,185,216,.5);border-radius:10px;padding:8px 12px;cursor:pointer}
+button:hover,select:hover{border-color:#F5C451}
+#playBtn{background:linear-gradient(145deg,#0e5a75,#2FB9D8);font-weight:bold;min-width:104px}
+.status{width:100%;text-align:center;color:#F5C451;font-size:14px;margin-top:6px;min-height:18px}
+.panel{max-width:860px;margin:14px auto;padding:0 12px}
+#search{width:100%;font-family:inherit;font-size:15px;padding:10px 12px;border-radius:10px;border:1px solid rgba(47,185,216,.5);background:#0b2239;color:#fff;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
+.surah{background:rgba(18,60,94,.65);border:1px solid rgba(47,185,216,.25);border-radius:12px;padding:9px 10px;cursor:pointer;text-align:right}
+.surah:hover{border-color:#F5C451}
+.surah b{display:block;font-size:14.5px;color:#fff}
+.surah span{font-size:11.5px;color:#9fd8e8}
+.surah.on{border-color:#F5C451;background:rgba(245,196,81,.14)}
+#reader{max-width:860px;margin:6px auto 30px;padding:20px 18px 28px;background:rgba(255,255,255,.045);border:1px solid rgba(47,185,216,.18);border-radius:16px;line-height:2.15;text-align:justify}
+#reader .ayah{cursor:pointer;border-radius:6px;padding:1px 2px;transition:background .25s}
+#reader .ayah:hover{background:rgba(47,185,216,.16)}
+#reader .ayah.cur{background:rgba(245,196,81,.32);box-shadow:0 0 0 1px rgba(245,196,81,.55)}
+#reader .mk{color:#F5C451;font-size:.72em;white-space:nowrap}
+.hint{text-align:center;color:#9fd8e8;font-size:12.5px;padding:0 14px 18px}
+#resume{display:none;background:rgba(245,196,81,.15);border:1px solid #F5C451;color:#ffe9a8;border-radius:10px;padding:8px 14px;cursor:pointer;font-size:13.5px}
+.err{color:#ffb3b3;text-align:center;padding:16px;font-size:14px}
+footer{text-align:center;color:#7fb6c9;font-size:12px;padding:0 12px 26px}
+</style>
+</head>
+<body>
+<header>
+  <div class="tile">📖</div>
+  <h1>المصحف بالمتابعة الصوتية</h1>
+  <div class="sub">اقرأ واسمع آية بآية — الآية الجارية تتظلّل والصفحة تتابعها</div>
+</header>
+
+<div class="bar">
+  <div class="row">
+    <button id="playBtn">▶ تشغيل</button>
+    <button id="prevBtn" title="الآية السابقة">⏮</button>
+    <button id="nextBtn" title="الآية التالية">⏭</button>
+    <select id="reciter" title="القارئ">
+      <option value="Alafasy_128kbps">مشاري العفاسي</option>
+      <option value="Husary_128kbps">محمود خليل الحصري</option>
+      <option value="Minshawy_Murattal_128kbps">محمد صديق المنشاوي</option>
+      <option value="Abdul_Basit_Murattal_64kbps">عبد الباسط عبد الصمد</option>
+    </select>
+    <select id="repeat" title="تكرار الآية للحفظ">
+      <option value="1">بدون تكرار</option>
+      <option value="3">تكرار ×٣ للحفظ</option>
+      <option value="5">تكرار ×٥ للحفظ</option>
+      <option value="0">تكرار مستمر ∞</option>
+    </select>
+    <button id="fontMinus">أ−</button>
+    <button id="fontPlus">أ+</button>
+    <button id="resume"></button>
+  </div>
+  <div class="status" id="status">اختر سورة من الفهرس بالأسفل</div>
+</div>
+
+<div class="panel">
+  <input id="search" type="text" placeholder="🔍 ابحث باسم السورة…">
+  <div class="grid" id="grid"></div>
+</div>
+
+<div id="reader" style="font-size:26px"><div class="hint">نص السورة يظهر هنا — دوس على أي آية لتبدأ التلاوة منها</div></div>
+<div class="hint">التلاوة آية بآية من everyayah، والنص العثماني من api.alquran.cloud — يحتاج اتصالاً بالإنترنت</div>
+<footer>جنود الخفاء — حب الخير للغير · muons2002.dpdns.org</footer>
+
+<audio id="au" preload="auto"></audio>
+<script>
+var S = {surah:0, ayah:0, ayahs:[], playing:false, repLeft:1, font:26, meta:[]};
+var au = document.getElementById('au');
+var reader = document.getElementById('reader');
+var statusEl = document.getElementById('status');
+function $(i){return document.getElementById(i)}
+function pad(n){return ('00'+n).slice(-3)}
+function save(){try{localStorage.setItem('jnoud_mushaf', JSON.stringify({s:S.surah,a:S.ayah,r:$('reciter').value,f:S.font}))}catch(e){}}
+function load(){try{return JSON.parse(localStorage.getItem('jnoud_mushaf')||'null')}catch(e){return null}}
+function setStatus(t){statusEl.textContent=t}
+function buildGrid(list){
+  var g=$('grid'); g.innerHTML='';
+  list.forEach(function(m){
+    var d=document.createElement('div'); d.className='surah'+(m.number===S.surah?' on':'');
+    d.innerHTML='<b>'+m.number+'. '+m.name.replace('سُورَةُ ','سورة ')+'</b><span>'+m.numberOfAyahs+' آية · '+(m.revelationType==='Meccan'?'مكية':'مدنية')+'</span>';
+    d.onclick=function(){loadSurah(m.number,1,true)};
+    g.appendChild(d);
+  });
+}
+function loadMeta(){
+  fetch('https://api.alquran.cloud/v1/surah').then(function(r){return r.json()}).then(function(j){
+    S.meta=j.data; buildGrid(S.meta);
+    var sv=load();
+    if(sv&&sv.s){var b=$('resume'); b.style.display='inline-block';
+      var nm=(S.meta[sv.s-1]||{}).name||'';
+      b.textContent='⏪ متابعة: '+nm.replace('سُورَةُ ','سورة ')+' — آية '+sv.a;
+      b.onclick=function(){if(sv.r)$('reciter').value=sv.r; if(sv.f){S.font=sv.f; reader.style.fontSize=sv.f+'px'} loadSurah(sv.s, sv.a, true)};
+    }
+  }).catch(function(){ $('grid').innerHTML='<div class="err">تعذّر تحميل فهرس السور — تأكد من الإنترنت وحاول مجدداً</div>' });
+}
+function loadSurah(n, startAyah, autoplay){
+  S.surah=n; S.ayah=startAyah||1; S.repLeft=parseInt($('repeat').value,10);
+  setStatus('جارٍ تحميل السورة…');
+  fetch('https://api.alquran.cloud/v1/surah/'+n+'/quran-uthmani').then(function(r){return r.json()}).then(function(j){
+    S.ayahs=j.data.ayahs;
+    reader.innerHTML='';
+    S.ayahs.forEach(function(a,i){
+      var sp=document.createElement('span'); sp.className='ayah'; sp.id='ay'+i;
+      sp.textContent=a.text.replace(/﻿/g,'');
+      var mk=document.createElement('span'); mk.className='mk'; mk.textContent=' ﴿'+a.numberInSurah+'﴾ ';
+      sp.appendChild(mk);
+      sp.onclick=function(){playFrom(i)};
+      reader.appendChild(sp);
+    });
+    buildGrid(S.meta.length?filterMeta():[]);
+    highlight(false);
+    var nm=j.data.name.replace('سُورَةُ ','سورة ');
+    setStatus(nm+' — '+S.ayahs.length+' آية · الآية '+S.ayah);
+    save();
+    if(autoplay) playFrom(S.ayah-1);
+  }).catch(function(){ reader.innerHTML='<div class="err">تعذّر تحميل نص السورة — تأكد من الإنترنت وحاول مجدداً</div>' });
+}
+function filterMeta(){
+  var q=$('search').value.trim();
+  if(!q) return S.meta;
+  return S.meta.filter(function(m){return m.name.indexOf(q)>-1||m.englishName.toLowerCase().indexOf(q.toLowerCase())>-1||String(m.number)===q});
+}
+function highlight(scroll){
+  var old=reader.querySelector('.ayah.cur'); if(old) old.classList.remove('cur');
+  var el=$('ay'+(S.ayah-1));
+  if(el){ el.classList.add('cur'); if(scroll!==false) el.scrollIntoView({block:'center',behavior:'smooth'}); }
+}
+function ayahUrl(){ return 'https://everyayah.com/data/'+$('reciter').value+'/'+pad(S.surah)+pad(S.ayah)+'.mp3' }
+function playFrom(i){
+  if(!S.ayahs.length) return;
+  S.ayah=i+1; S.repLeft=parseInt($('repeat').value,10);
+  au.src=ayahUrl();
+  au.play().then(function(){ S.playing=true; $('playBtn').textContent='⏸ إيقاف'; }).catch(function(){});
+  highlight(true);
+  var nm=(S.meta[S.surah-1]||{}).name||'';
+  setStatus(nm.replace('سُورَةُ ','سورة ')+' — الآية '+S.ayah+' من '+S.ayahs.length);
+  save();
+}
+au.addEventListener('ended', function(){
+  var now=Date.now(); if(S.lastEnd&&now-S.lastEnd<400) return; S.lastEnd=now;
+  var rep=parseInt($('repeat').value,10);
+  if(rep===0){ au.currentTime=0; au.play(); return; }
+  S.repLeft--;
+  if(S.repLeft>0){ au.currentTime=0; au.play(); return; }
+  if(S.ayah<S.ayahs.length){ playFrom(S.ayah); }
+  else if(S.surah<114){ setStatus('انتهت السورة — التالية تبدأ الآن…'); loadSurah(S.surah+1,1,true); }
+  else { S.playing=false; $('playBtn').textContent='▶ تشغيل'; setStatus('تمّت ختمة التلاوة — تقبل الله'); }
+});
+au.addEventListener('error', function(){
+  if(!S.playing||!au.src) return;
+  if(S.errKey!==au.src){ S.errKey=au.src; setTimeout(function(){ if(S.playing){ au.load(); au.play().catch(function(){}); } }, 900); }
+  else if(S.ayah<S.ayahs.length){ playFrom(S.ayah); }
+});
+$('playBtn').onclick=function(){
+  if(!S.ayahs.length){ if(S.meta.length) loadSurah(1,1,true); return; }
+  if(S.playing){ au.pause(); S.playing=false; $('playBtn').textContent='▶ تشغيل'; }
+  else if(au.src){ au.play(); S.playing=true; $('playBtn').textContent='⏸ إيقاف'; }
+  else playFrom(S.ayah-1);
+};
+$('prevBtn').onclick=function(){ if(S.ayah>1) playFrom(S.ayah-2); };
+$('nextBtn').onclick=function(){ if(S.ayah<S.ayahs.length) playFrom(S.ayah); };
+$('reciter').onchange=function(){ save(); if(S.playing) playFrom(S.ayah-1); };
+$('repeat').onchange=function(){ S.repLeft=parseInt($('repeat').value,10); };
+$('fontPlus').onclick=function(){ S.font=Math.min(42,S.font+2); reader.style.fontSize=S.font+'px'; save(); };
+$('fontMinus').onclick=function(){ S.font=Math.max(19,S.font-2); reader.style.fontSize=S.font+'px'; save(); };
+$('search').oninput=function(){ buildGrid(filterMeta()); };
+var sv0=load(); if(sv0&&sv0.f){ S.font=sv0.f; reader.style.fontSize=sv0.f+'px'; }
+loadMeta();
+</script>
+</body>
+</html>
