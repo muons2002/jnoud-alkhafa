@@ -19,7 +19,7 @@ h1 b{color:#d4af37}
 .player-box{margin:16px auto 0;background:#000;border:1px solid rgba(14,165,233,.4);border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.45)}
 .player-box.fs{position:fixed;inset:0;z-index:9999;margin:0;border:0;border-radius:0;display:flex;flex-direction:column}
 .player-box.fs video{flex:1;width:100%;height:100%;aspect-ratio:auto;object-fit:contain}
-.player-box.fs.rot{top:0;left:0;width:100vh;height:100vw;transform:rotate(90deg) translateY(-100%);transform-origin:top left}
+.player-box.fs.rot{top:50%;left:50%;right:auto;bottom:auto;width:100vh;height:100vw;transform:translate(-50%,-50%) rotate(90deg);transform-origin:center}
 .player-box.fs.rot .bar{display:none}
 .exitfs{display:none;position:fixed;top:12px;inset-inline-end:12px;z-index:10001;background:rgba(0,0,0,.65);border:1px solid #d4af37;color:#fff;border-radius:10px;padding:8px 14px;font-size:14px}
 .exitfs.show{display:block}
@@ -308,7 +308,16 @@ window.addEventListener('orientationchange', function(){
   if (wrapEl.classList.contains('fs')) setTimeout(forceFsLayout, 120);
 });
 function addRot(){
+  /* لف المشغّل 90° حول مركزه — الطريقة الوحيدة السليمة مع اتجاه RTL:
+     اللف القديم حول الزاوية العلوية اليسرى كان يدفع المشغّل كله برّه الشاشة
+     في الصفحة العربية فيختفي وراء بلاطات القنوات */
   wrapEl.classList.add('rot');
+  wrapEl.style.top = '50%';
+  wrapEl.style.left = '50%';
+  wrapEl.style.right = 'auto';
+  wrapEl.style.bottom = 'auto';
+  wrapEl.style.transform = 'translate(-50%,-50%) rotate(90deg)';
+  wrapEl.style.transformOrigin = 'center';
   forceFsLayout();
 }
 function tryRotate(){
