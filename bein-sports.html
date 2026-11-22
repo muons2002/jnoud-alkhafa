@@ -8,6 +8,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(160deg,#07131d,#0b1c2a 60%,#0a2436);color:#EAF4F9;min-height:100vh}
+body.fs-on{overflow:hidden}
 .wrap{max-width:920px;margin:0 auto;padding:0 14px 40px}
 header{text-align:center;padding:22px 10px 6px}
 header img{width:72px;height:72px;object-fit:contain;border-radius:16px}
@@ -282,8 +283,33 @@ document.getElementById('btnRetry').addEventListener('click', retryCurrent);
 document.getElementById('btnUpdate').addEventListener('click', refreshChannels);
 var fsBtn = document.getElementById('btnFull');
 var exitFsBtn = document.getElementById('btnExitFs');
+var wrapEl = document.getElementById('playerWrap');
+var origParent = wrapEl.parentNode;
+var origNext = wrapEl.nextSibling;
+var origExitParent = exitFsBtn.parentNode;
+var origExitNext = exitFsBtn.nextSibling;
 function unlockOrientation(){
   try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {}
+}
+function forceFsLayout(){
+  /* إجبار إعادة حساب أبعاد المشغّل بعد لف الشاشة — بعض WebView لا يعيد التخطيط تلقائياً
+     فيبقى المشغّل بمقاس الشاشة القديم ويختفي وراء محتوى الصفحة */
+  if (wrapEl.classList.contains('rot')) {
+    wrapEl.style.width = '100vh';
+    wrapEl.style.height = '100vw';
+  } else {
+    wrapEl.style.width = '100vw';
+    wrapEl.style.height = '100vh';
+  }
+  void wrapEl.offsetHeight;
+}
+window.addEventListener('resize', function(){ if (wrapEl.classList.contains('fs')) forceFsLayout(); });
+window.addEventListener('orientationchange', function(){
+  if (wrapEl.classList.contains('fs')) setTimeout(forceFsLayout, 120);
+});
+function addRot(){
+  wrapEl.classList.add('rot');
+  forceFsLayout();
 }
 function tryRotate(){
   /* لف الشاشة للعرض (landscape)؛ لو التطبيق رفض القفل نلف المشغّل نفسه بـ CSS */
@@ -292,28 +318,55 @@ function tryRotate(){
       var lp = screen.orientation.lock('landscape');
       if (lp && lp.then) {
         /* القفل رجّع Promise: نضيف لف CSS فقط لو القفل اترفض */
-        lp.then(function(){}, function(){ document.getElementById('playerWrap').classList.add('rot'); });
+        lp.then(function(){}, addRot);
       }
       /* لو القفل ما رجّعش Promise (نسخ قديمة) نفترض إنه اشتغل وما نضيفش rot —
          إضافة rot مع دوران الشاشة الحقيقي تلف المشغّل مرتين وتخفيه */
       return;
     }
-    document.getElementById('playerWrap').classList.add('rot');
+    addRot();
   } catch (e) {
-    document.getElementById('playerWrap').classList.add('rot');
+    addRot();
   }
 }
+function applyFs(){
+  /* نقل المشغّل وزر الخروج لمستوى body مباشرةً حتى لا يغطيهما أي عنصر في الصفحة
+     مهما كانت خصائصه، مع تثبيت بأعلى أولوية عرض */
+  if (wrapEl.parentNode !== document.body) document.body.appendChild(wrapEl);
+  if (exitFsBtn.parentNode !== document.body) document.body.appendChild(exitFsBtn);
+  wrapEl.classList.add('fs');
+  wrapEl.style.position = 'fixed';
+  wrapEl.style.inset = '0';
+  wrapEl.style.zIndex = '2147483647';
+  wrapEl.style.margin = '0';
+  wrapEl.style.border = '0';
+  wrapEl.style.borderRadius = '0';
+  wrapEl.style.background = '#000';
+  exitFsBtn.style.zIndex = '2147483647';
+  document.body.classList.add('fs-on');
+  fsBtn.textContent = '⛶ تصغير الشاشة';
+  exitFsBtn.classList.add('show');
+  forceFsLayout();
+  tryRotate();
+  setTimeout(forceFsLayout, 400);
+}
 function exitFs(){
-  var wrap = document.getElementById('playerWrap');
+  var wrap = wrapEl;
   if (document.fullscreenElement) { document.exitFullscreen(); }
   wrap.classList.remove('fs');
   wrap.classList.remove('rot');
+  /* إرجاع المشغّل وزر الخروج لمكانهما الأصلي وإزالة الأنماط المضمّنة */
+  wrap.style.cssText = '';
+  if (origParent && wrap.parentNode !== origParent) origParent.insertBefore(wrap, origNext);
+  exitFsBtn.style.cssText = '';
+  if (origExitParent && exitFsBtn.parentNode !== origExitParent) origExitParent.insertBefore(exitFsBtn, origExitNext);
+  document.body.classList.remove('fs-on');
   fsBtn.textContent = '⛶ ملء الشاشة';
   exitFsBtn.classList.remove('show');
   unlockOrientation();
 }
 fsBtn.addEventListener('click', function(){
-  var wrap = document.getElementById('playerWrap');
+  var wrap = wrapEl;
   if (document.fullscreenElement) { document.exitFullscreen(); return; }
   if (wrap.classList.contains('fs')) { exitFs(); return; }
   var p = null;
@@ -325,17 +378,12 @@ fsBtn.addEventListener('click', function(){
   if (p && p.catch) p.catch(function(){});
   /* التطبيق (WebView) لا ينفّذ ملء الشاشة الأصلي، فنكمّل بملء شاشة CSS لو لم يدخل ملء الشاشة */
   setTimeout(function(){
-    if (!document.fullscreenElement && !wrap.classList.contains('fs')) {
-      wrap.classList.add('fs');
-      fsBtn.textContent = '⛶ تصغير الشاشة';
-      exitFsBtn.classList.add('show');
-      tryRotate();
-    }
+    if (!document.fullscreenElement && !wrap.classList.contains('fs')) applyFs();
   }, 400);
 });
 exitFsBtn.addEventListener('click', exitFs);
 document.addEventListener('fullscreenchange', function(){
-  if (!document.fullscreenElement && !document.getElementById('playerWrap').classList.contains('fs')) {
+  if (!document.fullscreenElement && !wrapEl.classList.contains('fs')) {
     fsBtn.textContent = '⛶ ملء الشاشة';
     exitFsBtn.classList.remove('show');
     unlockOrientation();
