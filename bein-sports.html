@@ -291,9 +291,12 @@ function tryRotate(){
     if (screen.orientation && screen.orientation.lock) {
       var lp = screen.orientation.lock('landscape');
       if (lp && lp.then) {
+        /* القفل رجّع Promise: نضيف لف CSS فقط لو القفل اترفض */
         lp.then(function(){}, function(){ document.getElementById('playerWrap').classList.add('rot'); });
-        return;
       }
+      /* لو القفل ما رجّعش Promise (نسخ قديمة) نفترض إنه اشتغل وما نضيفش rot —
+         إضافة rot مع دوران الشاشة الحقيقي تلف المشغّل مرتين وتخفيه */
+      return;
     }
     document.getElementById('playerWrap').classList.add('rot');
   } catch (e) {
