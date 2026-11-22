@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قنوات beIN Sports — جنود الخفاء</title>
+<meta name="description" content="قنوات beIN Sports 1 إلى 9 HD — بث مباشر، جنود الخفاء">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(160deg,#07131d,#0b1c2a 60%,#0a2436);color:#EAF4F9;min-height:100vh}
+.wrap{max-width:920px;margin:0 auto;padding:0 14px 40px}
+header{text-align:center;padding:22px 10px 6px}
+header img{width:72px;height:72px;object-fit:contain;border-radius:16px}
+header .shield{font-size:56px;line-height:1}
+h1{font-size:24px;margin-top:8px;color:#fff}
+h1 b{color:#d4af37}
+.sub{color:#9fd8e8;font-size:13.5px;margin-top:4px}
+.warn{display:none;max-width:920px;margin:14px auto 0;padding:10px 14px;background:rgba(245,196,81,.12);border:1px solid #d4af37;color:#ffe9a8;border-radius:12px;font-size:13.5px;line-height:1.7;text-align:center}
+.player-box{margin:16px auto 0;background:#000;border:1px solid rgba(14,165,233,.4);border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+video{width:100%;aspect-ratio:16/9;display:block;background:#000}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:space-between;padding:10px 12px;background:rgba(8,20,38,.95);border-top:1px solid rgba(14,165,233,.25)}
+.status{display:flex;align-items:center;gap:8px;font-size:14px;min-height:20px}
+.dot{width:10px;height:10px;border-radius:50%;background:#8aa5b5;flex:none}
+.dot.loading{background:#d4af37;animation:pulse 1s infinite}
+.dot.playing{background:#0ea5e9;animation:pulse 1.4s infinite}
+.dot.error{background:#ff6b6b}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+#statusText{color:#EAF4F9}
+#statusText.err{color:#ffb3b3}
+.btns{display:flex;gap:8px}
+button{font-family:inherit;font-size:14px;color:#EAF4F9;background:#123c5e;border:1px solid rgba(14,165,233,.5);border-radius:10px;padding:8px 14px;cursor:pointer}
+button:hover{border-color:#d4af37}
+button.gold{background:linear-gradient(145deg,#8a6d1f,#d4af37);color:#07131d;font-weight:bold;border-color:#d4af37}
+.errbox{display:none;margin:12px auto 0;padding:14px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.55);border-radius:12px;color:#ffd7d7;font-size:14px;line-height:1.8;text-align:center}
+.errbox b{color:#ffb3b3}
+.errbox button{margin-top:10px}
+h2{margin:22px 0 10px;font-size:17px;color:#d4af37}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.ch{background:rgba(18,60,94,.65);border:1px solid rgba(14,165,233,.3);border-radius:14px;padding:14px 8px;cursor:pointer;text-align:center;color:#EAF4F9;transition:border-color .2s,background .2s}
+.ch:hover{border-color:#d4af37}
+.ch .num{font-size:26px;font-weight:bold;color:#0ea5e9;line-height:1}
+.ch .nm{font-size:13px;margin-top:6px;color:#fff}
+.ch .hd{font-size:11px;color:#9fd8e8;margin-top:2px}
+.ch.on{border-color:#d4af37;background:rgba(212,175,55,.16);box-shadow:0 0 0 1px #d4af37,0 4px 16px rgba(212,175,55,.25)}
+.ch.on .num{color:#d4af37}
+.ch .live{display:none;font-size:11px;color:#d4af37;margin-top:4px}
+.ch.on .live{display:block}
+.upd{text-align:center;color:#d4af37;font-size:12.5px;margin-top:14px;line-height:1.8}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:rgba(8,20,38,.97);border:1px solid #d4af37;color:#ffe9a8;border-radius:12px;padding:10px 18px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:50;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.note{text-align:center;color:#7fb6c9;font-size:12.5px;margin-top:20px;line-height:1.8}
+footer{text-align:center;color:#7fb6c9;font-size:12px;padding:18px 12px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img id="logo" src="https://muons2002.dpdns.org/invisible-soldiers-logo.png" alt="جنود الخفاء" onerror="logoErr(this)">
+    <h1>قنوات <b>beIN Sports</b></h1>
+    <div class="sub">بث مباشر — beIN Sports 1 إلى 9 HD · جنود الخفاء</div>
+  </header>
+
+  <div class="warn" id="httpsWarn">⚠️ تنبيه: هذه الصفحة مفتوحة عبر <b>https</b> والقنوات على <b>http</b> — المتصفح قد يمنع تشغيل البث (محتوى مختلط). إذا ظهر خطأ في التشغيل، افتح الصفحة عبر http أو من ملف محلي.</div>
+
+  <div class="player-box" id="playerWrap">
+    <video id="player" controls playsinline preload="auto"></video>
+    <div class="bar">
+      <div class="status"><span class="dot" id="dot"></span><span id="statusText">اختر قناة من الأسفل للبدء</span></div>
+      <div class="btns">
+        <button id="btnUpdate" type="button">🔄 تحديث القنوات</button>
+        <button id="btnRetry" type="button">↻ إعادة المحاولة</button>
+        <button id="btnFull" type="button" class="gold">⛶ ملء الشاشة</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="errbox" id="errbox"></div>
+
+  <h2>📺 القنوات</h2>
+  <div class="grid" id="grid"></div>
+
+  <div class="upd">🔄 أي قناة جديدة تضاف من الموقع تظهر هنا بزر «تحديث القنوات» — من غير إعادة تثبيت.</div>
+
+  <div class="note">التشغيل عبر HLS — آخر قناة شغّلتها تُحفظ وتُستأنف تلقائياً عند فتح الصفحة.<br>البث من روابطك الخاصة (http) — لا يُستخدم أي بروكسي أو وسيط.</div>
+  <footer>جنود الخفاء — حب الخير للغير · muons2002.dpdns.org</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<script>
+'use strict';
+function logoErr(img){
+  if(!img.dataset.fb){ img.dataset.fb='1'; img.src='https://muons2002.dpdns.org/jnoud-logo-crop.png'; }
+  else if(!img.dataset.fb2){ img.dataset.fb2='1'; var s=document.createElement('div'); s.className='shield'; s.textContent='🛡️'; img.replaceWith(s); }
+}
+
+/* القائمة المضمّنة — بديل احتياطي لو فشل جلب bein-channels.json (ملف محلي أو بلا نت) */
+var EMBEDDED_CHANNELS = [
+  { n: 1, name: 'beIN Sports 1 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_1_hd/tracks-v1a1/mono.ts.m3u8' },
+  { n: 2, name: 'beIN Sports 2 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_2_hd/tracks-v1a1/mono.ts.m3u8' },
+  { n: 3, name: 'beIN Sports 3 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_3_hd/tracks-v1a1/mono.ts.m3u8' },
+  { n: 4, name: 'beIN Sports 4 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_4_hd/tracks-v1a1/mono.ts.m3u8' },
+  { n: 5, name: 'beIN Sports 5 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_5_hd/tracks-v1a1/mono.ts.m3u8' },
+  { n: 6, name: 'beIN Sports 6 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_6_hd/tracks-v1a1/mono.ts.m3u8' },
+  { n: 7, name: 'beIN Sports 7 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_7_hd/tracks-v1a1/mono.ts.m3u8' },
+  { n: 8, name: 'beIN Sports 8 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_8_hd/tracks-v1a1/mono.ts.m3u8' },
+  { n: 9, name: 'beIN Sports 9 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_9_hd/tracks-v1a1/mono.ts.m3u8' }
+];
+var CHANNELS = EMBEDDED_CHANNELS.slice();
+var LS_KEY = 'bein_last_channel';
+var video = document.getElementById('player');
+var dot = document.getElementById('dot');
+var statusText = document.getElementById('statusText');
+var errbox = document.getElementById('errbox');
+var toastEl = document.getElementById('toast');
+var hls = null;
+var current = null;
+var toastTimer = null;
+
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 3000);
+}
+function findChannel(n){
+  for (var i = 0; i < CHANNELS.length; i++) if (CHANNELS[i].n === n) return CHANNELS[i];
+  return null;
+}
+function normalizeChannels(data){
+  if (!data || !data.length) return [];
+  var out = [];
+  for (var i = 0; i < data.length; i++) {
+    var it = data[i] || {};
+    var n = parseInt(it.id, 10);
+    var name = String(it.name || '').trim();
+    var url = String(it.url || '').trim();
+    if (!n || !name || !/^https?:\/\//.test(url)) continue;
+    var dup = false;
+    for (var j = 0; j < out.length; j++) if (out[j].n === n) dup = true;
+    if (!dup) out.push({ n: n, name: name, url: url });
+  }
+  return out;
+}
+function fetchRemoteChannels(timeoutMs){
+  if (typeof fetch !== 'function') return Promise.reject(new Error('no fetch'));
+  var ctrl = null;
+  try { ctrl = new AbortController(); } catch (e) {}
+  var timer = null;
+  if (ctrl) {
+    timer = setTimeout(function(){ try { ctrl.abort(); } catch (e) {} }, timeoutMs || 5000);
+  }
+  var opts = { cache: 'no-store' };
+  if (ctrl) opts.signal = ctrl.signal;
+  return fetch('bein-channels.json?t=' + Date.now(), opts).then(function(r){
+    if (timer) clearTimeout(timer);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }).then(function(data){
+    var list = normalizeChannels(data);
+    if (!list.length) throw new Error('empty list');
+    return list;
+  }).catch(function(err){
+    if (timer) clearTimeout(timer);
+    throw err;
+  });
+}
+function applyChannels(list){
+  CHANNELS = list;
+  buildGrid();
+  if (current && !findChannel(current)) {
+    /* القناة الجارية اختفت من القائمة — أوقف التشغيل فقط في هذه الحالة */
+    try { video.pause(); } catch (e) {}
+    if (hls) { hls.destroy(); hls = null; }
+    try { video.removeAttribute('src'); video.load(); } catch (e) {}
+    current = null;
+    setStatus('', 'القناة الجارية لم تعد في القائمة — اختر قناة أخرى');
+  } else if (current) {
+    markActive(current);
+  }
+}
+function refreshChannels(){
+  fetchRemoteChannels(8000).then(function(list){
+    applyChannels(list);
+    toast('تم تحديث القنوات — ' + list.length + ' قناة');
+  }).catch(function(){
+    toast('تعذّر التحديث — القائمة الحالية باقية');
+  });
+}
+function setStatus(state, text){
+  dot.className = 'dot' + (state ? ' ' + state : '');
+  statusText.textContent = text;
+  statusText.className = state === 'error' ? 'err' : '';
+}
+function showError(title, hint){
+  errbox.innerHTML = '<b>' + title + '</b><br>' + hint + '<br><button type="button" onclick="retryCurrent()">↻ إعادة المحاولة</button>';
+  errbox.style.display = 'block';
+}
+function hideError(){ errbox.style.display = 'none'; errbox.innerHTML = ''; }
+function mixedHint(){
+  if (location.protocol === 'https:') {
+    return 'السبب المرجح: الصفحة مفتوحة عبر https والبث على http، والمتصفح يمنع تشغيل البث (محتوى مختلط). جرّب فتح الصفحة عبر http أو من ملف محلي على جهازك.';
+  }
+  return 'تأكد من اتصال الإنترنت وأن رابط القناة يعمل، ثم حاول مجدداً.';
+}
+function fail(title){
+  setStatus('error', title);
+  showError(title, mixedHint());
+}
+function markActive(n){
+  var cards = document.querySelectorAll('.ch');
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].classList.toggle('on', parseInt(cards[i].dataset.n, 10) === n);
+  }
+}
+function tryPlay(){
+  var pr = video.play();
+  if (pr && pr.catch) {
+    pr.catch(function(){
+      setStatus('', 'القناة جاهزة — اضغط زر التشغيل ▶ في المشغّل');
+    });
+  }
+}
+function loadChannel(n){
+  var ch = findChannel(n);
+  if (!ch) return;
+  current = n;
+  try { localStorage.setItem(LS_KEY, String(n)); } catch (e) {}
+  markActive(n);
+  hideError();
+  if (hls) { hls.destroy(); hls = null; }
+  setStatus('loading', 'جارٍ تحميل ' + ch.name + '…');
+  if (window.Hls && Hls.isSupported()) {
+    hls = new Hls({ maxBufferLength: 30 });
+    hls.loadSource(ch.url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function(){
+      setStatus('loading', 'تم تحميل ' + ch.name + ' — جارٍ التشغيل…');
+      tryPlay();
+    });
+    hls.on(Hls.Events.ERROR, function(ev, data){
+      if (!data || !data.fatal) return;
+      if (data.type === Hls.ErrorTypes.NETWORK_ERROR) fail('تعذّر الوصول إلى بث ' + ch.name);
+      else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) fail('تعذّر تشغيل صورة/صوت ' + ch.name);
+      else fail('تعذّر تشغيل ' + ch.name);
+    });
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = ch.url;
+    video.addEventListener('loadedmetadata', function onMeta(){
+      video.removeEventListener('loadedmetadata', onMeta);
+      tryPlay();
+    });
+  } else {
+    fail('متصفحك لا يدعم تشغيل HLS');
+  }
+}
+function retryCurrent(){ if (current) loadChannel(current); }
+
+video.addEventListener('playing', function(){
+  if (!current) return;
+  var ch = findChannel(current);
+  if (!ch) return;
+  setStatus('playing', 'يعمل الآن — ' + ch.name);
+  hideError();
+});
+video.addEventListener('waiting', function(){
+  if (current) setStatus('loading', 'جارٍ التحميل…');
+});
+video.addEventListener('error', function(){
+  if (!current || !video.src) return;
+  if (window.Hls && Hls.isSupported()) return; /* hls.js handles its own errors */
+  fail('تعذّر تشغيل القناة');
+});
+
+document.getElementById('btnRetry').addEventListener('click', retryCurrent);
+document.getElementById('btnUpdate').addEventListener('click', refreshChannels);
+document.getElementById('btnFull').addEventListener('click', function(){
+  var wrap = document.getElementById('playerWrap');
+  if (document.fullscreenElement) { document.exitFullscreen(); return; }
+  if (wrap.requestFullscreen) wrap.requestFullscreen();
+  else if (wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+  else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+});
+
+function buildGrid(){
+  var grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  CHANNELS.forEach(function(ch){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'ch';
+    b.dataset.n = ch.n;
+    b.innerHTML = '<div class="num">' + ch.n + '</div><div class="nm">' + ch.name + '</div><div class="live">● يعمل الآن</div>';
+    b.addEventListener('click', function(){ loadChannel(ch.n); });
+    grid.appendChild(b);
+  });
+  markActive(current);
+}
+
+function boot(){
+  buildGrid();
+  var last = 0;
+  try {
+    var saved = parseInt(localStorage.getItem(LS_KEY), 10);
+    if (findChannel(saved)) last = saved;
+  } catch (e) {}
+  if (!last && CHANNELS.length) last = CHANNELS[0].n;
+  if (last) loadChannel(last);
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  if (location.protocol === 'https:') {
+    document.getElementById('httpsWarn').style.display = 'block';
+  }
+  /* جرّب القائمة البعيدة أولاً؛ ولو فشل الجلب نبقى على المضمّنة */
+  try {
+    fetchRemoteChannels(5000).then(function(list){
+      CHANNELS = list;
+    }, function(){
+      /* بلا نت أو ملف محلي — القائمة المضمّنة باقية */
+    }).then(boot);
+  } catch (e) {
+    boot();
+  }
+});
+</script>
+</body>
+</html>
