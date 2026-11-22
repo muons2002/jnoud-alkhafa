@@ -96,7 +96,7 @@
   <div class="card match">
     <div class="teams">الأهلي <span class="vs">×</span> بيراميدز</div>
     <div class="meta">الدوري المصري الممتاز<br>الإثنين 23 نوفمبر 2026 — 8:00 مساءً بتوقيت القاهرة<span id="localTime"></span></div>
-    <div class="count" id="countdown">--:--:--<small>المتبقي على قفل باب التوقعات (مع بداية المباراة)</small></div>
+    <div class="count" id="countdown">--:--:--<small>المتبقي على قفل باب التوقعات (قبل المباراة بـ10 دقائق)</small></div>
   </div>
 
   <div class="card" id="formCard">
@@ -113,7 +113,7 @@
   </div>
 
   <div class="card closed" id="closedCard" hidden>
-    🔒 قفل باب التوقعات — المباراة بدأت.<br>بالتوفيق لأصحاب التوقعات الصحيحة، وإعلان الفائزين بعد المباراة على منصتنا.
+    🔒 قفل باب التوقعات — المباراة بتبدأ 8:00 مساءً.<br>بالتوفيق لأصحاب التوقعات الصحيحة، وإعلان الفائزين بعد المباراة على منصتنا.
   </div>
 
   <div class="card" id="resultCard" hidden>
@@ -130,7 +130,7 @@
     <h2 class="sec">📜 قواعد المسابقة</h2>
     <div class="rules">
       • توقع واحد لكل شخص — وتقدر <b>تعدّل توقعك</b> لحد بداية المباراة.<br>
-      • التوقعات تقفل مع صافرة البداية: <b>الإثنين 8:00 مساءً</b> بتوقيت القاهرة.<br>
+      • التوقعات تقفل قبل المباراة بـ10 دقائق: <b>الإثنين 7:50 مساءً</b> بتوقيت القاهرة.<br>
       • الفائز هو صاحب <b>النتيجة الصحيحة بالضبط</b>، والأسبق في التسجيل هو «بطل التوقعات».<br>
       • كل اللي توقعوا صح، أسماؤهم بتنزل في <b>إعلان الفائزين</b> بعد المباراة هنا وعلى صفحاتنا.
     </div>
@@ -151,6 +151,7 @@ function cairoToEpoch(y, mo, d, h, mi) {
   return guess - (asUTC - guess);
 }
 const KICKOFF = cairoToEpoch(2026, 11, 23, 20, 0);
+const CLOSE = cairoToEpoch(2026, 11, 23, 19, 50); // باب التوقعات يقفل قبل المباراة بـ10 دقائق
 const $ = id => document.getElementById(id);
 const ga = $('ga'), gp = $('gp');
 for (let i = 0; i <= 9; i++) { ga.add(new Option(i, i)); gp.add(new Option(i, i)); }
@@ -169,7 +170,7 @@ try {
 
 function tick() {
   const now = Date.now();
-  const left = KICKOFF - now;
+  const left = CLOSE - now;
   if (RESULT) {
     $('countdown').innerHTML = 'انتهت المباراة 🏁<small>النتيجة النهائية وأسماء الفائزين بالأسفل</small>';
     $('formCard').hidden = true; $('closedCard').hidden = true; $('resultCard').hidden = false;
@@ -177,7 +178,7 @@ function tick() {
     return;
   }
   if (left <= 0) {
-    $('countdown').innerHTML = 'بدأت المباراة ⚽<small>باب التوقعات اتقفل</small>';
+    $('countdown').innerHTML = 'اتقفل باب التوقعات 🔒<small>المباراة بتبدأ 8:00 مساءً</small>';
     $('formCard').hidden = true; $('closedCard').hidden = false;
     return;
   }
