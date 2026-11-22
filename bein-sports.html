@@ -18,6 +18,10 @@ h1 b{color:#d4af37}
 .player-box{margin:16px auto 0;background:#000;border:1px solid rgba(14,165,233,.4);border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.45)}
 .player-box.fs{position:fixed;inset:0;z-index:9999;margin:0;border:0;border-radius:0;display:flex;flex-direction:column}
 .player-box.fs video{flex:1;width:100%;height:100%;aspect-ratio:auto;object-fit:contain}
+.player-box.fs.rot{top:0;left:0;width:100vh;height:100vw;transform:rotate(90deg) translateY(-100%);transform-origin:top left}
+.player-box.fs.rot .bar{display:none}
+.exitfs{display:none;position:fixed;top:12px;inset-inline-end:12px;z-index:10001;background:rgba(0,0,0,.65);border:1px solid #d4af37;color:#fff;border-radius:10px;padding:8px 14px;font-size:14px}
+.exitfs.show{display:block}
 video{width:100%;aspect-ratio:16/9;display:block;background:#000}
 .bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:space-between;padding:10px 12px;background:rgba(8,20,38,.95);border-top:1px solid rgba(14,165,233,.25)}
 .status{display:flex;align-items:center;gap:8px;font-size:14px;min-height:20px}
@@ -72,6 +76,8 @@ footer{text-align:center;color:#7fb6c9;font-size:12px;padding:18px 12px 0}
       </div>
     </div>
   </div>
+
+  <button id="btnExitFs" class="exitfs" type="button">⛶ تصغير الشاشة</button>
 
   <div class="errbox" id="errbox"></div>
 
@@ -274,11 +280,39 @@ video.addEventListener('error', function(){
 
 document.getElementById('btnRetry').addEventListener('click', retryCurrent);
 document.getElementById('btnUpdate').addEventListener('click', refreshChannels);
-document.getElementById('btnFull').addEventListener('click', function(){
+var fsBtn = document.getElementById('btnFull');
+var exitFsBtn = document.getElementById('btnExitFs');
+function unlockOrientation(){
+  try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {}
+}
+function tryRotate(){
+  /* لف الشاشة للعرض (landscape)؛ لو التطبيق رفض القفل نلف المشغّل نفسه بـ CSS */
+  try {
+    if (screen.orientation && screen.orientation.lock) {
+      var lp = screen.orientation.lock('landscape');
+      if (lp && lp.then) {
+        lp.then(function(){}, function(){ document.getElementById('playerWrap').classList.add('rot'); });
+        return;
+      }
+    }
+    document.getElementById('playerWrap').classList.add('rot');
+  } catch (e) {
+    document.getElementById('playerWrap').classList.add('rot');
+  }
+}
+function exitFs(){
   var wrap = document.getElementById('playerWrap');
-  var btn = document.getElementById('btnFull');
+  if (document.fullscreenElement) { document.exitFullscreen(); }
+  wrap.classList.remove('fs');
+  wrap.classList.remove('rot');
+  fsBtn.textContent = '⛶ ملء الشاشة';
+  exitFsBtn.classList.remove('show');
+  unlockOrientation();
+}
+fsBtn.addEventListener('click', function(){
+  var wrap = document.getElementById('playerWrap');
   if (document.fullscreenElement) { document.exitFullscreen(); return; }
-  if (wrap.classList.contains('fs')) { wrap.classList.remove('fs'); btn.textContent = '⛶ ملء الشاشة'; return; }
+  if (wrap.classList.contains('fs')) { exitFs(); return; }
   var p = null;
   try {
     if (wrap.requestFullscreen) p = wrap.requestFullscreen();
@@ -290,13 +324,18 @@ document.getElementById('btnFull').addEventListener('click', function(){
   setTimeout(function(){
     if (!document.fullscreenElement && !wrap.classList.contains('fs')) {
       wrap.classList.add('fs');
-      btn.textContent = '⛶ تصغير الشاشة';
+      fsBtn.textContent = '⛶ تصغير الشاشة';
+      exitFsBtn.classList.add('show');
+      tryRotate();
     }
   }, 400);
 });
+exitFsBtn.addEventListener('click', exitFs);
 document.addEventListener('fullscreenchange', function(){
   if (!document.fullscreenElement && !document.getElementById('playerWrap').classList.contains('fs')) {
-    document.getElementById('btnFull').textContent = '⛶ ملء الشاشة';
+    fsBtn.textContent = '⛶ ملء الشاشة';
+    exitFsBtn.classList.remove('show');
+    unlockOrientation();
   }
 });
 
