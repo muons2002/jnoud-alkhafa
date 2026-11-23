@@ -75,6 +75,18 @@ button.small{padding:8px 14px;font-size:13.5px;border-radius:10px}
 .gbox input{width:100%;padding:11px;border-radius:10px;border:1.5px solid rgba(47,185,216,.5);background:rgba(0,0,0,.35);color:#fff;font-size:16px;text-align:center;font-family:inherit;margin-bottom:10px}
 .gbox button{width:100%}
 #gateErr{color:#FF8A8A;font-size:13px;margin-top:8px;min-height:18px}
+#previewBox{margin-top:14px;border:2px dashed #d4af37;border-radius:14px;padding:14px;background:rgba(212,175,55,.06)}
+#previewBox .pvTag{display:inline-block;background:#d4af37;color:#081426;font-weight:800;border-radius:999px;padding:3px 14px;font-size:13.5px;margin-bottom:10px}
+#previewBox .pvTitle{font-size:23px;font-weight:800;color:#ffd968;text-align:center;line-height:1.5}
+#previewBox .pvSub{text-align:center;color:#bcd7e6;font-size:14.5px;margin:2px 0 12px}
+#previewBox .pvCard{background:#0d2b45;border:1px solid rgba(47,185,216,.35);border-radius:12px;padding:12px 14px;margin-top:10px}
+#previewBox .pvMatch{font-size:18px;font-weight:800;color:#eaf4fa;text-align:center}
+#previewBox .pvTime{text-align:center;color:#9fc6d8;font-size:13.5px;margin:3px 0 10px}
+#previewBox .pvScore{display:flex;align-items:center;justify-content:center;gap:9px}
+#previewBox .pvTeam{font-weight:700;color:#eaf4fa;min-width:74px;text-align:center}
+#previewBox .pvNum{background:#081426;border:1px solid rgba(47,185,216,.4);color:#ffd968;border-radius:9px;padding:5px 13px;font-weight:800}
+#previewBox .pvBtn{display:block;margin:11px auto 0;background:linear-gradient(180deg,#e9c860,#c39a2b);color:#081426;border:0;border-radius:10px;padding:8px 22px;font-weight:800;font-size:15px}
+#previewBox .pvName{background:#081426;border:1px solid rgba(47,185,216,.3);border-radius:9px;color:#7d99a8;padding:7px 12px;font-size:14px;margin-bottom:9px}
 </style>
 </head>
 <body>
@@ -110,8 +122,10 @@ button.small{padding:8px 14px;font-size:13.5px;border-radius:10px}
     <div id="matchRows"></div>
     <div class="btnrow">
       <button class="ghost" id="addMatchBtn" type="button">➕ أضف ماتش</button>
+      <button class="ghost" id="previewBtn" type="button">👁️ معاينة قبل النشر</button>
       <button class="gold" id="createBtn" type="button">إنشاء المسابقة وفتح التوقعات 🏆</button>
     </div>
+    <div id="previewBox" hidden></div>
     <div class="warn">⚠️ إنشاء مسابقة جديدة بيمسح توقعات ونتائج المسابقة الحالية (السجل والأرشيف محفوظين في لوحة الشرف والمسابقات السابقة).</div>
     <div class="msg" id="createMsg"></div>
   </div>
@@ -531,6 +545,32 @@ document.body.style.overflow = 'hidden';
 $('gateBtn').addEventListener('click', tryKey);
 $('gateKey').addEventListener('keydown', e => { if (e.key === 'Enter') tryKey(); });
 $('refreshBtn').addEventListener('click', load);
+function renderPreview() {
+  const box = $('previewBox');
+  const title = $('cTitle').value.trim() || 'عنوان المسابقة';
+  const sub = $('cSub').value.trim();
+  let cards = '';
+  let n = 0;
+  document.querySelectorAll('#matchRows .mrow').forEach(row => {
+    const g = f => row.querySelector('[data-f="' + f + '"]').value.trim();
+    const home = g('home'), away = g('away');
+    if (!home && !away) return;
+    n++;
+    const cm = Math.max(0, Math.min(120, parseInt(g('closeMin'), 10) || 10));
+    cards += '<div class="pvCard"><div class="pvMatch">' + esc(home || 'الفريق الأول') + ' × ' + esc(away || 'الفريق الثاني') + '</div>' +
+      '<div class="pvTime">' + esc(g('when') || 'ميعاد الماتش') + ' — باب التوقعات يقفل قبل الماتش بـ' + cm + ' دقيقة</div>' +
+      '<div class="pvName">اكتب اسمك هنا…</div>' +
+      '<div class="pvScore"><span class="pvTeam">' + esc(home || 'الأول') + '</span><span class="pvNum">٠</span><span>×</span><span class="pvNum">٠</span><span class="pvTeam">' + esc(away || 'الثاني') + '</span></div>' +
+      '<button class="pvBtn" type="button">سجّل توقعك ⚽</button></div>';
+  });
+  box.innerHTML = '<span class="pvTag">👁️ معاينة فقط — لسه ما اتنشرش حاجة</span>' +
+    '<div class="pvTitle">🏆 ' + esc(title) + '</div>' +
+    (sub ? '<div class="pvSub">' + esc(sub) + '</div>' : '') +
+    (cards || '<div class="pvSub">لسه ما كتبتش ماتشات — اكتب فريقين على الأقل في ماتش واحد</div>');
+  box.hidden = false;
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+$('previewBtn').addEventListener('click', renderPreview);
 $('addMatchBtn').addEventListener('click', addMatchRow);
 $('createBtn').addEventListener('click', createContest);
 $('openBtn').addEventListener('click', () => toggle(true));
