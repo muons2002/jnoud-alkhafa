@@ -5,44 +5,77 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>لوحة تحكم مسابقة التوقعات — جنود الخفاء</title>
+<link rel="icon" type="image/png" sizes="32x32" href="fav-contest-32.png">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(160deg,#081426,#0D2B45 55%,#0A3A56);color:#fff;min-height:100vh;padding:18px 14px 30px}
+[hidden]{display:none !important}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(160deg,#081426,#0D2B45 55%,#0A3A56);color:#fff;min-height:100vh;padding:18px 14px 40px}
 .wrap{max-width:860px;margin:0 auto}
 h1{font-size:24px;text-align:center;margin-bottom:4px}
-.sub{text-align:center;color:#9FC6DA;font-size:13.5px;margin-bottom:6px}
-.clock{text-align:center;color:#F5C451;font-size:15px;font-weight:700;margin-bottom:14px}
-.bar{display:flex;gap:10px;justify-content:center;align-items:center;margin-bottom:16px;flex-wrap:wrap}
-button.refresh{background:linear-gradient(135deg,#0EA5C9,#0369A1);color:#fff;border:1.5px solid rgba(245,196,81,.6);border-radius:12px;padding:9px 26px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
-.updated{color:#9FC6DA;font-size:12.5px}
+.sub{text-align:center;color:#9FC6DA;font-size:13.5px;margin-bottom:14px}
 .card{background:rgba(255,255,255,.05);border:1.5px solid rgba(47,185,216,.35);border-radius:16px;padding:16px;margin-bottom:18px}
-.card h2{font-size:19px;margin-bottom:2px}
-.meta{color:#9FC6DA;font-size:13px;margin-bottom:10px}
+.card.gold{border-color:rgba(245,196,81,.5)}
+.card h2{font-size:19px;margin-bottom:8px}
+.meta{color:#9FC6DA;font-size:13px;margin-bottom:10px;line-height:1.8}
 .status{display:inline-block;border-radius:999px;padding:2px 14px;font-size:13px;font-weight:700;margin-inline-start:8px}
 .open{background:rgba(74,222,128,.18);color:#4ADE80;border:1px solid rgba(74,222,128,.5)}
 .closed{background:rgba(255,138,138,.15);color:#FF8A8A;border:1px solid rgba(255,138,138,.5)}
-.bigcount{font-size:34px;font-weight:800;color:#2FB9D8}
-.bigcount small{font-size:14px;color:#9FC6DA;font-weight:400}
-.top3{margin:10px 0;font-size:14px;color:#D7ECF7}
-.top3 b{color:#F5C451}
-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
-th{color:#F5C451;text-align:right;padding:6px 8px;border-bottom:1.5px solid rgba(47,185,216,.4);font-size:13px}
-td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.07);color:#EAF6FC}
-td.score{font-weight:800;color:#2FB9D8;white-space:nowrap}
-td.time{color:#9FC6DA;white-space:nowrap;font-size:12.5px}
-.fastest{color:#F5C451;font-size:12px}
-.empty{color:#9FC6DA;text-align:center;padding:14px;font-size:14px}
+.scored{background:rgba(245,196,81,.16);color:#F5C451;border:1px solid rgba(245,196,81,.5)}
+.mrow-sum{display:flex;justify-content:space-between;align-items:center;gap:8px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.09);border-radius:11px;padding:9px 12px;margin-top:7px;font-size:14.5px}
+.mrow-sum .sc{direction:ltr;font-weight:800;color:#F5C451;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mrow-sum .cnt{color:#2FB9D8;font-weight:800;white-space:nowrap}
+label{display:block;font-weight:700;font-size:14px;margin:10px 0 5px;color:#D8EDF8}
+input[type=text],input[type=number],input[type=datetime-local],textarea{
+  width:100%;padding:11px;border-radius:10px;border:1.5px solid rgba(47,185,216,.4);
+  background:rgba(0,0,0,.3);color:#fff;font-size:15px;font-family:inherit}
+textarea{min-height:220px;line-height:1.9;resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media (max-width:560px){.grid2,.grid3{grid-template-columns:1fr}}
+button{border:none;border-radius:12px;padding:12px 18px;font-size:15.5px;font-weight:800;cursor:pointer;font-family:inherit;color:#fff;background:linear-gradient(135deg,#0EA5C9,#0369A1)}
+button:disabled{opacity:.45;cursor:default}
+button.gold{background:linear-gradient(90deg,#F5C451,#C9962E);color:#231a02}
+button.green{background:linear-gradient(90deg,#37B24D,#2B8A3E)}
+button.red{background:linear-gradient(90deg,#E4572E,#C2431F)}
+button.ghost{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25)}
+button.small{padding:8px 14px;font-size:13.5px;border-radius:10px}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.btnrow button{flex:1;min-width:150px}
+.mrow{border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:12px;margin-top:10px;background:rgba(0,0,0,.18)}
+.mrow .mhead{display:flex;justify-content:space-between;align-items:center}
+.mrow .mhead b{color:#F5C451}
+.msg{margin-top:10px;font-size:14.5px;min-height:20px;text-align:center}
+.ok{color:#7BE3A8}.err{color:#FF9D9D}
+.warn{color:#F5C451;font-size:13px;line-height:1.8;margin-top:8px}
+.resinputs{display:flex;align-items:center;gap:10px;justify-content:center;margin-top:6px}
+.resinputs .team{flex:1;text-align:center;font-weight:800;font-size:15.5px}
+.resinputs input{width:74px;text-align:center;font-size:18px}
+.resinputs .x{font-size:20px;font-weight:800;color:#F5C451}
+.champbox{background:linear-gradient(160deg,#2A2410,#171106);border:1px solid #F5C451;border-radius:14px;padding:12px;text-align:center;margin-top:12px}
+.champbox .n{color:#F5C451;font-size:18px;font-weight:800;margin-top:2px}
+.winlist{font-size:14.5px;line-height:2;color:#D7ECF7;margin-top:6px}
+.winlist b{color:#F5C451}
+.hallgrid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:10px}
+@media (min-width:640px){.hallgrid{grid-template-columns:1fr 1fr 1fr}}
+.hallcol{background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px}
+.hallcol h3{font-size:15px;text-align:center;color:#F5C451;margin-bottom:8px}
+.hrow{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;padding:5px 2px;border-bottom:1px solid rgba(255,255,255,.06)}
+.hrow:last-child{border-bottom:none}
+.hrow .rk{color:#F5C451;font-weight:800;margin-inline-end:4px}
+.hrow .ct{color:#2FB9D8;font-weight:800;white-space:nowrap}
+.empty{color:#9FC6DA;text-align:center;padding:12px;font-size:14px;line-height:1.8}
+.histline{font-size:14px;line-height:2;color:#D7ECF7;border-bottom:1px solid rgba(255,255,255,.06);padding:6px 0}
+.histline:last-child{border-bottom:none}
+.histline b{color:#F5C451}
 .foot{text-align:center;color:#9FC6DA;font-size:12.5px;margin-top:6px}
 #gate{position:fixed;inset:0;z-index:999;background:linear-gradient(160deg,#081426,#0D2B45 55%,#0A3A56);display:flex;align-items:center;justify-content:center;padding:20px}
 .gbox{background:rgba(255,255,255,.05);border:1.5px solid rgba(47,185,216,.4);border-radius:18px;padding:28px 24px;text-align:center;max-width:360px;width:100%}
 .gbox h2{font-size:20px;margin:10px 0 6px}
 .gbox p{color:#9FC6DA;font-size:13.5px;margin-bottom:14px}
 .gbox input{width:100%;padding:11px;border-radius:10px;border:1.5px solid rgba(47,185,216,.5);background:rgba(0,0,0,.35);color:#fff;font-size:16px;text-align:center;font-family:inherit;margin-bottom:10px}
-.gbox button{width:100%;background:linear-gradient(135deg,#0EA5C9,#0369A1);color:#fff;border:none;border-radius:10px;padding:11px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit}
+.gbox button{width:100%}
 #gateErr{color:#FF8A8A;font-size:13px;margin-top:8px;min-height:18px}
 </style>
-<link rel="icon" type="image/png" sizes="32x32" href="https://muons2002.dpdns.org/fav-portal-32.png">
-<link rel="apple-touch-icon" href="https://muons2002.dpdns.org/fav-portal-180.png">
 </head>
 <body>
 <div id="gate">
@@ -58,128 +91,464 @@ td.time{color:#9FC6DA;white-space:nowrap;font-size:12.5px}
 
 <div class="wrap">
   <h1>🎛️ لوحة تحكم مسابقة التوقعات</h1>
-  <div class="sub">عرض حي للتوقعات — للمتابعة بس، مفيش أي حاجة بتتغير من هنا</div>
-  <div class="clock" id="clock">🕐 …</div>
-  <div class="bar">
-    <button class="refresh" id="refreshBtn" type="button">🔄 حدّث دلوقتي</button>
-    <span class="updated" id="updated">آخر تحديث: —</span>
+  <div class="sub">إنشاء المسابقات، فتح وقفل التوقعات، اعتماد النتائج، وسجل الأعضاء — جنود الخفاء</div>
+
+  <div class="card gold" id="summaryCard">
+    <h2>📋 المسابقة الحالية</h2>
+    <div id="summary"><div class="empty">جارٍ التحميل…</div></div>
+    <div class="btnrow">
+      <button class="ghost" id="refreshBtn" type="button">🔄 حدّث الحالة</button>
+    </div>
   </div>
 
-  <div class="card" id="cardZ"></div>
-  <div class="card" id="cardA"></div>
+  <div class="card">
+    <h2>🆕 إنشاء مسابقة جديدة</h2>
+    <label>اسم المسابقة</label>
+    <input type="text" id="cTitle" maxlength="60" placeholder="مثال: مسابقة التوقعات — ليلة الأبطال">
+    <label>سطر تعريفي (اختياري)</label>
+    <input type="text" id="cSub" maxlength="80" placeholder="مثال: دوري أبطال أوروبا — الجولة الخامسة">
+    <div id="matchRows"></div>
+    <div class="btnrow">
+      <button class="ghost" id="addMatchBtn" type="button">➕ أضف ماتش</button>
+      <button class="gold" id="createBtn" type="button">إنشاء المسابقة وفتح التوقعات 🏆</button>
+    </div>
+    <div class="warn">⚠️ إنشاء مسابقة جديدة بيمسح توقعات ونتائج المسابقة الحالية (السجل والأرشيف محفوظين في لوحة الشرف والمسابقات السابقة).</div>
+    <div class="msg" id="createMsg"></div>
+  </div>
 
-  <div class="foot">اللوحة بتتحدث لوحدها كل 30 ثانية — جنود الخفاء 🛡️</div>
+  <div class="card">
+    <h2>🚪 فتح وقفل التوقعات</h2>
+    <div class="meta" id="toggleState">—</div>
+    <div class="btnrow">
+      <button class="green" id="openBtn" type="button">🟢 افتح التوقعات</button>
+      <button class="red" id="closeBtn" type="button">🔴 اقفل التوقعات</button>
+    </div>
+    <div class="msg" id="toggleMsg"></div>
+  </div>
+
+  <div class="card gold">
+    <h2>🏁 اعتماد النتائج وحساب الفائزين</h2>
+    <div id="resultsForm"><div class="empty">جارٍ التحميل…</div></div>
+    <div class="btnrow">
+      <button class="gold" id="resultsBtn" type="button">اعتمد النتيجة واحسب الفائزين 🏆</button>
+    </div>
+    <div class="warn">⚠️ الاعتماد بيتحسب مرة واحدة بس: بيحدّث سجل الأعضاء والأرشيف ولوحة الشرف، وبيقفل المسابقة.</div>
+    <div class="msg" id="resultsMsg"></div>
+    <div id="winnersBox"></div>
+    <div id="announceBox" hidden>
+      <label>📣 نص إعلان الفائزين — جاهز للنسخ والنشر</label>
+      <textarea id="announceTxt" readonly></textarea>
+      <div class="btnrow">
+        <button id="copyBtn" type="button">📋 انسخ الإعلان</button>
+      </div>
+      <div class="msg" id="copyMsg"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🗂️ ترحيل مسابقة ٢٣ نوفمبر</h2>
+    <div class="meta">ترحيل لمرة واحدة: بيضيف نتائج وتوقعات مسابقة الجونة × الزمالك والأهلي × بيراميدز (٢٣ نوفمبر) إلى سجل الأعضاء ولوحة الشرف والأرشيف.</div>
+    <div class="btnrow">
+      <button id="migrateBtn" type="button">رحّل مسابقة ٢٣ نوفمبر</button>
+    </div>
+    <div class="msg" id="migrateMsg"></div>
+  </div>
+
+  <div class="card">
+    <h2>🏅 لوحة الشرف والمسابقات السابقة</h2>
+    <div id="hallHist"><div class="empty">جارٍ التحميل…</div></div>
+  </div>
+
+  <div class="foot">لوحة تحكم مسابقة التوقعات v3 — جنود الخفاء</div>
 </div>
 
 <script>
-var API = 'https://jnoud-contest.m-uons2002.workers.dev/list';
-var MATCHES = {
-  z: { el: 'cardZ', title: '⚽ الجونة × الزمالك', kick: '5:00 مساءً', closeTxt: '4:50 مساءً',
-       deadline: Date.UTC(2026, 10, 23, 14, 50, 0) },
-  a: { el: 'cardA', title: '⚽ الأهلي × بيراميدز', kick: '8:00 مساءً', closeTxt: '7:50 مساءً',
-       deadline: Date.UTC(2026, 10, 23, 17, 50, 0) }
-};
+const API = 'https://jnoud-contest.m-uons2002.workers.dev';
+const KEY_STORE = 'jnoud_contest_key';
+const $ = id => document.getElementById(id);
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
-function cairoTime(ts) {
-  try {
-    return new Intl.DateTimeFormat('ar-EG', { timeZone: 'Africa/Cairo',
-      hour: 'numeric', minute: '2-digit' }).format(new Date(ts));
-  } catch (e) { return ''; }
-}
-function cairoClock() {
-  try {
-    return new Intl.DateTimeFormat('ar-EG', { timeZone: 'Africa/Cairo',
-      hour: 'numeric', minute: '2-digit', second: '2-digit' }).format(new Date());
-  } catch (e) { return ''; }
-}
+let STATE = null;
 
-function esc(s) {
-  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+function boardKey() { try { return sessionStorage.getItem(KEY_STORE) || ''; } catch (e) { return ''; } }
+
+async function api(path, body) {
+  const r = await fetch(API + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Key': boardKey() },
+    body: JSON.stringify(body || {})
   });
+  const j = await r.json().catch(() => ({}));
+  if (r.status === 401) {
+    try { sessionStorage.removeItem(KEY_STORE); } catch (e) {}
+    lockGate('❌ المفتاح غلط أو الجلسة انتهت — سجّل دخولك تاني');
+    throw new Error('auth');
+  }
+  return { status: r.status, j };
 }
 
-function renderMatch(key, entries) {
-  var m = MATCHES[key];
-  var box = document.getElementById(m.el);
-  var closed = Date.now() > m.deadline;
-  var html = '<h2>' + m.title +
-    '<span class="status ' + (closed ? 'closed' : 'open') + '">' +
-    (closed ? '🔴 الباب قفل' : '🟢 الباب مفتوح') + '</span></h2>';
-  html += '<div class="meta">الماتش ' + m.kick + ' — باب التوقعات ' +
-    (closed ? 'قفل' : 'يقفل') + ' ' + m.closeTxt + ' بتوقيت القاهرة</div>';
-  html += '<div class="bigcount">' + entries.length + ' <small>توقع متسجل</small></div>';
+async function load() {
+  try {
+    const r = await fetch(API + '/state', { cache: 'no-store' });
+    STATE = await r.json();
+    renderSummary();
+    renderResultsForm();
+    renderHallHist();
+  } catch (e) {
+    $('summary').innerHTML = '<div class="empty">⚠️ التحديث فشل — جرب «حدّث الحالة»</div>';
+  }
+}
 
-  if (!entries.length) {
-    html += '<div class="empty">لسه مفيش توقعات — أول ما حد يسجل هتظهر هنا</div>';
-    box.innerHTML = html;
+/* ---------- ملخص المسابقة الحالية ---------- */
+function renderSummary() {
+  const cfg = STATE && STATE.cfg;
+  if (!cfg) {
+    $('summary').innerHTML = '<div class="empty">مفيش مسابقة معمولة دلوقتي — اعمل واحدة من نموذج الإنشاء تحت 👇</div>';
+    $('toggleState').textContent = 'مفيش مسابقة حالية';
     return;
   }
-
-  // أكتر النتائج توقعاً
-  var tally = {};
-  entries.forEach(function (e) {
-    var k = e.h + '-' + e.w;
-    tally[k] = (tally[k] || 0) + 1;
-  });
-  var top = Object.keys(tally).sort(function (x, y) { return tally[y] - tally[x]; }).slice(0, 3);
-  html += '<div class="top3">🔥 أكتر النتائج توقعاً: ' + top.map(function (k) {
-    return '<b>' + k + '</b> (' + tally[k] + ')';
-  }).join(' • ') + '</div>';
-
-  html += '<table><tr><th>#</th><th>الاسم</th><th>التوقع</th><th>اتسجل</th></tr>';
-  entries.forEach(function (e, i) {
-    html += '<tr><td>' + (i + 1) + '</td><td>' + esc(e.name) +
-      (i === 0 ? ' <span class="fastest">⏱️ الأسرع</span>' : '') +
-      '</td><td class="score">' + e.h + ' – ' + e.w + '</td>' +
-      '<td class="time">' + cairoTime(e.ts) + '</td></tr>';
-  });
-  html += '</table>';
-  box.innerHTML = html;
-}
-
-function load() {
-  fetch(API, { cache: 'no-store' })
-    .then(function (r) { return r.json(); })
-    .then(function (d) {
-      renderMatch('z', d.z || []);
-      renderMatch('a', d.a || []);
-      document.getElementById('updated').textContent =
-        'آخر تحديث: ' + cairoClock() + ' (القاهرة)';
-    })
-    .catch(function () {
-      document.getElementById('updated').textContent =
-        '⚠️ التحديث فشل — جرب «حدّث دلوقتي»';
-    });
-}
-
-document.getElementById('refreshBtn').addEventListener('click', load);
-setInterval(function () {
-  document.getElementById('clock').textContent = '🕐 القاهرة دلوقتي: ' + cairoClock();
-}, 1000);
-document.getElementById('clock').textContent = '🕐 القاهرة دلوقتي: ' + cairoClock();
-load();
-setInterval(load, 30000);
-</script>
-<script>
-(function(){
-  var HASH='f7b769a7278e520d5b9a92df3ff6625600ca25e64fc33d0256beda4e8ea38a76';
-  var gate=document.getElementById('gate');
-  document.body.style.overflow='hidden';
-  function sha(s){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')})}
-  function open(){gate.style.display='none';document.body.style.overflow=''}
-  var saved='';try{saved=localStorage.getItem('jnoud_board_key')||''}catch(e){}
-  if(saved){sha(saved).then(function(h){if(h===HASH)open()}).catch(function(){})}
-  function tryKey(){
-    var v=document.getElementById('gateKey').value.trim();
-    if(!v)return;
-    sha(v).then(function(h){
-      if(h===HASH){try{localStorage.setItem('jnoud_board_key',v)}catch(e){} open()}
-      else{document.getElementById('gateErr').textContent='❌ المفتاح غلط — حاول تاني'}
-    }).catch(function(){document.getElementById('gateErr').textContent='حصلت مشكلة — حدّث الصفحة وحاول تاني'})
+  let h = '<div style="font-size:17px;font-weight:800">' + esc(cfg.title) +
+    '<span class="status ' + (cfg.scored ? 'scored' : (cfg.open ? 'open' : 'closed')) + '">' +
+    (cfg.scored ? '🏁 اتسجلت النتائج' : (cfg.open ? '🟢 التوقعات مفتوحة' : '🔴 التوقعات مقفولة')) + '</span></div>';
+  if (cfg.sub) h += '<div class="meta">' + esc(cfg.sub) + '</div>';
+  for (const m of cfg.matches) {
+    const cnt = (STATE.entries[m.k] || []).length;
+    const R = STATE.results && STATE.results[m.k];
+    h += '<div class="mrow-sum"><span>' + esc(m.home) + ' × ' + esc(m.away) +
+         '<span style="color:#9FC6DA;font-size:12.5px"> — ' + esc(m.when || '') + '</span></span>' +
+         (R ? '<span class="sc" dir="ltr">' + R.h + ' - ' + R.w + '</span>' : '') +
+         '<span class="cnt">' + cnt + ' توقع</span></div>';
   }
-  document.getElementById('gateBtn').addEventListener('click',tryKey);
-  document.getElementById('gateKey').addEventListener('keydown',function(e){if(e.key==='Enter')tryKey()});
+  $('summary').innerHTML = h;
+  $('toggleState').textContent = cfg.scored
+    ? 'المسابقة خلصت واتسجلت نتائجها — التوقعات مقفولة نهائياً'
+    : (cfg.open ? 'الحالة دلوقتي: 🟢 التوقعات مفتوحة' : 'الحالة دلوقتي: 🔴 التوقعات مقفولة');
+}
+
+/* ---------- إنشاء مسابقة ---------- */
+function matchRowHTML() {
+  return '<div class="mrow">' +
+    '<div class="mhead"><b>⚽ ماتش</b><button type="button" class="ghost small" data-rm>🗑️ شيل الماتش</button></div>' +
+    '<div class="grid2">' +
+      '<div><label>الفريق الأول (صاحب الأرض)</label><input type="text" data-f="home" maxlength="30"></div>' +
+      '<div><label>الفريق الثاني (الضيف)</label><input type="text" data-f="away" maxlength="30"></div>' +
+    '</div>' +
+    '<div class="grid3">' +
+      '<div><label>نص الميعاد (للعرض)</label><input type="text" data-f="when" maxlength="40" placeholder="الثلاثاء ٩:٠٠ مساءً"></div>' +
+      '<div><label>ميعاد الماتش</label><input type="datetime-local" data-f="kick"></div>' +
+      '<div><label>القفل قبل الماتش بـ(دقيقة)</label><input type="number" data-f="closeMin" value="10" min="0" max="120"></div>' +
+    '</div></div>';
+}
+function addMatchRow() {
+  const d = document.createElement('div');
+  d.innerHTML = matchRowHTML();
+  const row = d.firstChild;
+  row.querySelector('[data-rm]').addEventListener('click', () => {
+    if (document.querySelectorAll('#matchRows .mrow').length > 1) row.remove();
+  });
+  $('matchRows').appendChild(row);
+}
+
+async function createContest() {
+  const msg = $('createMsg');
+  const matches = [];
+  let bad = false;
+  document.querySelectorAll('#matchRows .mrow').forEach(row => {
+    const g = f => row.querySelector('[data-f="' + f + '"]').value.trim();
+    const kickVal = row.querySelector('[data-f="kick"]').value;
+    const home = g('home'), away = g('away');
+    if (!home && !away) return;
+    if (!home || !away || !kickVal) { bad = true; return; }
+    matches.push({
+      home: home, away: away, when: g('when'),
+      kickoff: new Date(kickVal).getTime(),
+      closeMin: Math.max(0, Math.min(120, parseInt(g('closeMin'), 10) || 10))
+    });
+  });
+  if (bad || !matches.length) {
+    msg.className = 'msg err';
+    msg.textContent = 'راجع الماتشات: لازم فريقين وميعاد لكل ماتش';
+    return;
+  }
+  $('createBtn').disabled = true;
+  msg.className = 'msg'; msg.textContent = 'جارٍ الإنشاء…';
+  try {
+    const { j } = await api('/admin/create', {
+      title: $('cTitle').value.trim() || 'مسابقة التوقعات',
+      sub: $('cSub').value.trim(),
+      matches: matches
+    });
+    if (j.ok) {
+      msg.className = 'msg ok';
+      msg.textContent = 'اتعملت المسابقة والتوقعات اتفتحت ✅';
+      await load();
+    } else {
+      msg.className = 'msg err';
+      msg.textContent = 'الإنشاء فشل — حاول تاني';
+    }
+  } catch (e) {
+    if (e.message !== 'auth') { msg.className = 'msg err'; msg.textContent = 'مشكلة في الاتصال — حاول تاني'; }
+  }
+  $('createBtn').disabled = false;
+}
+
+/* ---------- فتح / قفل ---------- */
+async function toggle(open) {
+  const msg = $('toggleMsg');
+  msg.className = 'msg'; msg.textContent = 'جارٍ التنفيذ…';
+  try {
+    const { j } = await api('/admin/toggle', { open: open });
+    if (j.ok) {
+      msg.className = 'msg ok';
+      msg.textContent = open ? 'التوقعات اتفتحت 🟢' : 'التوقعات اتقفلت 🔴';
+      await load();
+    } else {
+      msg.className = 'msg err';
+      msg.textContent = 'مفيش مسابقة حالية أصلاً';
+    }
+  } catch (e) {
+    if (e.message !== 'auth') { msg.className = 'msg err'; msg.textContent = 'مشكلة في الاتصال — حاول تاني'; }
+  }
+}
+
+/* ---------- اعتماد النتائج ---------- */
+function renderResultsForm() {
+  const cfg = STATE && STATE.cfg;
+  if (!cfg) {
+    $('resultsForm').innerHTML = '<div class="empty">مفيش مسابقة حالية</div>';
+    $('resultsBtn').disabled = true;
+    return;
+  }
+  $('resultsBtn').disabled = !!cfg.scored;
+  $('resultsForm').innerHTML = cfg.matches.map(m => {
+    const R = STATE.results && STATE.results[m.k];
+    return '<div style="margin-top:10px"><div style="text-align:center;font-weight:800">' +
+      esc(m.home) + ' × ' + esc(m.away) + '</div>' +
+      '<div class="resinputs"><span class="team">' + esc(m.home) + '</span>' +
+      '<input type="number" min="0" max="15" id="rh-' + m.k + '" value="' + (R ? R.h : '') + '">' +
+      '<span class="x">×</span>' +
+      '<input type="number" min="0" max="15" id="rw-' + m.k + '" value="' + (R ? R.w : '') + '">' +
+      '<span class="team">' + esc(m.away) + '</span></div></div>';
+  }).join('') + (cfg.scored ? '<div class="hint" style="text-align:center;color:#F5C451;margin-top:8px">النتائج اتسجلت واتحسبت خلاص 🏁</div>' : '');
+}
+
+function buildAnnouncement(cfg, results, winners, champs) {
+  const lines = [];
+  lines.push('🏆 نتائج ' + cfg.title + ' 🏆');
+  lines.push('');
+  lines.push('〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️');
+  lines.push('');
+  lines.push('السلام عليكم ورحمة الله وبركاته يا جنود الخفاء');
+  lines.push('');
+  lines.push('خلصت ماتشات المسابقة، ودي النتائج والفائزين:');
+  lines.push('');
+  for (const m of cfg.matches) {
+    const R = results[m.k];
+    if (!R) continue;
+    lines.push('⚽ ' + m.home + ' × ' + m.away + ' — النتيجة: ' + R.h + ' - ' + R.w);
+    const w = winners[m.k] || [];
+    const c = champs[m.k];
+    if (c) {
+      lines.push('👑 بطل التوقعات: ' + c + ' (أسرع توقع صحيح)');
+      lines.push('🏆 الفائزون: ' + w.join('، '));
+    } else {
+      lines.push('محدش أصاب نتيجة الماتش ده بالضبط المرة دي — حظ أوفر للجميع 🍀');
+    }
+    lines.push('');
+  }
+  lines.push('مبروك للفائزين، وشكراً من القلب لكل اللي شارك وتوقّع معانا 💙');
+  lines.push('');
+  lines.push('جنود الخفاء — حب الخير للغير');
+  return lines.join('\n');
+}
+
+async function submitResults() {
+  const cfg = STATE && STATE.cfg;
+  const msg = $('resultsMsg');
+  if (!cfg) return;
+  const results = {};
+  let any = false;
+  for (const m of cfg.matches) {
+    const hv = $('rh-' + m.k).value, wv = $('rw-' + m.k).value;
+    if (hv === '' && wv === '') continue;
+    if (hv === '' || wv === '') {
+      msg.className = 'msg err';
+      msg.textContent = 'كمّل نتيجة كل ماتش (رقمين) أو سيبها فاضية خالص';
+      return;
+    }
+    results[m.k] = { h: Math.max(0, Math.min(15, parseInt(hv, 10) || 0)), w: Math.max(0, Math.min(15, parseInt(wv, 10) || 0)) };
+    any = true;
+  }
+  if (!any) {
+    msg.className = 'msg err';
+    msg.textContent = 'اكتب نتيجة ماتش واحد على الأقل';
+    return;
+  }
+  $('resultsBtn').disabled = true;
+  msg.className = 'msg'; msg.textContent = 'جارٍ الاعتماد والحساب…';
+  try {
+    const { status, j } = await api('/admin/results', { results: results });
+    if (j.ok) {
+      msg.className = 'msg ok';
+      msg.textContent = 'اتسجلت النتائج واتحسب الفائزون ✅';
+      // عرض الفائزين
+      let h = '';
+      for (const m of cfg.matches) {
+        const c = j.champs && j.champs[m.k];
+        const w = (j.winners && j.winners[m.k]) || [];
+        if (c) {
+          h += '<div class="champbox"><div>👑 بطل توقعات ' + esc(m.home) + ' × ' + esc(m.away) + '</div>' +
+               '<div class="n">' + esc(c) + '</div>' +
+               '<div class="winlist">🏆 كل الفائزين: <b>' + w.map(esc).join('</b>، <b>') + '</b></div></div>';
+        } else {
+          h += '<div class="champbox" style="border-color:rgba(255,255,255,.25);background:rgba(0,0,0,.2)">' +
+               '<div>' + esc(m.home) + ' × ' + esc(m.away) + '</div>' +
+               '<div class="winlist">محدش أصاب النتيجة دي بالضبط</div></div>';
+        }
+      }
+      $('winnersBox').innerHTML = h;
+      // نص الإعلان
+      const fullResults = Object.assign({}, STATE.results || {}, results);
+      $('announceTxt').value = buildAnnouncement(cfg, fullResults, j.winners || {}, j.champs || {});
+      $('announceBox').hidden = false;
+      await load();
+    } else if (status === 409 || j.error === 'scored') {
+      msg.className = 'msg err';
+      msg.textContent = 'النتائج اتسجلت واتحسبت قبل كده خلاص 🏁';
+      await load();
+    } else {
+      msg.className = 'msg err';
+      msg.textContent = 'الاعتماد فشل — حاول تاني';
+    }
+  } catch (e) {
+    if (e.message !== 'auth') { msg.className = 'msg err'; msg.textContent = 'مشكلة في الاتصال — حاول تاني'; }
+  }
+  $('resultsBtn').disabled = false;
+}
+
+/* ---------- الترحيل ---------- */
+async function migrate() {
+  const msg = $('migrateMsg');
+  $('migrateBtn').disabled = true;
+  msg.className = 'msg'; msg.textContent = 'جارٍ الترحيل…';
+  try {
+    const { j } = await api('/admin/migrate', {});
+    if (j.ok && j.already) {
+      msg.className = 'msg ok';
+      msg.textContent = 'مسابقة ٢٣ نوفمبر اترحلت قبل كده ✅';
+    } else if (j.ok) {
+      msg.className = 'msg ok';
+      msg.textContent = 'تم ترحيل مسابقة ٢٣ نوفمبر إلى السجل والأرشيف ✅';
+      await load();
+    } else {
+      msg.className = 'msg err';
+      msg.textContent = 'الترحيل فشل — حاول تاني';
+    }
+  } catch (e) {
+    if (e.message !== 'auth') { msg.className = 'msg err'; msg.textContent = 'مشكلة في الاتصال — حاول تاني'; }
+  }
+  $('migrateBtn').disabled = false;
+}
+
+/* ---------- لوحة الشرف + الأرشيف ---------- */
+function renderHallHist() {
+  if (!STATE) return;
+  const hall = STATE.hall || {};
+  const cols = [
+    { key: 'players', title: '👥 أكتر ناس شاركت', field: 'p', unit: 'مشاركة' },
+    { key: 'champs', title: '👑 أبطال التوقعات', field: 'champ', unit: 'بطولة' },
+    { key: 'snipers', title: '🎯 ملوك الإصابة', field: 'hit', unit: 'إصابة' }
+  ];
+  let h = '';
+  if (cols.some(c => (hall[c.key] || []).length)) {
+    h += '<div class="hallgrid">';
+    for (const c of cols) {
+      h += '<div class="hallcol"><h3>' + c.title + '</h3>';
+      const rows = (hall[c.key] || []).filter(p => p.name && p.name.indexOf('__') !== 0);
+      if (!rows.length) h += '<div class="empty">لسه فاضية</div>';
+      h += rows.map((p, i) =>
+        '<div class="hrow"><span><span class="rk">' + (i + 1) + '.</span>' + esc(p.name) + '</span>' +
+        '<span class="ct">' + (p[c.field] || 0) + ' ' + c.unit + '</span></div>').join('');
+      h += '</div>';
+    }
+    h += '</div>';
+  }
+  const hist = STATE.hist || [];
+  if (hist.length) {
+    h += '<div style="margin-top:14px">';
+    for (const item of hist) {
+      let dateTxt = '';
+      try {
+        dateTxt = new Intl.DateTimeFormat('ar-EG', { timeZone: 'Africa/Cairo',
+          day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(item.date));
+      } catch (e) { /* ignore */ }
+      const champsArr = Object.values(item.champs || {});
+      h += '<div class="histline"><b>' + esc(item.title) + '</b> — ' + esc(dateTxt) + '<br>';
+      h += (item.matches || []).map((mm, i) =>
+        esc(mm.home) + ' × ' + esc(mm.away) +
+        (mm.res ? ' (<b>' + mm.res.h + ' - ' + mm.res.w + '</b>)' : '') +
+        (champsArr[i] ? ' — 👑 <b>' + esc(champsArr[i]) + '</b>' : ' — مفيش بطل')
+      ).join('<br>');
+      h += '</div>';
+    }
+    h += '</div>';
+  }
+  $('hallHist').innerHTML = h || '<div class="empty">لسه مفيش سجل — أول مسابقة تتحسب هتظهر هنا</div>';
+}
+
+/* ---------- البوابة ---------- */
+const HASH = 'f7b769a7278e520d5b9a92df3ff6625600ca25e64fc33d0256beda4e8ea38a76';
+function sha(s) {
+  return crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)).then(b =>
+    Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2, '0')).join(''));
+}
+function openGate() {
+  $('gate').style.display = 'none';
+  document.body.style.overflow = '';
+  load();
+}
+function lockGate(errTxt) {
+  $('gate').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  if (errTxt) $('gateErr').textContent = errTxt;
+}
+function tryKey() {
+  const v = $('gateKey').value.trim();
+  if (!v) return;
+  sha(v).then(h => {
+    if (h === HASH) {
+      try { sessionStorage.setItem(KEY_STORE, v); } catch (e) {}
+      $('gateErr').textContent = '';
+      openGate();
+    } else {
+      $('gateErr').textContent = '❌ المفتاح غلط — حاول تاني';
+    }
+  }).catch(() => { $('gateErr').textContent = 'حصلت مشكلة — حدّث الصفحة وحاول تاني'; });
+}
+
+/* ---------- تشغيل ---------- */
+document.body.style.overflow = 'hidden';
+$('gateBtn').addEventListener('click', tryKey);
+$('gateKey').addEventListener('keydown', e => { if (e.key === 'Enter') tryKey(); });
+$('refreshBtn').addEventListener('click', load);
+$('addMatchBtn').addEventListener('click', addMatchRow);
+$('createBtn').addEventListener('click', createContest);
+$('openBtn').addEventListener('click', () => toggle(true));
+$('closeBtn').addEventListener('click', () => toggle(false));
+$('resultsBtn').addEventListener('click', submitResults);
+$('migrateBtn').addEventListener('click', migrate);
+$('copyBtn').addEventListener('click', () => {
+  const t = $('announceTxt');
+  const done = () => { $('copyMsg').className = 'msg ok'; $('copyMsg').textContent = 'اتنسخ الإعلان ✅ الصقه في المنشور'; };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(t.value).then(done).catch(() => { t.select(); document.execCommand('copy'); done(); });
+  } else { t.select(); document.execCommand('copy'); done(); }
+});
+addMatchRow();
+addMatchRow();
+(function initGate() {
+  const saved = boardKey();
+  if (saved) sha(saved).then(h => { if (h === HASH) openGate(); }).catch(() => {});
 })();
 </script>
 </body>
