@@ -64,13 +64,6 @@
   .pulse { animation: pulse 1.6s infinite; }
   @keyframes pulse { 50% { box-shadow: 0 0 0 12px rgba(47,185,216,.18); } }
   .note { color: rgba(255,255,255,.65); font-size: 13px; margin-top: 12px; line-height: 1.9; }
-  .presence { display: none; margin-top: 12px; color: #F5C451; font-weight: 700; font-size: 15px; }
-  .guestrow { display: flex; gap: 8px; margin-top: 16px; }
-  .guestrow input {
-    flex: 1; min-width: 0; padding: 12px 14px; border-radius: 99px; border: 1px solid rgba(47,185,216,.55);
-    background: rgba(255,255,255,.08); color: #fff; font-family: inherit; font-size: 16px; text-align: center;
-  }
-  .guestrow input::placeholder { color: rgba(255,255,255,.45); }
   .sched { text-align: right; }
   .sched h2 { font-size: 19px; text-align: center; margin-bottom: 12px; }
   .srow { display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px dashed rgba(255,255,255,.15); }
@@ -104,12 +97,6 @@
     <button class="btn pulse" id="enter" hidden>🎧 ادخل السهرة</button>
     <button class="btn gold" id="backlive" hidden>⏪ ارجع للبث المباشر</button>
     <button class="btn small" id="pausebtn" hidden>⏸ وقّف عندي</button>
-    <div class="presence" id="presence"></div>
-    <div class="guestrow" id="guestrow">
-      <input id="gname" type="text" maxlength="30" placeholder="اكتب اسمك أو لقبك…">
-      <button class="btn small" id="joinbtn" style="margin-top:0">سجّل حضورك 👋</button>
-    </div>
-    <div class="note" id="guestnote">لو كتبت اسمك هيظهر في «يستمع الآن» عند كل اللي في السهرة معاك.</div>
     <div class="note" id="note">خليك في الصفحة دي، وأول ما الميعاد ييجي دوس «ادخل السهرة» هتلاقي نفسك في قلب الحكاية مع الكل.</div>
   </div>
 
@@ -139,7 +126,6 @@
 var TALE_BASE = "https://archive.org/download/7ikeyetAl3eroui/";
 var KAHF = { url: "https://server8.mp3quran.net/afs/018.mp3", title: "سورة الكهف — بصوت الشيخ مشاري العفاسي", dur: 1996, kind: "🕌 سورة الكهف" };
 var TALES = [{"f": "AlAarabiWelJamal.mp3", "t": "الأعرابي والجمل", "s": 494}, {"f": "AlAmanaSawwditOuejhLighraab.mp3", "t": "الأمانة سوّدت وجه الغراب", "s": 623}, {"f": "EjjnanOuCharitElKhoukh.mp3", "t": "الجنان وشجرة الخوخ", "s": 528}, {"f": "ElHajj.mp3", "t": "الحاج", "s": 435}, {"f": "ElHattabOuKassamLarzaak.mp3", "t": "الحطاب وقسّام الأرزاق", "s": 683}, {"f": "ElJoudWelKramAndElArab.mp3", "t": "الجود والكرم عند العرب", "s": 438}, {"f": "ElKhammasssWelKinz.mp3", "t": "الخمّاس والكنز", "s": 685}, {"f": "ElliYaakilArakJebine.mp3", "t": "اللي ياكل عرق جبينه", "s": 742}, {"f": "ErrizkWelBarka.mp3", "t": "الرزق والبركة", "s": 822}, {"f": "ElAzouzaWelMallakh.mp3", "t": "عزوزة والملّاخ", "s": 658}, {"f": "ElHmaWelKnayenEthalatha.mp3", "t": "الحماة والكناين الثلاثة", "s": 594}, {"f": "ElJorhYabraaYaJabra.mp3", "t": "الجرح يبرى يا جبرة", "s": 681}, {"f": "ElWaliyyEddajjal.mp3", "t": "الولي الدجّال", "s": 697}, {"f": "ErrajilElBedwiWelOuzirHassoud.mp3", "t": "الرجل البدوي والوزير الحسود", "s": 528}];
-var PRESENCE_URL = "https://jnoud-sahra.m-uons2002.workers.dev";
 var TZ = "Africa/Cairo";
 
 var $ = function (id) { return document.getElementById(id); };
@@ -337,39 +323,6 @@ audio.addEventListener("loadedmetadata", function () { if (S.joined && !S.paused
 setInterval(function () { if (S.joined && !S.paused && !audio.paused) syncAudio(false); }, 10000);
 setInterval(render, 500);
 render();
-/* ---- presence counter (lights up when the counter service is on) ---- */
-var cid = localStorage.getItem("jnoud_sahra_id");
-if (!cid) { cid = "c" + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem("jnoud_sahra_id", cid); }
-var myName = localStorage.getItem("jnoud_sahra_name") || "";
-if (myName) { $("gname").value = myName; $("joinbtn").textContent = "غيّر الاسم"; $("guestnote").textContent = "أهلاً يا " + myName + " 👋 — اسمك بيظهر في «يستمع الآن» عند الكل."; }
-$("joinbtn").addEventListener("click", function () {
-  var v = $("gname").value.replace(/\s+/g, " ").trim().slice(0, 30);
-  myName = v;
-  localStorage.setItem("jnoud_sahra_name", v);
-  $("joinbtn").textContent = v ? "غيّر الاسم" : "سجّل حضورك 👋";
-  $("guestnote").textContent = v ? ("أهلاً يا " + v + " 👋 — اسمك بيظهر في «يستمع الآن» عند الكل.") : "لو كتبت اسمك هيظهر في «يستمع الآن» عند كل اللي في السهرة معاك.";
-  ping();
-});
-function ping() {
-  fetch(PRESENCE_URL + "/ping", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: cid, name: myName }) })
-    .then(function (r) { return r.json(); })
-    .then(function (j) {
-      if (j && typeof j.count === "number" && j.count > 0) {
-        var names = (j.names || []).slice(0, 12);
-        $("presence").style.display = "block";
-        if (names.length) {
-          var extra = j.names.length > 12 ? (" وغيرهم " + (j.names.length - 12) + " كمان") : "";
-          $("presence").textContent = "🎧 يستمع الآن (" + j.count + "): " + names.join(" • ") + extra;
-        } else {
-          $("presence").textContent = "👥 موجود في السهرة دلوقتي " + j.count + " من جنود الخفاء";
-        }
-      } else {
-        $("presence").style.display = "none";
-      }
-    })
-    .catch(function () { $("presence").style.display = "none"; });
-}
-ping(); setInterval(ping, 30000);
 </script>
 </body>
 </html>
