@@ -320,6 +320,44 @@
     text-decoration-color:rgba(47,185,216,.4);
   }
 
+  /* ---------- Leagues selector ---------- */
+  .leagues{
+    display:flex;gap:8px;flex-wrap:wrap;justify-content:center;
+    padding:2px 2px 4px;margin:0 0 8px;
+  }
+  .league-chip{
+    flex:0 1 auto;
+    border:1.5px solid var(--line-soft);
+    background:var(--card);
+    color:var(--muted);
+    border-radius:999px;
+    padding:9px 16px;
+    font-size:14.5px;font-weight:800;
+    cursor:pointer;white-space:nowrap;
+    transition:border-color .18s, background .18s, color .18s;
+  }
+  .league-chip[aria-selected="true"]{
+    background:linear-gradient(180deg, var(--gold-dim), rgba(0,0,0,0));
+    background-color:var(--card-2);
+    border:2px solid var(--gold);
+    color:var(--gold-2);
+  }
+  .league-chip:active{transform:scale(.985)}
+
+  /* ---------- Radar (standings & scorers) link ---------- */
+  .radar-link{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    margin:0 0 14px;padding:12px 16px;
+    background:linear-gradient(180deg, var(--card-2), var(--card));
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    color:var(--gold-2);
+    font-size:15.5px;font-weight:800;
+    text-decoration:none;
+    box-shadow:0 8px 24px rgba(0,0,0,.28);
+  }
+  .radar-link:active{transform:scale(.99)}
+
   footer{
     text-align:center;color:var(--muted-2);
     font-size:12.5px;font-weight:600;line-height:1.9;
@@ -344,7 +382,11 @@
 
   <nav class="days" id="daysStrip" role="tablist" aria-label="اختيار اليوم"></nav>
 
+  <nav class="leagues" id="leaguesStrip" role="tablist" aria-label="اختيار الدوري"></nav>
+
   <p class="updated" id="updatedLine"></p>
+
+  <a class="radar-link" href="https://muons2002.dpdns.org/matches-radar.html">📊 ترتيب وهدافين الدوري المصري</a>
 
   <main id="content" aria-live="polite"></main>
 
@@ -390,6 +432,26 @@
     "ita.1":"أبوظبي الرياضية",
     "sau.1":"ثمانية"
   };
+  /* ---------- تصفح الدوريات ---------- */
+  var LEAGUE_FILTERS = [
+    { key:"all", name:"🌍 كل الدوريات" },
+    { key:"egy", name:"الدوري المصري", source:"365", comp:552 },
+    { key:"eng", name:"الدوري الإنجليزي", source:"espn", slug:"eng.1" },
+    { key:"esp", name:"الدوري الإسباني", source:"espn", slug:"esp.1" },
+    { key:"ucl", name:"دوري أبطال أوروبا", source:"espn", slug:"uefa.champions" },
+    { key:"alg", name:"الدوري الجزائري", source:"365", comp:560 },
+    { key:"mar", name:"الدوري المغربي", source:"365", comp:557 }
+  ];
+
+  /* الدوريات العربية من 365scores — نفس مصدر قسم الدوري المصري في صفحة الرادار */
+  var SCORES365_BASE = "https://webws.365scores.com/web";
+  var SCORES365_PARAMS = "appTypeId=5&langId=27&timezoneName=Africa/Cairo&userCountryId=131";
+  var LEAGUES_365 = [
+    { key:"egy", name:"الدوري المصري", comp:552 },
+    { key:"alg", name:"الدوري الجزائري", comp:560 },
+    { key:"mar", name:"الدوري المغربي", comp:557 }
+  ];
+
 
   var TEAM_AR = {
     "Al Ahly":"الأهلي","Al-Ahly":"الأهلي","Al Ahly SC":"الأهلي",
@@ -499,11 +561,13 @@
   var content = document.getElementById("content");
   var updatedLine = document.getElementById("updatedLine");
   var daysStrip = document.getElementById("daysStrip");
+  var leaguesStrip = document.getElementById("leaguesStrip");
 
   function emptySlot(){ return { loaded:false, loading:false, groups:null, failed:false, updatedAt:null }; }
 
   var state = {
     day: 0,
+    league: "all",
     cache: [emptySlot(), emptySlot(), emptySlot(), emptySlot(), emptySlot(), emptySlot(), emptySlot()]
   };
 
@@ -553,6 +617,162 @@
       return { league: league, events: events };
     });
   }
+  function leagueFilterByKey(key){
+    for(var i=0;i<LEAGUE_FILTERS.length;i++){
+      if(LEAGUE_FILTERS[i].key === key) return LEAGUE_FILTERS[i];
+    }
+    return LEAGUE_FILTERS[0];
+  }
+
+  function buildLeagueChips(){
+    leaguesStrip.innerHTML = "";
+    LEAGUE_FILTERS.forEach(function(L){
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "league-chip";
+      btn.setAttribute("role", "tab");
+      btn.setAttribute("aria-selected", L.key === state.league ? "true" : "false");
+      btn.setAttribute("data-league", L.key);
+      btn.textContent = L.name;
+      btn.addEventListener("click", function(){ selectLeague(L.key); });
+      leaguesStrip.appendChild(btn);
+    });
+  }
+
+  function syncLeagueChips(){
+    var chips = leaguesStrip.querySelectorAll(".league-chip");
+    for(var i=0;i<chips.length;i++){
+      chips[i].setAttribute("aria-selected",
+        chips[i].getAttribute("data-league") === state.league ? "true" : "false");
+    }
+  }
+
+  function selectLeague(key){
+    if(state.league === key) return;
+    state.league = key;
+    syncLeagueChips();
+    reloadCurrent(false);
+    render();
+  }
+
+  function ddmmyyyy(d){
+    return pad(d.getDate()) + "/" + pad(d.getMonth()+1) + "/" + d.getFullYear();
+  }
+
+  var scoresPromises = {}; // dayIdx -> Promise<{ok, games}>
+  function scoresForDay(idx, force){
+    if(force) delete scoresPromises[idx];
+    if(scoresPromises[idx]) return scoresPromises[idx];
+    var ds = ddmmyyyy(dateForDay(idx));
+    var url = SCORES365_BASE + "/games/allscores/?" + SCORES365_PARAMS +
+              "&sports=1&startDate=" + ds + "&endDate=" + ds +
+              "&withTop=true&onlyMajorGames=false";
+    var p = fetch(url).then(function(res){
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    }).then(function(json){
+      return { ok:true, games: (json && json.games) || [] };
+    }).catch(function(){
+      return { ok:false, games: [] };
+    });
+    scoresPromises[idx] = p;
+    return p;
+  }
+
+  function gamesForComp(games, comp){
+    var out = [];
+    (games || []).forEach(function(g){
+      if(g && g.competitionId === comp) out.push(g);
+    });
+    out.sort(function(a,b){ return new Date(a.startTime) - new Date(b.startTime); });
+    return out;
+  }
+
+  /* تحويل مباراة 365scores لشكل مباريات ESPN عشان تتعرض بنفس كارت المباراة */
+  function adapt365(g){
+    var hc = g.homeCompetitor || {}, ac = g.awayCompetitor || {};
+    var hs = hc.score, as = ac.score;
+    var hasScore = (typeof hs === "number" && hs >= 0 && typeof as === "number" && as >= 0);
+    var phase = "pre";
+    if(g.statusGroup === 3) phase = "in";
+    else if(g.statusGroup === 4) phase = "post";
+    var clock = "";
+    if(phase === "in" && typeof g.gameTime === "number" && g.gameTime > 0){
+      clock = Math.floor(g.gameTime) + "'";
+    }
+    var detail = "";
+    if(g.statusText && g.statusText.indexOf("تأجل") >= 0) detail = "Postponed";
+    return {
+      date: g.startTime,
+      competitions: [{ competitors: [
+        { homeAway:"home", team:{ displayName: hc.name || "—", logo:"" }, score: hasScore ? String(hs) : "" },
+        { homeAway:"away", team:{ displayName: ac.name || "—", logo:"" }, score: hasScore ? String(as) : "" }
+      ]}],
+      status: { type:{ state:phase, shortDetail:"", detail:detail }, displayClock: clock }
+    };
+  }
+
+  function groups365(games){
+    var out = [];
+    LEAGUES_365.forEach(function(L){
+      var gs = gamesForComp(games, L.comp);
+      if(gs.length){
+        out.push({ league:{ name:L.name, slug:L.key }, events: gs.map(adapt365) });
+      }
+    });
+    return out;
+  }
+
+  var leagueSlot = emptySlot();
+  var leagueStamp = "";
+
+  function currentSlot(){
+    return state.league === "all" ? state.cache[state.day] : leagueSlot;
+  }
+
+  function reloadCurrent(force){
+    if(state.league === "all") loadDay(state.day, force);
+    else loadLeague(force);
+  }
+
+  function loadLeague(force){
+    var L = leagueFilterByKey(state.league);
+    var stamp = L.key + "@" + state.day;
+    if(leagueStamp !== stamp){ leagueSlot = emptySlot(); leagueStamp = stamp; }
+    var slot = leagueSlot;
+    if(slot.loading) return;
+    if(slot.loaded && !force){
+      render();
+      return;
+    }
+    slot.loading = true;
+    if(!slot.loaded) renderLoading();
+    var idx = state.day;
+    function done(groups, ok){
+      slot.loading = false;
+      slot.failed = !ok;
+      slot.groups = groups;
+      slot.loaded = true;
+      slot.updatedAt = new Date();
+      if(state.league === L.key && state.day === idx) render();
+    }
+    if(L.source === "espn"){
+      var lg = null;
+      LEAGUES.forEach(function(x){ if(x.slug === L.slug) lg = x; });
+      fetchLeague(lg, yyyymmdd(dateForDay(idx))).then(function(res){
+        var evs = (res.events || []).slice().sort(function(a,b){
+          return new Date(a.date) - new Date(b.date);
+        });
+        done(evs.length ? [{ league: lg, events: evs }] : [], true);
+      }).catch(function(){ done([], false); });
+    } else {
+      scoresForDay(idx, force).then(function(res){
+        var gs = gamesForComp(res.games, L.comp);
+        done(gs.length ? [{ league:{ name:L.name, slug:L.key }, events: gs.map(adapt365) }] : [], res.ok);
+      });
+    }
+  }
+
 
   function loadDay(idx, force){
     var slot = state.cache[idx];
@@ -565,11 +785,21 @@
     if(!slot.loaded) renderLoading();
     var dateStr = yyyymmdd(dateForDay(idx));
     var jobs = LEAGUES.map(function(l){ return fetchLeague(l, dateStr); });
-    Promise.allSettled(jobs).then(function(results){
+    var scoresJob = scoresForDay(idx, force).then(function(res){
+      return { groups: groups365(res.games), ok: res.ok };
+    });
+    Promise.allSettled(jobs.concat([scoresJob])).then(function(results){
       slot.loading = false;
       var groups = [];
       var anyOk = false;
-      results.forEach(function(r){
+      var scoresRes = results[results.length - 1];
+      if(scoresRes.status === "fulfilled" && scoresRes.value){
+        if(scoresRes.value.ok) anyOk = true;
+        if(scoresRes.value.groups && scoresRes.value.groups.length){
+          groups = scoresRes.value.groups;
+        }
+      }
+      results.slice(0, results.length - 1).forEach(function(r){
         if(r.status === "fulfilled"){
           anyOk = true;
           if(r.value.events && r.value.events.length){
@@ -602,7 +832,7 @@
   }
 
   function render(){
-    var slot = state.cache[state.day];
+    var slot = currentSlot();
     if(!slot.loaded){
       if(!slot.loading) renderLoading();
       return;
@@ -615,7 +845,7 @@
         '<button class="retry-btn" id="retryBtn">حاول تاني</button></div>';
       document.getElementById("retryBtn").addEventListener("click", function(){
         slot.loaded = false;
-        loadDay(state.day, true);
+        reloadCurrent(true);
       });
       return;
     }
@@ -623,11 +853,17 @@
       updatedLine.innerHTML = "آخر تحديث: <b>" + esc(clockFmt.format(slot.updatedAt)) + "</b> • بيتم التحديث تلقائياً كل دقيقة";
     }
     if(!slot.groups || !slot.groups.length){
+      var emptyMsg;
+      if(state.league !== "all"){
+        emptyMsg = '<p><strong>مفيش مباريات في ' + esc(leagueFilterByKey(state.league).name) +
+                   ' في اليوم ده</strong><br>جرّب يوم تاني أو ارجع لـ «كل الدوريات»</p>';
+      } else {
+        emptyMsg = '<p><strong>مفيش مباريات كبيرة في اليوم ده</strong><br>ممكن تكون فترة توقف دولي أو راحة بين المباريات — ارجع بكرة هتلاقي مباريات جديدة</p>';
+      }
       content.innerHTML =
-        '<div class="state"><div class="big">⚽</div>' +
-        '<p><strong>مفيش مباريات كبيرة في اليوم ده</strong><br>ممكن تكون فترة توقف دولي أو راحة بين المباريات — ارجع بكرة هتلاقي مباريات جديدة</p></div>' +
+        '<div class="state"><div class="big">⚽</div>' + emptyMsg + '</div>' +
         '<button class="manual-refresh" id="refreshBtn">تحديث دلوقتي</button>';
-      document.getElementById("refreshBtn").addEventListener("click", function(){ loadDay(state.day, true); });
+      document.getElementById("refreshBtn").addEventListener("click", function(){ reloadCurrent(true); });
       return;
     }
     var html = "";
@@ -646,7 +882,7 @@
     });
     html += '<button class="manual-refresh" id="refreshBtn">🔄 تحديث النتائج دلوقتي</button>';
     content.innerHTML = html;
-    document.getElementById("refreshBtn").addEventListener("click", function(){ loadDay(state.day, true); });
+    document.getElementById("refreshBtn").addEventListener("click", function(){ reloadCurrent(true); });
   }
 
   function matchHTML(ev){
@@ -729,26 +965,27 @@
   function selectDay(idx){
     state.day = idx;
     syncChips();
-    loadDay(idx, false);
+    reloadCurrent(false);
     render();
   }
 
   buildChips();
+  buildLeagueChips();
 
   // Initial load: today first
   loadDay(0, false);
 
   // Auto-refresh visible day every 60 seconds
   setInterval(function(){
-    loadDay(state.day, true);
+    reloadCurrent(true);
   }, 60000);
 
   // Refresh when the page becomes visible again (user came back to it)
   document.addEventListener("visibilitychange", function(){
     if(!document.hidden){
-      var slot = state.cache[state.day];
+      var slot = currentSlot();
       if(slot.updatedAt && (Date.now() - slot.updatedAt.getTime() > 60000)){
-        loadDay(state.day, true);
+        reloadCurrent(true);
       }
     }
   });
