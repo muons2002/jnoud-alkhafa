@@ -255,6 +255,7 @@
   .score{
     font-size:22px;font-weight:900;line-height:1.15;
     font-variant-numeric:tabular-nums;white-space:nowrap;
+    direction:ltr;
   }
   .score .dash{color:var(--muted-2);margin:0 5px;font-weight:700}
   .status-under{margin-top:3px;font-size:12.5px;font-weight:700}
@@ -931,6 +932,8 @@
     }
 
     var center = "";
+    /* النتيجة بتتعرض «ضيف - صاحب أرض» لأن الصف عربي RTL: صاحب الأرض على اليمين
+       والضيف على الشمال، فكده كل رقم بيبقى جنب فريقه (تصليح انعكاس النتيجة) */
     if(postponed){
       center = '<span class="time-pill">مؤجلة</span>';
     } else if(phase === "in"){
@@ -939,13 +942,13 @@
       center =
         '<div class="live-badge"><span class="pulse-dot"></span>مباشر</div>' +
         (hasScore
-          ? '<div class="score">' + esc(homeScore) + '<span class="dash">-</span>' + esc(awayScore) + '</div>'
+          ? '<div class="score">' + esc(awayScore) + '<span class="dash">-</span>' + esc(homeScore) + '</div>'
           : '<div class="score">- - -</div>') +
         '<div class="status-under minute">' + esc(minute) + '</div>';
     } else if(phase === "post"){
       center =
         (hasScore
-          ? '<div class="score">' + esc(homeScore) + '<span class="dash">-</span>' + esc(awayScore) + '</div>'
+          ? '<div class="score">' + esc(awayScore) + '<span class="dash">-</span>' + esc(homeScore) + '</div>'
           : '<div class="score">- - -</div>') +
         '<div class="status-under finished">انتهت</div>';
     } else {
