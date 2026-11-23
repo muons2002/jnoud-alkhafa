@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مسابقة التوقعات — جنود الخفاء</title>
+<!-- OG -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="جنود الخفاء">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:title" content="مسابقة التوقعات — جنود الخفاء">
+<meta property="og:description" content="توقّع نتيجة الجونة × الزمالك والأهلي × بيراميدز وكن بطل التوقعات">
+<meta property="og:url" content="https://muons2002.dpdns.org/contest-ahly-pyramids.html">
+<meta property="og:image" content="https://muons2002.dpdns.org/og-contest-ahly-pyramids.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="مسابقة التوقعات — جنود الخفاء">
+<meta name="twitter:description" content="توقّع نتيجة الجونة × الزمالك والأهلي × بيراميدز وكن بطل التوقعات">
+<meta name="twitter:image" content="https://muons2002.dpdns.org/og-contest-ahly-pyramids.jpg">
+<link rel="icon" type="image/png" sizes="180x180" href="fav-contest-ahly-pyramids-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="fav-contest-ahly-pyramids-32.png">
+<link rel="apple-touch-icon" href="fav-contest-ahly-pyramids-180.png">
+<!-- /OG -->
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scrollbar-gutter:stable; }
+  [hidden] { display:none !important; }
+  body {
+    font-family:'Segoe UI',Tahoma,Arial,sans-serif;
+    background:linear-gradient(180deg,#081426 0%,#0D2B45 55%,#0A3A56 100%);
+    color:#EAF4FA; min-height:100vh; padding:18px 14px 42px;
+  }
+  .wrap { max-width:560px; margin:0 auto; }
+  .tile {
+    width:74px; height:74px; margin:6px auto 10px; border-radius:20px;
+    background:linear-gradient(145deg,#1B9AC4,#0A5E7A);
+    display:flex; align-items:center; justify-content:center; font-size:38px;
+    box-shadow:0 8px 22px rgba(0,0,0,.35);
+  }
+  h1 { text-align:center; font-size:25px; font-weight:800; }
+  .sub { text-align:center; color:#F5C451; font-weight:700; margin-top:5px; font-size:15.5px; }
+  .when { text-align:center; color:#BCD9EA; margin-top:4px; font-size:14px; }
+  .card {
+    background:rgba(255,255,255,.06); border:1px solid rgba(245,196,81,.35);
+    border-radius:16px; padding:16px; margin-top:16px;
+  }
+  .card h2 { font-size:18.5px; font-weight:800; text-align:center; }
+  .card .mtime { text-align:center; color:#BCD9EA; font-size:13.5px; margin-top:3px; }
+  label { display:block; font-weight:700; font-size:14.5px; margin:12px 0 6px; color:#D8EDF8; }
+  input[type=text] {
+    width:100%; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.25);
+    background:rgba(0,0,0,.25); color:#fff; font-size:16px; font-family:inherit;
+  }
+  .score { display:flex; align-items:center; gap:10px; justify-content:center; margin-top:6px; }
+  .score .team { flex:1; text-align:center; font-weight:800; font-size:16px; }
+  .score select {
+    width:74px; padding:11px 6px; border-radius:12px; border:1px solid rgba(255,255,255,.25);
+    background:#0D2B45; color:#fff; font-size:18px; text-align:center; font-family:inherit;
+  }
+  .score .x { font-size:20px; font-weight:800; color:#F5C451; }
+  button {
+    width:100%; margin-top:14px; padding:13px; border:none; border-radius:12px; cursor:pointer;
+    background:linear-gradient(145deg,#1B9AC4,#0A5E7A); color:#fff; font-size:16.5px; font-weight:800;
+    font-family:inherit;
+  }
+  button:disabled { opacity:.45; cursor:default; }
+  .msg { text-align:center; margin-top:10px; font-size:14.5px; min-height:20px; }
+  .ok { color:#7BE3A8; } .err { color:#FF9D9D; }
+  .cd {
+    text-align:center; font-size:30px; font-weight:800; color:#F5C451;
+    font-variant-numeric:tabular-nums; margin-top:4px;
+  }
+  .cd small { display:block; font-size:13px; color:#BCD9EA; font-weight:600; margin-top:2px; }
+  .listhead { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .listhead b { font-size:16px; }
+  .count { background:rgba(245,196,81,.16); color:#F5C451; border:1px solid rgba(245,196,81,.4);
+    padding:2px 12px; border-radius:999px; font-weight:800; font-size:14px; }
+  .entry {
+    display:flex; justify-content:space-between; align-items:center; gap:8px;
+    background:rgba(0,0,0,.22); border:1px solid rgba(255,255,255,.09);
+    border-radius:11px; padding:9px 12px; margin-top:7px; font-size:15px;
+  }
+  .entry .sc { font-weight:800; color:#F5C451; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .entry.win { border-color:#F5C451; background:rgba(245,196,81,.13); }
+  .empty { text-align:center; color:#9FC3D8; padding:12px 0 4px; font-size:14.5px; }
+  .rules { font-size:14px; line-height:2; color:#D8EDF8; }
+  .rules b { color:#F5C451; }
+  .result {
+    text-align:center; font-size:17px; font-weight:800; color:#081426;
+    background:linear-gradient(145deg,#F5C451,#D9A92F); border-radius:12px; padding:12px; margin-top:12px;
+  }
+  .foot { text-align:center; color:#8FB8CE; font-size:13px; margin-top:20px; }
+</style>
+</head>
+<body>
+<div style="background:linear-gradient(135deg,#F5C451,#D9A62E);color:#081426;text-align:center;font-weight:800;font-size:16px;padding:12px 10px;line-height:1.7">👁️ نسخة تصوّرية — دي نتائج افتراضية للعرض بس<br><span style="font-weight:600;font-size:13.5px">شكل الصفحة بعد الماتشات: النتيجة فوق، والفائزين متعلمين بـ🏆</span></div>
+<div class="wrap">
+  <div class="tile">🏆</div>
+  <h1>مسابقة التوقعات</h1>
+  <div class="sub">جنود الخفاء — حب الخير للغير</div>
+  <div class="when">الإثنين 23 نوفمبر 2026 — الدوري المصري الممتاز</div>
+
+  <div class="card">
+    <label for="name" style="margin-top:0">اسمك أو لقبك</label>
+    <input type="text" id="name" maxlength="30" placeholder="اكتب اسمك هنا…" autocomplete="off">
+    <div class="rules" style="margin-top:8px;font-size:13px">سجّل توقعك لكل ماتش لوحده قبل ما يقفل — وتقدر تعدّل أي توقع لحد ما يقفل بابه.</div>
+  </div>
+
+  <div class="card" id="card-z">
+    <h2>الجونة × الزمالك</h2>
+    <div class="mtime">الساعة 5:00 مساءً — باب التوقعات يقفل 4:50</div>
+    <div class="cd" id="cd-z">…<small>المتبقي على قفل باب التوقعات</small></div>
+    <div id="form-z">
+      <div class="score">
+        <div class="team">الجونة</div>
+        <select id="h-z"></select>
+        <div class="x">×</div>
+        <select id="w-z"></select>
+        <div class="team">الزمالك</div>
+      </div>
+      <button id="send-z">سجّل توقعك ⚽</button>
+      <div class="msg" id="msg-z"></div>
+    </div>
+    <div class="result" id="result-z" hidden></div>
+  </div>
+  <div class="card">
+    <div class="listhead"><b>توقعات الجونة × الزمالك</b><span class="count" id="count-z">…</span></div>
+    <div id="list-z"><div class="empty">جارٍ التحميل…</div></div>
+  </div>
+
+  <div class="card" id="card-a">
+    <h2>الأهلي × بيراميدز</h2>
+    <div class="mtime">الساعة 8:00 مساءً — باب التوقعات يقفل 7:50</div>
+    <div class="cd" id="cd-a">…<small>المتبقي على قفل باب التوقعات</small></div>
+    <div id="form-a">
+      <div class="score">
+        <div class="team">الأهلي</div>
+        <select id="h-a"></select>
+        <div class="x">×</div>
+        <select id="w-a"></select>
+        <div class="team">بيراميدز</div>
+      </div>
+      <button id="send-a">سجّل توقعك ⚽</button>
+      <div class="msg" id="msg-a"></div>
+    </div>
+    <div class="result" id="result-a" hidden></div>
+  </div>
+  <div class="card">
+    <div class="listhead"><b>توقعات الأهلي × بيراميدز</b><span class="count" id="count-a">…</span></div>
+    <div id="list-a"><div class="empty">جارٍ التحميل…</div></div>
+  </div>
+
+  <div class="card rules">
+    <b>القواعد:</b><br>
+    • توقّع نتيجة كل ماتش بالضبط (الأهداف بالأرقام).<br>
+    • كل ماتش باب توقعاته يقفل قبله بـ10 دقائق: الزمالك <b>4:50</b> والأهلي <b>7:50</b> مساءً بتوقيت القاهرة.<br>
+    • تقدر تعدّل توقعك أي وقت قبل القفل — آخر تعديل هو اللي بيتحسب، ووقت تسجيلك الأول محفوظ.<br>
+    • اللي يصيب النتيجة بالضبط يكسب، وأسرع توقع صحيح في كل ماتش هو <b>بطل التوقعات 👑</b>، وكل الفائزين هيتعلن أسماؤهم بعد الماتشات على منصتنا.
+  </div>
+
+  <div class="foot">جنود الخفاء 🛡️ muons2002.dpdns.org</div>
+</div>
+
+<script>
+const API = 'https://jnoud-contest.m-uons2002.workers.dev';
+// بعد الماتشات: حط النتيجة النهائية هنا وارفع الصفحة — التوقعات الصحيحة هتتلون لوحدها
+const RESULTS = { z: {h:0, w:2}, a: {h:2, w:1} }; // مثال: { z: {h:1, w:2}, a: {h:0, w:0} }
+
+function cairoToEpoch(y, mo, d, h, mi) {
+  const guess = Date.UTC(y, mo - 1, d, h, mi, 0);
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'Africa/Cairo', hour12: false,
+    year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }).formatToParts(new Date(guess));
+  const p = {};
+  for (const x of parts) p[x.type] = parseInt(x.value, 10);
+  const asUTC = Date.UTC(p.year, p.month - 1, p.day, p.hour % 24, p.minute, p.second);
+  return guess - (asUTC - guess);
+}
+const MATCHES = {
+  z: { close: cairoToEpoch(2026, 11, 23, 16, 50) },
+  a: { close: cairoToEpoch(2026, 11, 23, 19, 50) }
+};
+
+const $ = id => document.getElementById(id);
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function pad(n) { return String(n).padStart(2, '0'); }
+
+let myId = localStorage.getItem('jnoud_contest_id');
+if (!myId) {
+  myId = 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+  localStorage.setItem('jnoud_contest_id', myId);
+}
+$('name').value = localStorage.getItem('jnoud_contest_name') || '';
+$('name').addEventListener('change', () => localStorage.setItem('jnoud_contest_name', $('name').value.trim()));
+
+for (const m of ['z', 'a']) {
+  for (const side of ['h', 'w']) {
+    const sel = $(side + '-' + m);
+    for (let i = 0; i <= 9; i++) {
+      const o = document.createElement('option');
+      o.value = i; o.textContent = i;
+      sel.appendChild(o);
+    }
+  }
+  $('send-' + m).addEventListener('click', () => submit(m));
+}
+
+let DATA = {"z": [{"name": "مهندس يونس", "h": 1, "w": 3, "ts": 1795399865973}, {"name": "Drahmed Fayedaboegila", "h": 0, "w": 2, "ts": 1795400200658}, {"name": "عمرو عبدالبديع عبدالوكيل", "h": 1, "w": 2, "ts": 1795400284863}, {"name": "Abu Mido", "h": 1, "w": 0, "ts": 1795400332008}, {"name": "محمد حسن", "h": 0, "w": 2, "ts": 1795400712072}, {"name": "هشام البختاوى", "h": 1, "w": 1, "ts": 1795400851632}], "a": [{"name": "مهندس يونس", "h": 1, "w": 2, "ts": 1795399851600}, {"name": "Drahmed Fayedaboegila", "h": 3, "w": 1, "ts": 1795400214283}, {"name": "عمرو عبدالبديع عبدالوكيل", "h": 2, "w": 1, "ts": 1795400293415}, {"name": "Abu Mido", "h": 2, "w": 0, "ts": 1795400347999}, {"name": "محمد حسن", "h": 2, "w": 2, "ts": 1795400730172}, {"name": "هشام البختاوى", "h": 2, "w": 1, "ts": 1795400867957}]};
+
+function render(m) {
+  const entries = DATA[m] || [];
+  $('count-' + m).textContent = entries.length + ' توقع';
+  const R = RESULTS[m];
+  if (!entries.length) {
+    $('list-' + m).innerHTML = '<div class="empty">لسه مفيش توقعات — كن أول واحد ⚽</div>';
+    return;
+  }
+  $('list-' + m).innerHTML = entries.slice().reverse().map(e => {
+    const win = R && e.h === R.h && e.w === R.w;
+    return '<div class="entry' + (win ? ' win' : '') + '"><span>' + (win ? '🏆 ' : '') + esc(e.name) + '</span><span class="sc">' + e.h + ' - ' + e.w + '</span></div>';
+  }).join('');
+}
+
+async function load() { render('z'); render('a'); }
+
+async function submit(m) {
+  const name = $('name').value.trim();
+  const msg = $('msg-' + m);
+  if (!name) {
+    msg.className = 'msg err';
+    msg.textContent = 'اكتب اسمك الأول فوق يا بطل';
+    $('name').focus();
+    return;
+  }
+  localStorage.setItem('jnoud_contest_name', name);
+  const btn = $('send-' + m);
+  btn.disabled = true;
+  msg.className = 'msg'; msg.textContent = 'جارٍ التسجيل…';
+  try {
+    const r = await fetch(API + '/enter', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: myId, name: name, m: m, h: parseInt($('h-' + m).value, 10), w: parseInt($('w-' + m).value, 10) })
+    });
+    const j = await r.json();
+    if (j.ok) {
+      msg.className = 'msg ok';
+      msg.textContent = 'اتسجل توقعك يا بطل ✅ بالتوفيق';
+      await load();
+    } else if (j.error === 'closed') {
+      msg.className = 'msg err';
+      msg.textContent = 'باب التوقعات قفل خلاص 🔒';
+      tick();
+    } else {
+      msg.className = 'msg err';
+      msg.textContent = 'حصلت مشكلة — حاول تاني';
+    }
+  } catch (e) {
+    msg.className = 'msg err';
+    msg.textContent = 'مشكلة في الاتصال — حاول تاني';
+  }
+  btn.disabled = false;
+}
+
+function tick() {
+  const now = Date.now();
+  for (const m of ['z', 'a']) {
+    const R = RESULTS[m];
+    const cd = $('cd-' + m);
+    if (R) {
+      $('result-' + m).hidden = false;
+      $('result-' + m).textContent = 'النتيجة النهائية: ' + R.h + ' - ' + R.w + ' ⚽';
+      $('form-' + m).hidden = true;
+      cd.innerHTML = 'انتهت المباراة ⚽<small>النتيجة النهائية فوق</small>';
+      continue;
+    }
+    const left = MATCHES[m].close - now;
+    if (left <= 0) {
+      cd.innerHTML = 'اتقفل باب التوقعات 🔒<small>بالتوفيق لأصحاب التوقعات</small>';
+      $('form-' + m).hidden = true;
+    } else {
+      const s = Math.floor(left / 1000);
+      cd.innerHTML = pad(Math.floor(s / 3600)) + ':' + pad(Math.floor(s % 3600 / 60)) + ':' + pad(s % 60) +
+        '<small>المتبقي على قفل باب التوقعات</small>';
+    }
+  }
+}
+
+tick();
+setInterval(tick, 1000);
+load();
+setInterval(load, 30000);
+</script>
+</body>
+</html>
