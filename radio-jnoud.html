@@ -234,6 +234,74 @@
     .eq i,.livedot{animation:none}
     html{scroll-behavior:auto}
   }
+
+  /* ===== راديو كاسيت جنود الخفاء ===== */
+  .cs-hero {
+    background: linear-gradient(160deg, rgba(47,185,216,.10), rgba(255,255,255,.03) 45%, rgba(201,162,39,.08));
+    border:1px solid rgba(47,185,216,.35); border-radius:22px; padding:18px 16px 16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.35); margin:2px 0 20px;
+  }
+  .cs-cassette {
+    width:100%; max-width:350px; margin:0 auto; aspect-ratio: 1.58;
+    background: linear-gradient(165deg, #E9C766 0%, #C9A227 45%, #97771F 100%);
+    border-radius:16px; position:relative; padding:12px 14px;
+    box-shadow: inset 0 2px 0 rgba(255,255,255,.5), inset 0 -6px 14px rgba(0,0,0,.28), 0 12px 24px rgba(0,0,0,.4);
+  }
+  .cs-screw { position:absolute; width:11px; height:11px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #FFF3C4, #A8842A);
+    box-shadow: inset 0 0 2px rgba(0,0,0,.6); }
+  .cs-screw::after { content:''; position:absolute; left:1.5px; right:1.5px; top:50%; height:1.6px; background:rgba(60,45,5,.75); transform:rotate(38deg); }
+  .cs-s-tl{ top:7px; inset-inline-start:9px; } .cs-s-tr{ top:7px; inset-inline-end:9px; }
+  .cs-s-bl{ bottom:7px; inset-inline-start:9px; } .cs-s-br{ bottom:7px; inset-inline-end:9px; }
+  .cs-cassette .cs-brand { text-align:center; color:#3D2E05; font-weight:800; font-size:12.5px; letter-spacing:.4px; }
+  .cs-cassette .cs-brand span { font-weight:600; font-size:10.5px; opacity:.75; }
+  .cs-window {
+    margin-top:8px; background:linear-gradient(180deg,#12293F,#0A1B2E); border-radius:12px;
+    border:2px solid rgba(61,46,5,.55); padding:10px 14px 8px; position:relative; overflow:hidden;
+  }
+  .cs-tape { position:absolute; top:50%; left:0; right:0; height:15px; transform:translateY(-68%);
+    background:linear-gradient(180deg,#2A1608,#170B03); opacity:.92; }
+  .cs-reels { display:flex; justify-content:space-between; align-items:center; position:relative; }
+  .cs-reel { width:56px; height:56px; border-radius:50%; background:radial-gradient(circle,#F7EFCE 0 26%, #D9C98F 27% 34%, #F1E5BC 35% 100%);
+    border:2px solid rgba(0,0,0,.35); position:relative; animation:cs-spin 5s linear infinite; animation-play-state:paused; }
+  .cs-reel::before { content:''; position:absolute; inset:6px; border-radius:50%;
+    background:repeating-conic-gradient(rgba(70,55,10,.85) 0 14deg, transparent 14deg 60deg); }
+  .cs-reel::after { content:''; position:absolute; inset:22px; border-radius:50%; background:#0D2B45; border:2px solid #C9A227; }
+  .cs-reel.cs-small { width:44px; height:44px; animation-duration:3.4s; }
+  .cs-reel.cs-small::after { inset:16px; }
+  .cs-hero.playing .cs-reel { animation-play-state:running; }
+  @keyframes cs-spin { to { transform:rotate(360deg); } }
+  .cs-window .cs-scale { display:flex; justify-content:space-between; color:#8FB8CC; font-size:8.5px; margin-top:6px; padding:0 2px; }
+  .cs-cassette .cs-jaw { margin:10px auto 0; width:72%; height:20px;
+    background:linear-gradient(180deg, rgba(255,255,255,.28), rgba(0,0,0,.14));
+    clip-path: polygon(6% 0, 94% 0, 100% 100%, 0 100%); border-radius:4px; }
+  .cs-cassette .cs-side { position:absolute; bottom:9px; inset-inline-start:16px; color:#3D2E05; font-size:10px; font-weight:700; }
+  .cs-cassette .cs-side.cs-b { inset-inline-start:auto; inset-inline-end:16px; }
+
+  .cs-hero h2 { text-align:center; font-size:22px; font-weight:800; margin-top:16px; }
+  .cs-hero h2 .cs-tape-ic { color:#E9C766; }
+  .cs-hero .cs-tagline { text-align:center; color:#BFE0EE; font-size:13.5px; margin-top:5px; line-height:1.7; }
+
+  .cs-now { margin-top:14px; background:rgba(8,20,38,.55); border:1px solid rgba(47,185,216,.25);
+    border-radius:14px; padding:10px 12px; }
+  .cs-now .cs-row { display:flex; align-items:center; gap:8px; font-size:13px; }
+  .cs-now .cs-row + .cs-row { margin-top:7px; color:#9FC6D8; font-size:12px; }
+  .cs-now .cs-lbl { color:#2FB9D8; font-weight:700; font-size:11px; white-space:nowrap; }
+  .cs-eq { display:inline-flex; gap:2px; align-items:flex-end; height:12px; margin-inline-start:auto; }
+  .cs-eq i { width:3px; background:#2FB9D8; border-radius:2px; animation:cs-eq .9s ease-in-out infinite; animation-play-state:paused; }
+  .cs-eq i:nth-child(2){ animation-delay:.2s } .cs-eq i:nth-child(3){ animation-delay:.45s } .cs-eq i:nth-child(4){ animation-delay:.1s }
+  .cs-hero.playing .cs-eq i { animation-play-state:running; }
+  @keyframes cs-eq { 0%,100%{ height:4px } 50%{ height:12px } }
+
+  .cs-controls { display:flex; align-items:center; justify-content:center; gap:14px; margin-top:15px; }
+  .cs-play { width:66px; height:66px; border-radius:50%; border:none; cursor:pointer; flex:0 0 auto;
+    background: radial-gradient(circle at 32% 28%, #7FD8EE, #2FB9D8 55%, #17809B);
+    box-shadow:0 8px 22px rgba(47,185,216,.45), inset 0 2px 3px rgba(255,255,255,.6);
+    display:flex; align-items:center; justify-content:center; }
+  .cs-play span { font-size:26px; color:#082A3F; line-height:1; }
+  .cs-ctl { background:rgba(255,255,255,.06); border:1px solid rgba(159,198,216,.35); color:#DCEFF7;
+    font-family:inherit; font-size:12.5px; padding:9px 13px; border-radius:999px; cursor:pointer; }
+  .cs-shuf { text-align:center; margin-top:11px; font-size:11.5px; color:#F1D27A; }
 </style>
 </head>
 <body>
@@ -263,6 +331,43 @@
       <input type="search" id="search" placeholder="ابحث عن إذاعة…" aria-label="ابحث عن إذاعة" />
     </div>
   </div>
+
+  <!-- ===== راديو كاسيت جنود الخفاء ===== -->
+  <section class="cs-hero" id="csHero" aria-label="راديو كاسيت جنود الخفاء">
+    <div class="cs-cassette">
+      <div class="cs-screw cs-s-tl"></div><div class="cs-screw cs-s-tr"></div>
+      <div class="cs-screw cs-s-bl"></div><div class="cs-screw cs-s-br"></div>
+      <div class="cs-brand">JNoud Al-Khafa <span>• CHROME • C-90</span></div>
+      <div class="cs-window">
+        <div class="cs-tape"></div>
+        <div class="cs-reels">
+          <div class="cs-reel"></div>
+          <div class="cs-reel cs-small"></div>
+        </div>
+        <div class="cs-scale"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+      </div>
+      <div class="cs-jaw"></div>
+      <div class="cs-side">SIDE A</div>
+      <div class="cs-side cs-b">📼 زمان</div>
+    </div>
+
+    <h2><span class="cs-tape-ic">📼</span> راديو كاسيت جنود الخفاء</h2>
+    <p class="cs-tagline">رجعنا زمن الكاسيت — أغاني الزمن الجميل من غير توقف</p>
+
+    <div class="cs-now">
+      <div class="cs-row"><span class="cs-lbl">بيشغّل دلوقتي</span> <span id="csNow">دوس تشغيل وابدأ السهرة</span>
+        <span class="cs-eq"><i></i><i></i><i></i><i></i></span></div>
+      <div class="cs-row"><span class="cs-lbl">اللي جاي</span> <span id="csNext">—</span></div>
+    </div>
+
+    <div class="cs-controls">
+      <button class="cs-ctl" id="csPrev" aria-label="الأغنية السابقة">⏮ السابق</button>
+      <button class="cs-play" id="csPlay" aria-label="تشغيل أو إيقاف الكاسيت"><span id="csPlayIc">▶</span></button>
+      <button class="cs-ctl" id="csNextBtn" aria-label="الأغنية التالية">⏭ التالي</button>
+    </div>
+    <div class="cs-shuf">🔀 تشغيل عشوائي — كل مكتبة أغاني الزمن الجميل</div>
+    <audio id="csAudio" preload="none"></audio>
+  </section>
 
   <div id="sections"></div>
   <div class="empty" id="empty">لا توجد إذاعة مطابقة لبحثك</div>
@@ -544,6 +649,7 @@ function refreshMainBtn(){
 }
 
 function playStation(idx){
+  if (window.__cassetteStop) window.__cassetteStop();
   var s = STATIONS[idx];
   if (current !== idx){
     current = idx;
@@ -563,6 +669,7 @@ function pauseStream(){
   refreshAllCards(); refreshMainBtn();
 }
 function stopAll(){
+  if (window.__cassetteStop) window.__cassetteStop();
   audio.pause();
   audio.removeAttribute('src');
   audio.load();
@@ -635,6 +742,107 @@ function tickClock(){
 }
 tickClock();
 setInterval(tickClock, 1000);
+</script>
+<script>
+/* ---------- راديو كاسيت جنود الخفاء ---------- */
+(function(){
+  var CATALOG_URL = 'https://muons2002.dpdns.org/songs.json';
+  var au      = document.getElementById('csAudio');
+  var hero    = document.getElementById('csHero');
+  var playBtn = document.getElementById('csPlay');
+  var playIc  = document.getElementById('csPlayIc');
+  var nowEl   = document.getElementById('csNow');
+  var nextEl  = document.getElementById('csNext');
+  var nextBtn = document.getElementById('csNextBtn');
+  var prevBtn = document.getElementById('csPrev');
+  if (!au || !playBtn || !nowEl || !nextEl) return;
+
+  var queue = [], pos = -1, loaded = false, loading = false, errCount = 0, waiters = [];
+
+  function fmt(tr){ return tr ? (tr.artist + ' — ' + tr.t) : '—'; }
+  function render(){
+    var playing = !au.paused;
+    playIc.textContent = playing ? '❚❚' : '▶';
+    playBtn.setAttribute('aria-label', playing ? 'إيقاف الكاسيت مؤقتاً' : 'تشغيل الكاسيت');
+    hero.classList.toggle('playing', playing);
+    if (pos >= 0 && queue.length){
+      nowEl.textContent = fmt(queue[pos]);
+      nextEl.textContent = fmt(queue[(pos + 1) % queue.length]);
+    }
+  }
+  function stopStation(){
+    if (typeof stopAll === 'function') stopAll();
+  }
+  function ensureCatalog(done){
+    if (loaded){ done(); return; }
+    waiters.push(done);
+    if (loading) return;
+    loading = true;
+    nowEl.textContent = 'جاري تحميل الأغاني…';
+    fetch(CATALOG_URL).then(function(r){ return r.json(); }).then(function(data){
+      var flat = [];
+      (data.artists || []).forEach(function(a){
+        (a.tracks || []).forEach(function(t){ flat.push({ artist: a.name, t: t.t, u: t.u }); });
+      });
+      for (var i = flat.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = flat[i]; flat[i] = flat[j]; flat[j] = tmp;
+      }
+      queue = flat; loaded = true; loading = false;
+      var ws = waiters; waiters = [];
+      ws.forEach(function(f){ f(); });
+    }).catch(function(){
+      loading = false; waiters = [];
+      nowEl.textContent = 'تعذّر تحميل الأغاني — تحقّق من الاتصال وجرّب تاني';
+    });
+  }
+  function playAt(i){
+    if (!queue.length) return;
+    pos = ((i % queue.length) + queue.length) % queue.length;
+    stopStation();
+    au.src = queue[pos].u;
+    try { if (typeof audio !== 'undefined' && audio) au.volume = audio.volume; } catch(e){}
+    var p = au.play();
+    if (p && p.catch) p.catch(function(){});
+    render();
+  }
+  function resume(){
+    stopStation();
+    var p = au.play();
+    if (p && p.catch) p.catch(function(){});
+    render();
+  }
+
+  playBtn.addEventListener('click', function(){
+    if (!au.paused){ au.pause(); return; }
+    ensureCatalog(function(){
+      if (pos < 0) playAt(0); else resume();
+    });
+  });
+  nextBtn.addEventListener('click', function(){
+    ensureCatalog(function(){ playAt(pos + 1); });
+  });
+  prevBtn.addEventListener('click', function(){
+    ensureCatalog(function(){ playAt(pos < 0 ? 0 : pos - 1); });
+  });
+
+  au.addEventListener('playing', function(){ errCount = 0; render(); });
+  au.addEventListener('pause', render);
+  au.addEventListener('ended', function(){ playAt(pos + 1); });
+  au.addEventListener('error', function(){
+    if (!au.getAttribute('src') || !queue.length) return;
+    errCount++;
+    if (errCount <= 8) playAt(pos + 1);
+    else { nowEl.textContent = 'تعذّر تشغيل الأغاني دلوقتي — جرّب تاني بعد شوية'; render(); }
+  });
+
+  /* إيقاف الكاسيت عند تشغيل أي إذاعة (يُستدعى من مشغّل الإذاعات) */
+  window.__cassetteStop = function(){
+    if (!au.paused) au.pause();
+    render();
+  };
+  render();
+})();
 </script>
 </body>
 </html>
