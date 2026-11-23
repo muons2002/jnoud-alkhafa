@@ -9,18 +9,18 @@
 <link rel="apple-touch-icon" href="https://muons2002.dpdns.org/fav-radar-180.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="جنود الخفاء">
-<meta property="og:title" content="رادار الدوري المصري — جنود الخفاء">
+<meta property="og:title" content="رادار كرة القدم — جنود الخفاء">
 <meta property="og:description" content="المباريات والدوري المصري: نتائج وترتيب وهدافون">
 <meta property="og:url" content="https://muons2002.dpdns.org/matches-radar.html">
 <meta property="og:image" content="https://muons2002.dpdns.org/og-radar.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="رادار الدوري المصري — جنود الخفاء">
+<meta name="twitter:title" content="رادار كرة القدم — جنود الخفاء">
 <meta name="twitter:description" content="المباريات والدوري المصري: نتائج وترتيب وهدافون">
 <meta name="twitter:image" content="https://muons2002.dpdns.org/og-radar.jpg">
 <!-- /OG -->
-<title>رادار الدوري المصري — جنود الخفاء</title>
+<title>رادار كرة القدم — جنود الخفاء</title>
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
@@ -159,11 +159,6 @@
     border:1px solid var(--line-soft);border-radius:var(--radius);
     padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:13px;
   }
-  .card.zamalek{
-    border:1.5px solid var(--gold);
-    background:linear-gradient(180deg,#14365A,#0d2716);
-    box-shadow:0 0 0 1px rgba(232,199,102,.25), 0 16px 38px rgba(0,0,0,.5);
-  }
   .card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
   .league{display:flex;align-items:center;gap:8px;font-weight:900;font-size:14.5px;color:#D9F2FA}
   .league .lg-ic{width:26px;height:26px;border-radius:8px;background:rgba(232,199,102,.14);display:grid;place-items:center;flex:0 0 auto}
@@ -172,11 +167,6 @@
   .status.upcoming{background:rgba(255,255,255,.1);color:#E6F6FB;border:1px solid var(--line-soft)}
   .status.live{background:rgba(255,71,87,.16);color:#ffb3ba;border:1px solid rgba(255,71,87,.5)}
   .status.ended{background:rgba(0,0,0,.4);color:var(--muted);border:1px solid var(--line-soft)}
-  .zamalek-badge{
-    display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--gold-ink);
-    font-size:12px;font-weight:900;border-radius:999px;padding:4px 11px;
-  }
-  .zamalek-badge i{width:8px;height:8px;border-radius:50%;background:#fff;border:2px solid #d21f2c;display:inline-block}
   .teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center}
   .team .crest{
     position:relative;overflow:hidden;
@@ -185,9 +175,7 @@
     border:1px solid var(--line-soft);font-size:20px;font-weight:900;color:#fff;
   }
   .team .crest img{position:absolute;inset:5px;width:calc(100% - 10px);height:calc(100% - 10px);object-fit:contain}
-  .team.z .crest{background:radial-gradient(circle at 35% 30%, #ffffff, #cfd4cf);color:#14251a;border:2px solid var(--gold)}
   .team .name{font-size:17px;font-weight:900;line-height:1.3}
-  .team.z .name{color:var(--gold)}
   .vs{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:86px}
   .vs .time{font-size:21px;font-weight:900;font-variant-numeric:tabular-nums}
   .vs .score{font-size:26px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums;line-height:1;direction:ltr}
@@ -323,7 +311,7 @@
           <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="#e8c766" stroke-width="2.5" opacity=".45"/><circle cx="24" cy="24" r="12.5" stroke="#e8c766" stroke-width="2.5" opacity=".7"/><path d="M24 24 L38 10" stroke="#e8c766" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="24" r="3.4" fill="#e8c766"/><circle cx="31" cy="29" r="2.6" fill="#2FB9D8"/><circle cx="17" cy="15" r="2.2" fill="#fff" opacity=".85"/></svg>
         </div>
         <div>
-          <h1>رادار الدوري المصري<br><span class="gold">جنود الخفاء</span></h1>
+          <h1>رادار كرة القدم<br><span class="gold">جنود الخفاء</span></h1>
           <p class="tagline"><b>جنود الخفاء</b> — مواعيد المباريات · القنوات الناقلة · ترددات الشيرنج</p>
         </div>
       </div>
@@ -357,16 +345,6 @@
     </div>
   </div>
 
-  <!-- ===== حالة التغذية (تحميل / خطأ) ===== -->
-  <div class="feed-msg" id="feedMsg">
-    <div class="spin" aria-hidden="true"></div>
-    <p>جارٍ جلب مباريات هذا اليوم من التغذية الحية…</p>
-  </div>
-
-  <!-- ===== بطاقات المباريات ===== -->
-  <main class="grid" id="grid"></main>
-  <div class="empty" id="emptyState" hidden></div>
-
   <!-- ===== الدوري المصري ===== -->
   <style>
     /* ===== قسم الدوري المصري ===== */
@@ -397,8 +375,6 @@
     .eg-table th{color:var(--gold);font-weight:900;font-size:12.5px}
     .eg-table td.team,.eg-table th.team{text-align:right;font-weight:800;white-space:normal;min-width:110px}
     .eg-table td.pts{font-weight:900;color:var(--gold)}
-    .eg-table tr.eg-zamalek td{background:rgba(232,199,102,.14);font-weight:900}
-    .eg-table tr.eg-zamalek td.team{color:var(--gold)}
     .eg-srow{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;background:rgba(0,0,0,.28);border:1px solid var(--line-soft);border-radius:11px;padding:8px 12px}
     .eg-rank{width:28px;height:28px;border-radius:50%;background:rgba(232,199,102,.15);border:1px solid rgba(232,199,102,.4);color:var(--gold);display:grid;place-items:center;font-size:13px;font-weight:900;font-variant-numeric:tabular-nums}
     .eg-player{display:flex;flex-direction:column;gap:1px;min-width:0}
@@ -422,6 +398,16 @@
     <h3 class="egypt-h3">هدافي الدوري</h3>
     <div id="egScorers" class="eg-list"><p class="eg-load">جاري تحميل بيانات الدوري المصري…</p></div>
   </section>
+
+  <!-- ===== حالة التغذية (تحميل / خطأ) ===== -->
+  <div class="feed-msg" id="feedMsg">
+    <div class="spin" aria-hidden="true"></div>
+    <p>جارٍ جلب مباريات هذا اليوم من التغذية الحية…</p>
+  </div>
+
+  <!-- ===== بطاقات المباريات ===== -->
+  <main class="grid" id="grid"></main>
+  <div class="empty" id="emptyState" hidden></div>
 
   <!-- ===== ترددات الشيرنج على آموس ===== -->
   <section class="amos">
@@ -473,7 +459,7 @@
 
 <script>
 /* =====================================================================
-   رادار الدوري المصري · تغذية حية من ESPN
+   رادار كرة القدم · تغذية حية من ESPN
    ---------------------------------------------------------------------
    المباريات تُجلب تلقائياً من واجهة ESPN العامة للنتائج
    (scoreboard لكل بطولة + باراميتر dates=YYYYMMDD) — لا توجد أي
@@ -931,7 +917,7 @@ function checkReminders() {
     if (diff <= 15 * 60 * 1000 && diff > -5 * 60 * 1000) {
       r.fired = true; changed = true;
       beep(4);
-      notify("رادار الدوري المصري",
+      notify("رادار كرة القدم",
         "مباراة " + r.home + " × " + r.away + " تبدأ " + (diff > 0 ? "بعد أقل من 15 دقيقة" : "الآن"));
       toast("تنبيه: " + r.home + " × " + r.away + " قربت تبدأ!");
     }
@@ -962,7 +948,7 @@ function crestHtml(m, side, isZ) {
   const img = logo
     ? '<img src="' + esc(logo) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
     : "";
-  return '<div class="team' + (isZ ? " z" : "") + '"><div class="crest"><span>' + esc(initials(name)) + '</span>' + img + '</div><div class="name">' + esc(name) + '</div></div>';
+  return '<div class="team"><div class="crest"><span>' + esc(initials(name)) + '</span>' + img + '</div><div class="name">' + esc(name) + '</div></div>';
 }
 
 function render() {
@@ -1015,11 +1001,10 @@ function render() {
     const reminded = reminders[m.id] ? " on" : "";
     const remindLabel = reminders[m.id] ? "التذكير مفعّل" : "تذكير قبل المباراة";
     return '' +
-    '<article class="card' + (isZ ? " zamalek" : "") + '">' +
+    '<article class="card">' +
       '<div class="card-head">' +
         statusHtml +
       '</div>' +
-      (isZ ? '<div><span class="zamalek-badge"><i></i> مباراة الزمالك — قمة اليوم</span></div>' : "") +
       '<div class="teams">' +
         crestHtml(m, "home", isZ) +
         '<div class="vs">' + center + '</div>' +
@@ -1111,7 +1096,7 @@ grid.addEventListener("click", e => {
       if ("Notification" in window && Notification.permission === "default") {
         try { Notification.requestPermission(); } catch (err) {}
       }
-      notify("رادار الدوري المصري", "تم تفعيل التذكير: " + m.home + " × " + m.away + " — " + m.time + " بتوقيت القاهرة");
+      notify("رادار كرة القدم", "تم تفعيل التذكير: " + m.home + " × " + m.away + " — " + m.time + " بتوقيت القاهرة");
       toast("تم تفعيل التذكير قبل مباراة " + m.home + " × " + m.away + " — هننبّهك قبلها بـ 15 دقيقة");
     }
     render();
@@ -1364,7 +1349,6 @@ checkReminders();
       rows.forEach(function (r, idx) {
         var name = (r.competitor && r.competitor.name) || "—";
         var tr = mk("tr");
-        if (name.indexOf("الزمالك") >= 0) tr.className = "eg-zamalek";
         var cells = [
           String(idx + 1), name,
           fmtNum(r.gamePlayed), fmtNum(r.gamesWon), fmtNum(r.gamesEven), fmtNum(r.gamesLost),
