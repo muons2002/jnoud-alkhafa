@@ -9,18 +9,18 @@
 <link rel="apple-touch-icon" href="https://muons2002.dpdns.org/fav-radar-180.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="جنود الخفاء">
-<meta property="og:title" content="رادار المباريات — جنود الخفاء">
+<meta property="og:title" content="رادار الدوري المصري — جنود الخفاء">
 <meta property="og:description" content="المباريات والدوري المصري: نتائج وترتيب وهدافون">
 <meta property="og:url" content="https://muons2002.dpdns.org/matches-radar.html">
 <meta property="og:image" content="https://muons2002.dpdns.org/og-radar.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="رادار المباريات — جنود الخفاء">
+<meta name="twitter:title" content="رادار الدوري المصري — جنود الخفاء">
 <meta name="twitter:description" content="المباريات والدوري المصري: نتائج وترتيب وهدافون">
 <meta name="twitter:image" content="https://muons2002.dpdns.org/og-radar.jpg">
 <!-- /OG -->
-<title>جدول مباريات جنود الخفاء</title>
+<title>رادار الدوري المصري — جنود الخفاء</title>
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
@@ -323,7 +323,7 @@
           <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" stroke="#e8c766" stroke-width="2.5" opacity=".45"/><circle cx="24" cy="24" r="12.5" stroke="#e8c766" stroke-width="2.5" opacity=".7"/><path d="M24 24 L38 10" stroke="#e8c766" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="24" r="3.4" fill="#e8c766"/><circle cx="31" cy="29" r="2.6" fill="#2FB9D8"/><circle cx="17" cy="15" r="2.2" fill="#fff" opacity=".85"/></svg>
         </div>
         <div>
-          <h1>جدول مباريات<br><span class="gold">جنود الخفاء</span></h1>
+          <h1>رادار الدوري المصري<br><span class="gold">جنود الخفاء</span></h1>
           <p class="tagline"><b>جنود الخفاء</b> — مواعيد المباريات · القنوات الناقلة · ترددات الشيرنج</p>
         </div>
       </div>
@@ -473,7 +473,7 @@
 
 <script>
 /* =====================================================================
-   جدول مباريات جنود الخفاء · تغذية حية من ESPN
+   رادار الدوري المصري · تغذية حية من ESPN
    ---------------------------------------------------------------------
    المباريات تُجلب تلقائياً من واجهة ESPN العامة للنتائج
    (scoreboard لكل بطولة + باراميتر dates=YYYYMMDD) — لا توجد أي
@@ -931,7 +931,7 @@ function checkReminders() {
     if (diff <= 15 * 60 * 1000 && diff > -5 * 60 * 1000) {
       r.fired = true; changed = true;
       beep(4);
-      notify("جدول مباريات جنود الخفاء",
+      notify("رادار الدوري المصري",
         "مباراة " + r.home + " × " + r.away + " تبدأ " + (diff > 0 ? "بعد أقل من 15 دقيقة" : "الآن"));
       toast("تنبيه: " + r.home + " × " + r.away + " قربت تبدأ!");
     }
@@ -1111,7 +1111,7 @@ grid.addEventListener("click", e => {
       if ("Notification" in window && Notification.permission === "default") {
         try { Notification.requestPermission(); } catch (err) {}
       }
-      notify("جدول مباريات جنود الخفاء", "تم تفعيل التذكير: " + m.home + " × " + m.away + " — " + m.time + " بتوقيت القاهرة");
+      notify("رادار الدوري المصري", "تم تفعيل التذكير: " + m.home + " × " + m.away + " — " + m.time + " بتوقيت القاهرة");
       toast("تم تفعيل التذكير قبل مباراة " + m.home + " × " + m.away + " — هننبّهك قبلها بـ 15 دقيقة");
     }
     render();
