@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>لوحة تحكم مسابقة التوقعات — جنود الخفاء</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(160deg,#081426,#0D2B45 55%,#0A3A56);color:#fff;min-height:100vh;padding:18px 14px 30px}
+.wrap{max-width:860px;margin:0 auto}
+h1{font-size:24px;text-align:center;margin-bottom:4px}
+.sub{text-align:center;color:#9FC6DA;font-size:13.5px;margin-bottom:6px}
+.clock{text-align:center;color:#F5C451;font-size:15px;font-weight:700;margin-bottom:14px}
+.bar{display:flex;gap:10px;justify-content:center;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+button.refresh{background:linear-gradient(135deg,#0EA5C9,#0369A1);color:#fff;border:1.5px solid rgba(245,196,81,.6);border-radius:12px;padding:9px 26px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
+.updated{color:#9FC6DA;font-size:12.5px}
+.card{background:rgba(255,255,255,.05);border:1.5px solid rgba(47,185,216,.35);border-radius:16px;padding:16px;margin-bottom:18px}
+.card h2{font-size:19px;margin-bottom:2px}
+.meta{color:#9FC6DA;font-size:13px;margin-bottom:10px}
+.status{display:inline-block;border-radius:999px;padding:2px 14px;font-size:13px;font-weight:700;margin-inline-start:8px}
+.open{background:rgba(74,222,128,.18);color:#4ADE80;border:1px solid rgba(74,222,128,.5)}
+.closed{background:rgba(255,138,138,.15);color:#FF8A8A;border:1px solid rgba(255,138,138,.5)}
+.bigcount{font-size:34px;font-weight:800;color:#2FB9D8}
+.bigcount small{font-size:14px;color:#9FC6DA;font-weight:400}
+.top3{margin:10px 0;font-size:14px;color:#D7ECF7}
+.top3 b{color:#F5C451}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
+th{color:#F5C451;text-align:right;padding:6px 8px;border-bottom:1.5px solid rgba(47,185,216,.4);font-size:13px}
+td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.07);color:#EAF6FC}
+td.score{font-weight:800;color:#2FB9D8;white-space:nowrap}
+td.time{color:#9FC6DA;white-space:nowrap;font-size:12.5px}
+.fastest{color:#F5C451;font-size:12px}
+.empty{color:#9FC6DA;text-align:center;padding:14px;font-size:14px}
+.foot{text-align:center;color:#9FC6DA;font-size:12.5px;margin-top:6px}
+#gate{position:fixed;inset:0;z-index:999;background:linear-gradient(160deg,#081426,#0D2B45 55%,#0A3A56);display:flex;align-items:center;justify-content:center;padding:20px}
+.gbox{background:rgba(255,255,255,.05);border:1.5px solid rgba(47,185,216,.4);border-radius:18px;padding:28px 24px;text-align:center;max-width:360px;width:100%}
+.gbox h2{font-size:20px;margin:10px 0 6px}
+.gbox p{color:#9FC6DA;font-size:13.5px;margin-bottom:14px}
+.gbox input{width:100%;padding:11px;border-radius:10px;border:1.5px solid rgba(47,185,216,.5);background:rgba(0,0,0,.35);color:#fff;font-size:16px;text-align:center;font-family:inherit;margin-bottom:10px}
+.gbox button{width:100%;background:linear-gradient(135deg,#0EA5C9,#0369A1);color:#fff;border:none;border-radius:10px;padding:11px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit}
+#gateErr{color:#FF8A8A;font-size:13px;margin-top:8px;min-height:18px}
+</style>
+</head>
+<body>
+<div id="gate">
+  <div class="gbox">
+    <div style="font-size:44px">🔒</div>
+    <h2>لوحة تحكم المسابقة</h2>
+    <p>الصفحة دي خاصة بالإدارة — اكتب مفتاح اللوحة عشان تدخل</p>
+    <input id="gateKey" type="password" placeholder="🔑 مفتاح اللوحة" autocomplete="off">
+    <button id="gateBtn" type="button">دخول</button>
+    <div id="gateErr"></div>
+  </div>
+</div>
+
+<div class="wrap">
+  <h1>🎛️ لوحة تحكم مسابقة التوقعات</h1>
+  <div class="sub">عرض حي للتوقعات — للمتابعة بس، مفيش أي حاجة بتتغير من هنا</div>
+  <div class="clock" id="clock">🕐 …</div>
+  <div class="bar">
+    <button class="refresh" id="refreshBtn" type="button">🔄 حدّث دلوقتي</button>
+    <span class="updated" id="updated">آخر تحديث: —</span>
+  </div>
+
+  <div class="card" id="cardZ"></div>
+  <div class="card" id="cardA"></div>
+
+  <div class="foot">اللوحة بتتحدث لوحدها كل 30 ثانية — جنود الخفاء 🛡️</div>
+</div>
+
+<script>
+var API = 'https://jnoud-contest.m-uons2002.workers.dev/list';
+var MATCHES = {
+  z: { el: 'cardZ', title: '⚽ الجونة × الزمالك', kick: '5:00 مساءً', closeTxt: '4:50 مساءً',
+       deadline: Date.UTC(2026, 10, 23, 14, 50, 0) },
+  a: { el: 'cardA', title: '⚽ الأهلي × بيراميدز', kick: '8:00 مساءً', closeTxt: '7:50 مساءً',
+       deadline: Date.UTC(2026, 10, 23, 17, 50, 0) }
+};
+
+function cairoTime(ts) {
+  try {
+    return new Intl.DateTimeFormat('ar-EG', { timeZone: 'Africa/Cairo',
+      hour: 'numeric', minute: '2-digit' }).format(new Date(ts));
+  } catch (e) { return ''; }
+}
+function cairoClock() {
+  try {
+    return new Intl.DateTimeFormat('ar-EG', { timeZone: 'Africa/Cairo',
+      hour: 'numeric', minute: '2-digit', second: '2-digit' }).format(new Date());
+  } catch (e) { return ''; }
+}
+
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+function renderMatch(key, entries) {
+  var m = MATCHES[key];
+  var box = document.getElementById(m.el);
+  var closed = Date.now() > m.deadline;
+  var html = '<h2>' + m.title +
+    '<span class="status ' + (closed ? 'closed' : 'open') + '">' +
+    (closed ? '🔴 الباب قفل' : '🟢 الباب مفتوح') + '</span></h2>';
+  html += '<div class="meta">الماتش ' + m.kick + ' — باب التوقعات ' +
+    (closed ? 'قفل' : 'يقفل') + ' ' + m.closeTxt + ' بتوقيت القاهرة</div>';
+  html += '<div class="bigcount">' + entries.length + ' <small>توقع متسجل</small></div>';
+
+  if (!entries.length) {
+    html += '<div class="empty">لسه مفيش توقعات — أول ما حد يسجل هتظهر هنا</div>';
+    box.innerHTML = html;
+    return;
+  }
+
+  // أكتر النتائج توقعاً
+  var tally = {};
+  entries.forEach(function (e) {
+    var k = e.h + '-' + e.w;
+    tally[k] = (tally[k] || 0) + 1;
+  });
+  var top = Object.keys(tally).sort(function (x, y) { return tally[y] - tally[x]; }).slice(0, 3);
+  html += '<div class="top3">🔥 أكتر النتائج توقعاً: ' + top.map(function (k) {
+    return '<b>' + k + '</b> (' + tally[k] + ')';
+  }).join(' • ') + '</div>';
+
+  html += '<table><tr><th>#</th><th>الاسم</th><th>التوقع</th><th>اتسجل</th></tr>';
+  entries.forEach(function (e, i) {
+    html += '<tr><td>' + (i + 1) + '</td><td>' + esc(e.name) +
+      (i === 0 ? ' <span class="fastest">⏱️ الأسرع</span>' : '') +
+      '</td><td class="score">' + e.h + ' – ' + e.w + '</td>' +
+      '<td class="time">' + cairoTime(e.ts) + '</td></tr>';
+  });
+  html += '</table>';
+  box.innerHTML = html;
+}
+
+function load() {
+  fetch(API, { cache: 'no-store' })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      renderMatch('z', d.z || []);
+      renderMatch('a', d.a || []);
+      document.getElementById('updated').textContent =
+        'آخر تحديث: ' + cairoClock() + ' (القاهرة)';
+    })
+    .catch(function () {
+      document.getElementById('updated').textContent =
+        '⚠️ التحديث فشل — جرب «حدّث دلوقتي»';
+    });
+}
+
+document.getElementById('refreshBtn').addEventListener('click', load);
+setInterval(function () {
+  document.getElementById('clock').textContent = '🕐 القاهرة دلوقتي: ' + cairoClock();
+}, 1000);
+document.getElementById('clock').textContent = '🕐 القاهرة دلوقتي: ' + cairoClock();
+load();
+setInterval(load, 30000);
+</script>
+<script>
+(function(){
+  var HASH='f7b769a7278e520d5b9a92df3ff6625600ca25e64fc33d0256beda4e8ea38a76';
+  var gate=document.getElementById('gate');
+  document.body.style.overflow='hidden';
+  function sha(s){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')})}
+  function open(){gate.style.display='none';document.body.style.overflow=''}
+  var saved='';try{saved=localStorage.getItem('jnoud_board_key')||''}catch(e){}
+  if(saved){sha(saved).then(function(h){if(h===HASH)open()}).catch(function(){})}
+  function tryKey(){
+    var v=document.getElementById('gateKey').value.trim();
+    if(!v)return;
+    sha(v).then(function(h){
+      if(h===HASH){try{localStorage.setItem('jnoud_board_key',v)}catch(e){} open()}
+      else{document.getElementById('gateErr').textContent='❌ المفتاح غلط — حاول تاني'}
+    }).catch(function(){document.getElementById('gateErr').textContent='حصلت مشكلة — حدّث الصفحة وحاول تاني'})
+  }
+  document.getElementById('gateBtn').addEventListener('click',tryKey);
+  document.getElementById('gateKey').addEventListener('keydown',function(e){if(e.key==='Enter')tryKey()});
+})();
+</script>
+</body>
+</html>
