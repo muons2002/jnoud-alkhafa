@@ -75,7 +75,7 @@ button.small{padding:8px 14px;font-size:13.5px;border-radius:10px}
 .gbox input{width:100%;padding:11px;border-radius:10px;border:1.5px solid rgba(47,185,216,.5);background:rgba(0,0,0,.35);color:#fff;font-size:16px;text-align:center;font-family:inherit;margin-bottom:10px}
 .gbox button{width:100%}
 #gateErr{color:#FF8A8A;font-size:13px;margin-top:8px;min-height:18px}
-#previewBox{margin-top:14px;border:2px dashed #d4af37;border-radius:14px;padding:14px;background:rgba(212,175,55,.06)}
+#previewBox{margin:0 0 14px;border:2px dashed #d4af37;border-radius:14px;padding:14px;background:rgba(212,175,55,.06)}
 #previewBox .pvTag{display:inline-block;background:#d4af37;color:#081426;font-weight:800;border-radius:999px;padding:3px 14px;font-size:13.5px;margin-bottom:10px}
 #previewBox .pvTitle{font-size:23px;font-weight:800;color:#ffd968;text-align:center;line-height:1.5}
 #previewBox .pvSub{text-align:center;color:#bcd7e6;font-size:14.5px;margin:2px 0 12px}
@@ -105,6 +105,7 @@ button.small{padding:8px 14px;font-size:13.5px;border-radius:10px}
   <h1>🎛️ لوحة تحكم مسابقة التوقعات</h1>
   <div class="sub">إنشاء المسابقات، فتح وقفل التوقعات، اعتماد النتائج، وسجل الأعضاء — جنود الخفاء</div>
 
+  <div id="previewBox" hidden></div>
   <div class="card gold" id="summaryCard">
     <h2>📋 المسابقة الحالية</h2>
     <div id="summary"><div class="empty">جارٍ التحميل…</div></div>
@@ -125,7 +126,6 @@ button.small{padding:8px 14px;font-size:13.5px;border-radius:10px}
       <button class="ghost" id="previewBtn" type="button">👁️ معاينة قبل النشر</button>
       <button class="gold" id="createBtn" type="button">إنشاء المسابقة وفتح التوقعات 🏆</button>
     </div>
-    <div id="previewBox" hidden></div>
     <div class="warn">⚠️ إنشاء مسابقة جديدة بيمسح توقعات ونتائج المسابقة الحالية (السجل والأرشيف محفوظين في لوحة الشرف والمسابقات السابقة).</div>
     <div class="msg" id="createMsg"></div>
   </div>
