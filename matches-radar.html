@@ -147,13 +147,14 @@
   .remind-note b{color:var(--gold)}
 
   /* ===== Match cards ===== */
-  .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:14px}
+  .grid{display:flex;flex-direction:column;margin-top:2px}
+  .grid .block:first-child{margin-top:20px}
   .lg-head{grid-column:1/-1;display:flex;align-items:center;gap:9px;margin-top:12px;color:var(--gold);font-weight:900;font-size:16.5px}
   .lg-head:first-child{margin-top:0}
   .lg-head .lg-ic{width:28px;height:28px;border-radius:9px;background:rgba(232,199,102,.14);display:grid;place-items:center;flex:0 0 auto}
   .lg-head .lg-ic svg{width:17px;height:17px}
   .lg-head .lg-cnt{margin-inline-start:auto;font-size:12px;color:var(--muted);font-weight:700}
-  @media (min-width:760px){.grid{grid-template-columns:1fr 1fr}}
+
   .card{
     background:linear-gradient(180deg,var(--card2),var(--card));
     border:1px solid var(--line-soft);border-radius:var(--radius);
@@ -248,6 +249,50 @@
   }
   .retry-btn:hover{background:#f2d67f}
 
+  /* ===== شريط اختيار البطولات (ثابت — يحكم الصفحة كلها) ===== */
+  .selector-bar{
+    position:sticky;top:0;z-index:55;
+    margin:12px -14px 0;padding:10px 14px;
+    background:rgba(6,18,34,.97);
+    border-top:1px solid rgba(47,185,216,.35);border-bottom:1px solid rgba(47,185,216,.35);
+  }
+  .selector-bar .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .selector-bar .chips::-webkit-scrollbar{display:none}
+  .selector-bar .chip{flex:0 0 auto}
+  .chip.live-chip{border-color:rgba(255,71,87,.55);color:#ffb3ba}
+  .chip.live-chip.active{background:var(--red);color:#fff;border-color:var(--red)}
+
+  /* ===== كتل الدوريات المستقلة ===== */
+  .block{
+    margin-top:34px;border:1px solid var(--line-soft);border-radius:16px;overflow:hidden;
+    background:rgba(255,255,255,.028);box-shadow:var(--shadow);
+  }
+  .block-head{
+    display:flex;align-items:center;gap:10px;padding:13px 16px;background:#04101F;
+    border-bottom:3px solid var(--green);
+  }
+  .block-head .bh-ic{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.07);display:grid;place-items:center;flex:0 0 auto}
+  .block-head .bh-ic svg{width:18px;height:18px}
+  .block-head .bh-name{font-size:18.5px;font-weight:900;color:#fff}
+  .block-head .bh-cnt{
+    margin-inline-start:auto;flex:0 0 auto;font-size:11.5px;font-weight:800;color:#06222F;
+    background:var(--green);border-radius:999px;padding:3px 11px;white-space:nowrap;
+  }
+  .block-cards{display:grid;grid-template-columns:1fr;gap:16px;padding:14px}
+  @media (min-width:760px){.block-cards{grid-template-columns:1fr 1fr}}
+  /* لمسات لونية لكل كتلة */
+  .b-egypt{border-color:rgba(232,199,102,.35);background:linear-gradient(180deg,#0A2438,#081A2E)}
+  .b-egypt .block-head{border-bottom-color:var(--gold)}
+  .b-egypt .block-head .bh-cnt{background:var(--gold);color:var(--gold-ink)}
+  .b-world .block-head{border-bottom-color:#2FB9D8}
+  .b-world .block-head .bh-cnt{background:#2FB9D8}
+  .b-africa .block-head{border-bottom-color:#3ECF7A}
+  .b-africa .block-head .bh-cnt{background:#3ECF7A;color:#06240f}
+  .b-europe .block-head{border-bottom-color:#A78BFA}
+  .b-europe .block-head .bh-cnt{background:#A78BFA;color:#1d1140}
+  .b-other .block-head{border-bottom-color:#7E97A8}
+  .b-other .block-head .bh-cnt{background:#7E97A8;color:#0a1622}
+
   /* ===== Amos strip ===== */
   .amos{margin-top:26px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg,#0A2438,#081A2E);padding:18px}
   .amos h2{margin:0 0 4px;font-size:19px;font-weight:900}
@@ -338,19 +383,28 @@
       <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#9FB8CC" stroke-width="2.2"/><path d="M20 20l-3.8-3.8" stroke="#9FB8CC" stroke-width="2.2" stroke-linecap="round"/></svg>
       <input id="searchInput" type="search" placeholder="ابحث باسم فريق… الزمالك، الأهلي، ريال مدريد" aria-label="بحث باسم فريق" />
     </label>
-    <div class="chips" id="chips" role="group" aria-label="تصفية المباريات"></div>
     <div class="remind-note">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" style="flex:0 0 auto;margin-top:2px"><path d="M6 16v-5a6 6 0 1 1 12 0v5l1.5 3h-15L6 16Z" stroke="#e8c766" stroke-width="2" stroke-linejoin="round"/><path d="M10 21a2.2 2.2 0 0 0 4 0" stroke="#e8c766" stroke-width="2" stroke-linecap="round"/></svg>
       <span><b>تنبيه التذكير:</b> زر «تذكير قبل المباراة» ينبّهك بصوت وإشعار قبل الانطلاق بـ 15 دقيقة — والتذكير يعمل فقط أثناء بقاء الصفحة مفتوحة في متصفحك.</span>
     </div>
   </div>
 
+  <!-- ===== شريط اختيار البطولات — ثابت ويحكم الصفحة كلها ===== -->
+  <div class="selector-bar">
+    <div class="chips" id="chips" role="group" aria-label="اختيار البطولة"></div>
+  </div>
+
   <!-- ===== الدوري المصري ===== -->
   <style>
     /* ===== قسم الدوري المصري ===== */
-    .egypt{margin-top:26px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg,#0A2438,#081A2E);padding:18px}
-    .egypt h2{margin:0 0 4px;font-size:19px;font-weight:900}
-    .egypt h2 span{color:var(--gold)}
+    .egypt{margin-top:20px}
+    .eg-body{padding:14px 16px 16px}
+    .expand-strip{
+      margin:14px 0 2px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;
+      background:#0A1E33;border:1px dashed rgba(232,199,102,.55);border-radius:10px;padding:11px 14px;
+      font-size:14px;font-weight:800;color:#FFE9A8;cursor:pointer;font-family:inherit;text-align:right;
+    }
+    .expand-strip .chev{color:var(--gold);font-size:16px;flex:0 0 auto}
     .egypt-sub{margin:0 0 4px;color:var(--muted);font-size:13.5px;font-weight:600}
     .egypt-h3{margin:20px 0 10px;font-size:16.5px;font-weight:900;color:#D9F2FA}
     .egypt-group{font-size:13px;font-weight:900;color:var(--gold);margin:14px 0 8px}
@@ -382,21 +436,32 @@
     .eg-pteam{color:var(--muted);font-size:12px;font-weight:700}
     .eg-goals{font-weight:900;font-size:13.5px;color:var(--gold-ink);background:var(--gold);border-radius:999px;padding:4px 12px;white-space:nowrap;font-variant-numeric:tabular-nums}
   </style>
-  <section class="egypt" id="egyptLeague">
-    <h2>🇪🇬 الدوري المصري <span>الممتاز</span></h2>
-    <p class="egypt-sub">مباريات وترتيب وهدافو الدوري المصري — بيانات حية تتحدث تلقائياً.</p>
+  <section class="egypt block b-egypt" id="egyptLeague">
+    <div class="block-head">
+      <span class="bh-name">🇪🇬 الدوري المصري الممتاز</span>
+      <span class="bh-cnt" id="egCount" hidden></span>
+    </div>
+    <div class="eg-body">
+      <p class="egypt-sub">مباريات وترتيب وهدافو الدوري المصري — بيانات حية تتحدث تلقائياً.</p>
 
-    <div class="egypt-group">المباريات القادمة</div>
-    <div id="egUpcoming" class="eg-list"><p class="eg-load">جاري تحميل بيانات الدوري المصري…</p></div>
+      <div class="egypt-group" id="egUpcomingLabel">المباريات القادمة</div>
+      <div id="egUpcoming" class="eg-list"><p class="eg-load">جاري تحميل بيانات الدوري المصري…</p></div>
 
-    <div class="egypt-group">آخر النتائج</div>
-    <div id="egResults" class="eg-list"><p class="eg-load">جاري تحميل بيانات الدوري المصري…</p></div>
+      <div class="egypt-group" id="egResultsLabel">آخر النتائج</div>
+      <div id="egResults" class="eg-list"><p class="eg-load">جاري تحميل بيانات الدوري المصري…</p></div>
 
-    <h3 class="egypt-h3">جدول الترتيب</h3>
-    <div id="egTable"><p class="eg-load">جاري تحميل بيانات الدوري المصري…</p></div>
+      <button type="button" class="expand-strip" id="egExpand" aria-expanded="false" aria-controls="egExtra">
+        <span id="egExpandTxt">📊 الترتيب والهدافين — دوس للتوسيع</span>
+        <span class="chev" id="egExpandChev">▾</span>
+      </button>
+      <div id="egExtra" hidden>
+        <h3 class="egypt-h3">جدول الترتيب</h3>
+        <div id="egTable"><p class="eg-load">جاري تحميل بيانات الدوري المصري…</p></div>
 
-    <h3 class="egypt-h3">هدافي الدوري</h3>
-    <div id="egScorers" class="eg-list"><p class="eg-load">جاري تحميل بيانات الدوري المصري…</p></div>
+        <h3 class="egypt-h3">هدافي الدوري</h3>
+        <div id="egScorers" class="eg-list"><p class="eg-load">جاري تحميل بيانات الدوري المصري…</p></div>
+      </div>
+    </div>
   </section>
 
   <!-- ===== حالة التغذية (تحميل / خطأ) ===== -->
@@ -419,7 +484,7 @@
   <footer>
     <b>جنود الخفاء — حب الخير للغير</b><br />
     المباريات تُجلب تلقائياً من تغذية النتائج العالمية (ESPN) وتتحدث كل دقيقة — المواعيد كلها بتوقيت القاهرة.<br />
-    قسم الدوري المصري بالأسفل تصل بياناته من مصدر نتائج عالمي آخر وتتحدث تلقائياً.
+    قسم الدوري المصري في أول الصفحة تصل بياناته من مصدر نتائج عالمي آخر وتتحدث تلقائياً.
   </footer>
 </div>
 
@@ -845,7 +910,24 @@ function applyView() {
   feedMsg.hidden = true;
   renderChips();
   render();
+  applyMasterVisibility();
   refreshStats();
+}
+
+/* ================= الرؤية حسب اختيار البطولة =================
+   شريط الاختيار يحكم الصفحة كلها: قسم الدوري المصري (365scores)
+   وشبكة بطاقات ESPN معاً. */
+function applyMasterVisibility() {
+  const f = activeFilter;
+  window.__masterFilter = f;
+  if (typeof window.__egApplyView === "function") window.__egApplyView(f);
+  else {
+    const sec = document.getElementById("egyptLeague");
+    if (sec) sec.style.display = (f === "all" || f === "egypt" || f === "live") ? "" : "none";
+  }
+  const egyptOnly = f === "egypt";
+  grid.style.display = egyptOnly ? "none" : "";
+  if (egyptOnly) { emptyState.hidden = true; feedMsg.hidden = true; }
 }
 
 /* ================= العد التنازلي ================= */
@@ -954,7 +1036,7 @@ function crestHtml(m, side, isZ) {
 function render() {
   const term = searchTerm.trim();
   const list = currentMatches.filter(m => {
-    const okFilter = activeFilter === "all" ||
+    const okFilter = activeFilter === "all" || activeFilter === "egypt" ||
       (activeFilter === "live" ? m.state === "in" : m.cat === activeFilter);
     const okSearch = !term ||
       (m.home + " " + m.away + " " + m.homeEn + " " + m.awayEn + " " + m.league).toLowerCase().includes(term.toLowerCase());
@@ -1030,18 +1112,26 @@ function render() {
   const groups = [];
   LEAGUES.forEach(lg => {
     const ms = list.filter(m => m.league === lg.name);
-    if (ms.length) groups.push({ name: lg.name, ms: ms });
+    if (ms.length) groups.push({ name: lg.name, ms: ms, cat: lg.cat, slug: lg.slug });
   });
   list.forEach(m => {
     if (!LEAGUES.some(lg => lg.name === m.league)) {
       let g = groups.find(x => x.name === m.league);
-      if (!g) { g = { name: m.league, ms: [] }; groups.push(g); }
+      if (!g) { g = { name: m.league, ms: [], cat: m.cat, slug: "" }; groups.push(g); }
       if (!g.ms.includes(m)) g.ms.push(m);
     }
   });
+  const accentOf = g => (g.slug === "fifa.world.u17" || g.cat === "world") ? "b-world"
+    : g.cat === "africa" ? "b-africa"
+    : g.cat === "europe" ? "b-europe" : "b-other";
+  const emojiOf = g => g.cat === "africa" ? "🌍" : g.cat === "world" ? "🌍" : g.cat === "europe" ? "⭐" : "🏆";
   grid.innerHTML = groups.map(g =>
-    '<div class="lg-head"><span class="lg-ic">' + ICON.trophy + '</span><span>' + esc(g.name) + '</span><span class="lg-cnt">' + g.ms.length + (g.ms.length === 1 ? ' مباراة' : ' مباريات') + '</span></div>' +
-    g.ms.map(cardOf).join("")
+    '<section class="block ' + accentOf(g) + '">' +
+      '<div class="block-head"><span class="bh-ic">' + ICON.trophy + '</span>' +
+      '<span class="bh-name">' + emojiOf(g) + ' ' + esc(g.name) + '</span>' +
+      '<span class="bh-cnt">' + g.ms.length + (g.ms.length === 1 ? ' مباراة' : ' مباريات') + '</span></div>' +
+      '<div class="block-cards">' + g.ms.map(cardOf).join("") + '</div>' +
+    '</section>'
   ).join("");
   updateCountdowns();
 }
@@ -1049,26 +1139,31 @@ function render() {
 /* ================= الفلاتر والبحث ================= */
 const FILTERS = [
   { key: "all", label: "الكل" },
-  { key: "africa", label: "أفريقيا" },
+  { key: "egypt", label: "الدوري المصري" },
   { key: "world", label: "كأس العالم" },
+  { key: "africa", label: "أفريقيا" },
   { key: "europe", label: "الدوريات الأوروبية" },
-  { key: "live", label: "جارية الآن" }
+  { key: "live", label: "🔴 جارية الآن" }
 ];
 function renderChips() {
   $("#chips").innerHTML = FILTERS.map(f => {
-    const cnt = f.key === "all" ? currentMatches.length
-      : f.key === "live" ? currentMatches.filter(m => m.state === "in").length
-      : currentMatches.filter(m => m.cat === f.key).length;
-    return '<button type="button" class="chip' + (activeFilter === f.key ? " active" : "") + '" data-filter="' + f.key + '">' +
-      f.label + ' <span class="cnt">(' + cnt + ')</span></button>';
+    let cnt = null;
+    if (f.key === "all") cnt = currentMatches.length + (window.__egCount || 0);
+    else if (f.key === "egypt") cnt = (typeof window.__egCount === "number") ? window.__egCount : null;
+    else if (f.key === "live") cnt = currentMatches.filter(m => m.state === "in").length + (window.__egLiveCount || 0);
+    else cnt = currentMatches.filter(m => m.cat === f.key).length;
+    return '<button type="button" class="chip' + (f.key === "live" ? " live-chip" : "") + (activeFilter === f.key ? " active" : "") + '" data-filter="' + f.key + '">' +
+      f.label + (cnt === null ? "" : ' <span class="cnt">(' + cnt + ')</span>') + '</button>';
   }).join("");
 }
 $("#chips").addEventListener("click", e => {
   const btn = e.target.closest("[data-filter]");
   if (!btn) return;
   activeFilter = btn.getAttribute("data-filter");
+  window.__masterFilter = activeFilter;
   renderChips();
   render();
+  applyMasterVisibility();
 });
 $("#searchInput").addEventListener("input", e => { searchTerm = e.target.value; render(); });
 
@@ -1241,6 +1336,7 @@ checkReminders();
 
   function matchRow(g, kind) {
     var row = mk("div", "eg-row");
+    row.setAttribute("data-eg-kind", kind);
     var home = (g.homeCompetitor && g.homeCompetitor.name) || "—";
     var away = (g.awayCompetitor && g.awayCompetitor.name) || "—";
     row.appendChild(mk("span", "eg-team home", home));
@@ -1318,6 +1414,15 @@ checkReminders();
           resBox.appendChild(mk("p", "eg-none", "لا توجد نتائج حديثة في هذه الفترة"));
         }
       }
+      window.__egCount = live.length + upcoming.length + ended.length;
+      window.__egLiveCount = live.length;
+      var cntEl = byId("egCount");
+      if (cntEl) {
+        cntEl.textContent = window.__egCount + (window.__egCount === 1 ? " مباراة" : " مباريات");
+        cntEl.hidden = false;
+      }
+      egApplyView(null, false);
+      if (typeof window.renderChips === "function") window.renderChips();
       fixturesOk = true;
     }).catch(function () {
       if (!fixturesOk) {
@@ -1422,6 +1527,60 @@ checkReminders();
         setLoading("egScorers");
         loadEgScorers();
       }
+    });
+  }
+
+  /* ---------------- الرؤية حسب اختيار البطولة + شريط الترتيب والهدافين ---------------- */
+  function egCollapseExtra() {
+    var extra = byId("egExtra"), btn = byId("egExpand");
+    if (extra) extra.hidden = true;
+    if (btn) {
+      btn.setAttribute("aria-expanded", "false");
+      var t = byId("egExpandTxt"); if (t) t.textContent = "📊 الترتيب والهدافين — دوس للتوسيع";
+      var c = byId("egExpandChev"); if (c) c.textContent = "▾";
+    }
+  }
+  function egApplyView(f, fromFilter) {
+    f = f || window.__masterFilter || "all";
+    var sec = byId("egyptLeague");
+    if (!sec) return;
+    if (fromFilter) egCollapseExtra();
+    var liveOnly = f === "live";
+    var show = f === "all" || f === "egypt" || liveOnly;
+    var liveCount = 0;
+    var upBox = byId("egUpcoming");
+    if (upBox) {
+      var rows = upBox.querySelectorAll(".eg-row");
+      for (var i = 0; i < rows.length; i++) {
+        var isLive = rows[i].getAttribute("data-eg-kind") === "live";
+        if (isLive) liveCount++;
+        rows[i].style.display = liveOnly && !isLive ? "none" : "";
+      }
+      var nones = upBox.querySelectorAll(".eg-none");
+      for (var j = 0; j < nones.length; j++) nones[j].style.display = liveOnly ? "none" : "";
+    }
+    if (liveOnly && liveCount === 0) show = false;
+    var resBox = byId("egResults");
+    if (resBox) resBox.style.display = liveOnly ? "none" : "";
+    var upLbl = byId("egUpcomingLabel"), resLbl = byId("egResultsLabel");
+    if (upLbl) upLbl.style.display = liveOnly ? "none" : "";
+    if (resLbl) resLbl.style.display = liveOnly ? "none" : "";
+    sec.style.display = show ? "" : "none";
+  }
+  window.__egApplyView = function (f) { egApplyView(f, true); };
+
+  var egExpandBtn = byId("egExpand");
+  if (egExpandBtn) {
+    egExpandBtn.addEventListener("click", function () {
+      var extra = byId("egExtra");
+      if (!extra) return;
+      var open = extra.hidden;
+      extra.hidden = !open;
+      egExpandBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      var t = byId("egExpandTxt");
+      if (t) t.textContent = open ? "📊 الترتيب والهدافين — دوس للإخفاء" : "📊 الترتيب والهدافين — دوس للتوسيع";
+      var c = byId("egExpandChev");
+      if (c) c.textContent = open ? "▴" : "▾";
     });
   }
 
