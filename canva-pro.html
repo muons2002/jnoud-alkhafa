@@ -77,17 +77,7 @@
     <div class="msg" id="reqMsg"></div>
   </form>
 
-  <div class="rules">⚠️ <b>الشروط:</b> ممنوع تبعت دعوات من عضويتك لحد برّه الجروب — ولازم تعمل منشور مصداقية بعد التفعيل، وإلا العضوية تتلغي. إيميلك لا يظهر لأي عضو — يوصل للإدارة فقط.</div>
-
-  <div class="sec">✅ اتفعّلت خلاص؟ أكّد منشور المصداقية</div>
-  <form id="cfForm">
-    <label for="cEmail">إيميلك اللي طلبت بيه</label>
-    <input id="cEmail" class="ltr" type="email" placeholder="example@gmail.com">
-    <label for="cLink">رابط منشور المصداقية في الجروب</label>
-    <input id="cLink" class="ltr" type="url" placeholder="https://www.facebook.com/groups/...">
-    <button id="cfBtn" type="submit" style="background:linear-gradient(90deg,#2FB9D8,#1668A0)">تأكيد المنشور 📝</button>
-    <div class="msg" id="cfMsg"></div>
-  </form>
+  <div class="rules">⚠️ <b>شرط واحد بس:</b> ممنوع تبعت دعوات من عضويتك لحد برّه الجروب. غير كده الدعوة هديتنا ليك — اقبلها واشتغل على طول، من غير أي خطوات تانية. إيميلك لا يظهر لأي عضو — يوصل للإدارة فقط. ولو حابب تشكرنا بمنشور صغير في الجروب يسعدنا، بس ده اختياري تماماً 💙</div>
 
   <div class="foot">جنود الخفاء (حب الخير للغير) 🛡️</div>
 </div>
@@ -123,25 +113,6 @@
       showMsg("reqMsg", false, "حصلت مشكلة مؤقتة في الإرسال — حاول كمان شوية");
     });
   });
-  document.getElementById("cfForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var email = document.getElementById("cEmail").value.trim();
-    var link = document.getElementById("cLink").value.trim();
-    var btn = document.getElementById("cfBtn");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || link.indexOf("facebook.com") === -1) {
-      showMsg("cfMsg", false, "راجع الإيميل ورابط المنشور (لازم يكون رابط فيسبوك)"); return;
-    }
-    btn.disabled = true; btn.textContent = "بيتبعت...";
-    post("/confirm", { email: email, link: link }).then(function (res) {
-      btn.disabled = false; btn.textContent = "تأكيد المنشور 📝";
-      if (res.j && res.j.ok) showMsg("cfMsg", true, "وصل رابط منشورك ✅ هيتراجع ويتعلم عندك «كامل»");
-      else if (res.status === 404) showMsg("cfMsg", false, "الإيميل ده مش لاقيه في الطلبات — اتأكد إنه نفس الإيميل اللي طلبت بيه");
-      else showMsg("cfMsg", false, "حصلت مشكلة مؤقتة — حاول كمان شوية");
-    }).catch(function () {
-      btn.disabled = false; btn.textContent = "تأكيد المنشور 📝";
-      showMsg("cfMsg", false, "حصلت مشكلة مؤقتة — حاول كمان شوية");
-    });
-  });
-</script>
+  </script>
 </body>
 </html>

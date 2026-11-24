@@ -65,7 +65,7 @@
     <div class="stats">
       <div class="stat s1"><div class="n" id="nNew">0</div><div class="l">🟡 طلبات جديدة منتظرة</div></div>
       <div class="stat s2"><div class="n" id="nSent">0</div><div class="l">📩 اتبعتت دعواتهم</div></div>
-      <div class="stat s3"><div class="n" id="nCred">0</div><div class="l">📝 بانتظار تأكيد المصداقية</div></div>
+      <div class="stat s3" style="display:none"><div class="n" id="nCred">0</div><div class="l">مصداقية (أُلغيت)</div></div>
       <div class="stat s4"><div class="n" id="nDone">0</div><div class="l">✅ كاملين</div></div>
     </div>
     <div class="toolbar">
@@ -84,7 +84,7 @@
   var ST = {
     "new":  { t: "جديد — منتظر", c: "c-new" },
     "sent": { t: "اتبعتت الدعوة", c: "c-sent" },
-    "cred": { t: "أرسل رابط المصداقية", c: "c-cred" },
+    "cred": { t: "اتبعتت الدعوة", c: "c-sent" },
     "done": { t: "كامل ✅", c: "c-done" }
   };
   function fmtDate(ts) {
@@ -110,7 +110,7 @@
     var counts = { "new": 0, "sent": 0, "cred": 0, "done": 0 };
     ITEMS.forEach(function (it) { if (counts[it.status] !== undefined) counts[it.status]++; });
     document.getElementById("nNew").textContent = counts["new"];
-    document.getElementById("nSent").textContent = counts["sent"];
+    document.getElementById("nSent").textContent = counts["sent"] + counts["cred"];
     document.getElementById("nCred").textContent = counts["cred"];
     document.getElementById("nDone").textContent = counts["done"];
     var w = document.getElementById("tableWrap");
