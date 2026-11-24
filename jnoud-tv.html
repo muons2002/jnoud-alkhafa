@@ -44,7 +44,7 @@
   .player-box{max-width:680px;margin:14px auto 0;padding:0}
   .screen{position:relative;border-radius:16px;overflow:hidden;background:#000;border:1px solid var(--line);aspect-ratio:16/9;box-shadow:0 16px 40px rgba(0,0,0,.45)}
   video{width:100%;height:100%;display:block;background:#000}
-  .placeholder{position:absolute;inset:0;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;color:var(--muted);font-size:16px;text-align:center;padding:16px}
+  .placeholder{position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,#0B1E33,#050D18);display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;color:var(--muted);font-size:16px;text-align:center;padding:16px}
   .placeholder .big{font-size:44px}
   .nowbar{display:flex;align-items:center;gap:10px;margin-top:10px}
   .nowbar .dot{width:9px;height:9px;border-radius:50%;background:#5a6b7f;flex:0 0 auto}
@@ -92,7 +92,7 @@
 
   <div class="player-box">
     <div class="screen">
-      <video id="vid" controls playsinline></video>
+      <video id="vid" playsinline></video>
       <div class="placeholder" id="ph"><div class="big">📺</div><div>اختر قناة من تحت وهي تشتغل هنا</div></div>
     </div>
     <div class="nowbar" id="nowbar"><span class="dot"></span><span class="nowname" id="nowname">لا توجد قناة مشغلة</span><button class="stopbtn" id="stopbtn" type="button">إيقاف</button></div>
@@ -552,6 +552,7 @@ function render(){
 function stop(){
   if (hls){ hls.destroy(); hls = null; }
   vid.pause(); vid.removeAttribute('src'); vid.load();
+  vid.controls = false;
   ph.style.display = 'flex'; nowbar.classList.remove('live'); nowname.textContent = 'لا توجد قناة مشغلة';
   if (activeBtn){ activeBtn.classList.remove('active'); activeBtn = null; }
   errBox.style.display = 'none';
@@ -562,6 +563,7 @@ function play(ch, btn){
   if (hls){ hls.destroy(); hls = null; }
   if (activeBtn) activeBtn.classList.remove('active');
   activeBtn = btn; if (btn) btn.classList.add('active');
+  vid.controls = true;
   ph.style.display = 'none'; nowbar.classList.add('live'); nowname.textContent = ch.n;
   document.querySelector('.player-box').scrollIntoView({behavior:'smooth', block:'start'});
   const fail = () => showErr('القناة «' + ch.n + '» لا تستجيب الآن من مصدرها — جرّب قناة تانية أو عيد المحاولة بعد شوية.');
