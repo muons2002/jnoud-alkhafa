@@ -16,12 +16,14 @@
 *{box-sizing:border-box}
 body{margin:0;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#EAF6FB;min-height:100vh;background:radial-gradient(120% 60% at 50% 0%,#12294d 0%,#081426 55%,#050B18 100%)}
 .wrap{max-width:640px;margin:0 auto;padding:18px 14px 36px}
-.brand{text-align:center;margin-bottom:16px}
-.brand img{width:100%;display:block;border-radius:16px;border:2px solid #C9932B;box-shadow:0 0 0 4px rgba(245,196,81,.15),0 14px 34px rgba(0,0,0,.55)}
-.brand .crown{font-size:19px;margin-top:12px}
-.brand h2{margin:2px 0 0;font-size:21px;font-weight:900;background:linear-gradient(180deg,#FFEFAE,#F5C451 55%,#C9932B);-webkit-background-clip:text;background-clip:text;color:transparent}
-.brand p{margin:3px 0 0;font-size:12.5px;color:rgba(230,243,250,.65);letter-spacing:.5px}
-.paper{background:linear-gradient(180deg,rgba(245,196,81,.06),rgba(255,255,255,.03));border:2px solid #C9932B;outline:1px solid rgba(245,196,81,.4);outline-offset:4px;border-radius:18px;padding:22px 18px;box-shadow:0 14px 34px rgba(0,0,0,.5)}
+.brand{text-align:center;margin-bottom:6px}
+.brand img{width:100%;display:block;border-radius:16px 16px 0 0;-webkit-mask-image:linear-gradient(to bottom,#000 82%,transparent 99%);mask-image:linear-gradient(to bottom,#000 82%,transparent 99%)}
+.paper{position:relative;background:linear-gradient(180deg,#0A1E42 0%,#040F25 100%);border:2px solid #C9932B;outline:1px solid rgba(245,196,81,.45);outline-offset:4px;border-radius:18px;padding:26px 20px 22px;box-shadow:0 0 34px rgba(201,147,43,.16),0 14px 34px rgba(0,0,0,.5)}
+.cnr{position:absolute;font-style:normal;font-size:13px;color:#F5C451;text-shadow:0 0 8px rgba(245,196,81,.8);line-height:1}
+.cnr.tl{top:7px;inset-inline-start:9px}
+.cnr.tr{top:7px;inset-inline-end:9px}
+.cnr.bl{bottom:7px;inset-inline-start:9px}
+.cnr.br{bottom:7px;inset-inline-end:9px}
 .meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 .chip{font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;background:rgba(245,196,81,.16);color:#F5C451;border:1px solid rgba(245,196,81,.45)}
 .date{font-size:12px;color:rgba(230,243,250,.55);margin-inline-start:auto}
@@ -34,13 +36,13 @@ body{margin:0;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#EAF6FB;min-h
 .state .big{font-size:40px;display:block;margin-bottom:8px}
 .foot{margin-top:26px;text-align:center;color:rgba(230,243,250,.5);font-size:12.5px;line-height:1.9}
 .foot a{color:#E9C767;text-decoration:none;font-weight:700}
-.paper .body a{color:#B8860B;font-weight:700;text-decoration:underline;word-break:break-all}
+.paper .body a{color:#E9C767;font-weight:700;text-decoration:underline;word-break:break-all}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="brand">
-    <img src="https://muons2002.dpdns.org/royal-sharh.jpg?v=2" alt="شعار جنود الخفاء">
+    <img src="https://muons2002.dpdns.org/royal-sharh-arch.jpg" alt="جنود الخفاء — حب الخير للغير">
   </div>
   <div id="box"><div class="state">جارٍ التحميل…</div></div>
   <div class="foot">جنود الخفاء — حب الخير للغير<br><a href="https://muons2002.dpdns.org/">بوابة جنود الخفاء</a></div>
@@ -60,7 +62,7 @@ body{margin:0;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#EAF6FB;min-h
   }).then(function(d){
     var it=d.item; if(!it) throw 0;
     document.title=it.title+' — جنود الخفاء';
-    var h='<div class="paper"><div class="meta"><span class="chip">منشور</span><span class="date">'+fmt(it.ts)+'</span></div>';
+    var h='<div class="paper"><i class="cnr tl">◆</i><i class="cnr tr">◆</i><i class="cnr bl">◆</i><i class="cnr br">◆</i><div class="meta"><span class="chip">منشور</span><span class="date">'+fmt(it.ts)+'</span></div>';
     h+='<h1>'+esc(it.title)+'</h1><div class="body">'+linkify(esc(it.body))+'</div>';
     h+='<div class="row"><button class="btn" id="cp" type="button">📋 نسخ النص</button></div></div>';
     box.innerHTML=h;
