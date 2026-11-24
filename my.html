@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>غرفة محمد</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:linear-gradient(160deg,#081426,#0D2B45 55%,#0A3A56);color:#EAF6FB;min-height:100vh}
+.wrap{max-width:520px;margin:0 auto;padding:26px 16px 40px}
+.head{text-align:center;margin-bottom:22px}
+.tile{width:84px;height:84px;margin:0 auto 12px;border-radius:22px;background:linear-gradient(135deg,#0A3A56,#2FB9D8);border:2px solid #F5C451;display:flex;align-items:center;justify-content:center;font-size:42px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.head h1{margin:0;font-size:26px;color:#fff}
+.head p{margin:6px 0 0;color:rgba(191,227,242,.8);font-size:14.5px}
+.big{display:flex;align-items:center;gap:14px;width:100%;padding:20px 18px;margin:0 0 14px;border:none;border-radius:18px;background:linear-gradient(135deg,#0D2B45,#0A3A56);color:#fff;font-family:inherit;font-size:20px;font-weight:800;cursor:pointer;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.3);border:1.5px solid rgba(47,185,216,.35)}
+.big .ic{font-size:30px}
+.big small{display:block;font-size:13px;font-weight:400;color:rgba(191,227,242,.75);margin-top:3px}
+.big:active{transform:scale(.99)}
+.panel{display:none;background:rgba(0,0,0,.25);border:1.5px solid rgba(47,185,216,.3);border-radius:16px;padding:16px;margin:-4px 0 16px}
+.panel.open{display:block}
+.panel textarea{width:100%;min-height:74px;padding:12px;border-radius:12px;border:1.5px solid rgba(245,196,81,.5);background:rgba(0,0,0,.3);color:#fff;font-size:16px;font-family:inherit;resize:vertical}
+.panel .save{width:100%;margin-top:10px;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#2FB9D8,#1B7FA6);color:#fff;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer}
+.note{color:rgba(191,227,242,.7);font-size:13px;margin:10px 0 0;text-align:center}
+.idea{background:rgba(255,255,255,.06);border-radius:12px;padding:10px 12px;margin-top:10px;display:flex;gap:10px;align-items:flex-start}
+.idea .tx{flex:1;font-size:15px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.idea .dt{display:block;font-size:11.5px;color:rgba(191,227,242,.55);margin-top:4px}
+.idea .del{background:none;border:none;color:#ff9d9d;font-size:17px;cursor:pointer;padding:2px 4px}
+.sys{display:flex;gap:10px;align-items:flex-start;padding:9px 2px;border-bottom:1px dashed rgba(191,227,242,.15);font-size:14.5px;line-height:1.6}
+.sys:last-of-type{border-bottom:none}
+.sys .sic{font-size:19px}
+.sys b{color:#F5C451}
+.links{margin-top:14px;text-align:center;font-size:14px;line-height:2.1}
+.links a{color:#2FB9D8;text-decoration:none;font-weight:700}
+footer{text-align:center;color:rgba(191,227,242,.6);font-size:12.5px;margin-top:26px}
+#gate{position:fixed;inset:0;z-index:999;background:linear-gradient(160deg,#081426,#0D2B45 55%,#0A3A56);display:flex;align-items:center;justify-content:center;padding:20px}
+#gate .gbox{text-align:center;max-width:340px;width:100%}
+#gate h2{color:#fff;font-size:21px;margin:0 0 6px}
+#gate p{color:rgba(191,227,242,.75);font-size:13.5px;margin:0 0 18px}
+#gate input{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:12px;border:1.5px solid rgba(233,161,59,.55);background:rgba(0,0,0,.3);color:#fff;font-size:16px;text-align:center;font-family:inherit}
+#gate button{width:100%;margin-top:10px;padding:12px;border:none;border-radius:12px;background:linear-gradient(135deg,#2FB9D8,#1B7FA6);color:#fff;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer}
+#gateErr{color:#ff9d9d;font-size:13.5px;min-height:20px;margin-top:10px;font-weight:700}
+</style>
+<link rel="icon" type="image/png" sizes="32x32" href="https://muons2002.dpdns.org/fav-portal-32.png">
+<link rel="apple-touch-icon" href="https://muons2002.dpdns.org/fav-portal-180.png">
+</head>
+<body>
+<div id="gate">
+  <div class="gbox">
+    <div style="font-size:44px">🔒</div>
+    <h2>غرفة محمد</h2>
+    <p>الصفحة دي خاصة بمحمد بس — اكتب مفتاح اللوحة عشان تدخل</p>
+    <input id="gateKey" type="password" placeholder="🔑 مفتاح اللوحة" autocomplete="off">
+    <button id="gateBtn" type="button">دخول</button>
+    <div id="gateErr"></div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="head">
+    <div class="tile">🏠</div>
+    <h1>غرفة محمد</h1>
+    <p>كل حاجة من مكان واحد — ٣ زراير وخلاص</p>
+  </div>
+
+  <a class="big" href="https://muons2002.dpdns.org/"><span class="ic">🏠</span><span>ادخل البيت<small>بوابة جنود الخفاء — كل المشاريع من باب واحد</small></span></a>
+
+  <button class="big" id="ideaBtn" type="button"><span class="ic">💡</span><span>اكتب فكرة<small>خطرت على بالك؟ سجلها هنا قبل ما تطير</small></span></button>
+  <div class="panel" id="ideaPanel">
+    <textarea id="ideaText" placeholder="اكتب الفكرة هنا بكلماتك..."></textarea>
+    <button class="save" id="ideaSave" type="button">احفظ الفكرة</button>
+    <div id="ideaList"></div>
+    <p class="note">أفكارك محفوظة هنا على جهازك — ناقشها مع جيمي وقت ما تحب وهو ينفذها معاك.</p>
+  </div>
+
+  <button class="big" id="statusBtn" type="button"><span class="ic">📊</span><span>حالة الشغل<small>إيه اللي شغال لوحده وبيتابع نفسه</small></span></button>
+  <div class="panel" id="statusPanel">
+    <div class="sys"><span class="sic">🔗</span><span><b>الروابط والقنوات والراديو:</b> فحص يومي كل صباح، وأي رابط يقع بيتصلح أو يبلغك جيمي.</span></div>
+    <div class="sys"><span class="sic">💰</span><span><b>الذهب:</b> تنبيه فوري على الموبايل مع كل جنيه حركة، من ٦:٣٠ الصبح لـ ٩:٣٠ بالليل.</span></div>
+    <div class="sys"><span class="sic">🎨</span><span><b>طلبات كانفا:</b> متابعة كل نص ساعة والدعوات بتتبعت لوحدها.</span></div>
+    <div class="sys"><span class="sic">📰</span><span><b>النشرة الصباحية:</b> بتتجهز وتنشر كل يوم ٦:٣٠ الصبح.</span></div>
+    <div class="sys"><span class="sic">🔤</span><span><b>أسماء البلاطات:</b> فحص أسبوعي كل يوم اثنين بيقارن البوابة والتطبيق وهاي لينك.</span></div>
+    <p class="note">كل ده بيشتغل لوحده — ولو حاجة وقعت جيمي هيبلغك. مش محتاج تيجي هنا إلا لو حبيت تطمن بنفسك.</p>
+    <div class="links">
+      <a href="https://muons2002.dpdns.org/control.html">لوحة التحكم</a> •
+      <a href="https://muons2002.dpdns.org/contest-admin.html">لوحة المسابقة</a> •
+      <a href="https://muons2002.dpdns.org/canva-admin.html">إدارة كانفا</a> •
+      <a href="https://muons2002.dpdns.org/gold-prices.html">أسعار الذهب</a>
+    </div>
+  </div>
+
+  <footer>جنود الخفاء — حب الخير للغير</footer>
+</div>
+<script>
+(function(){
+  var HASH='f7b769a7278e520d5b9a92df3ff6625600ca25e64fc33d0256beda4e8ea38a76';
+  var gate=document.getElementById('gate');
+  document.body.style.overflow='hidden';
+  function sha(s){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')})}
+  function open(){gate.style.display='none';document.body.style.overflow=''}
+  var saved='';try{saved=localStorage.getItem('jnoud_board_key')||''}catch(e){}
+  if(saved){sha(saved).then(function(h){if(h===HASH)open()}).catch(function(){})}
+  function tryKey(){
+    var v=document.getElementById('gateKey').value.trim();
+    if(!v)return;
+    sha(v).then(function(h){
+      if(h===HASH){try{localStorage.setItem('jnoud_board_key',v)}catch(e){} open()}
+      else{document.getElementById('gateErr').textContent='❌ المفتاح غلط — حاول تاني'}
+    }).catch(function(){document.getElementById('gateErr').textContent='حصلت مشكلة — حدّث الصفحة وحاول تاني'})
+  }
+  document.getElementById('gateBtn').addEventListener('click',tryKey);
+  document.getElementById('gateKey').addEventListener('keydown',function(e){if(e.key==='Enter')tryKey()});
+})();
+</script>
+<script>
+(function(){
+  function toggle(id){var p=document.getElementById(id);p.classList.toggle('open')}
+  document.getElementById('ideaBtn').addEventListener('click',function(){toggle('ideaPanel')});
+  document.getElementById('statusBtn').addEventListener('click',function(){toggle('statusPanel')});
+  var KEY='ghurfa-ideas';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return[]}}
+  function store(a){try{localStorage.setItem(KEY,JSON.stringify(a))}catch(e){}}
+  function fmt(ts){var d=new Date(ts);return d.toLocaleDateString('ar-EG')+' — '+d.toLocaleTimeString('ar-EG',{hour:'numeric',minute:'2-digit'})}
+  function render(){
+    var list=document.getElementById('ideaList');list.innerHTML='';
+    var a=load();
+    a.slice().reverse().forEach(function(it,ri){
+      var idx=a.length-1-ri;
+      var div=document.createElement('div');div.className='idea';
+      var tx=document.createElement('div');tx.className='tx';tx.textContent=it.t;
+      var dt=document.createElement('span');dt.className='dt';dt.textContent=fmt(it.ts);tx.appendChild(dt);
+      var del=document.createElement('button');del.className='del';del.type='button';del.textContent='✕';del.title='امسح الفكرة';
+      del.addEventListener('click',function(){var b=load();b.splice(idx,1);store(b);render()});
+      div.appendChild(tx);div.appendChild(del);list.appendChild(div);
+    });
+  }
+  document.getElementById('ideaSave').addEventListener('click',function(){
+    var ta=document.getElementById('ideaText');var v=ta.value.trim();if(!v)return;
+    var a=load();a.push({t:v,ts:Date.now()});store(a);ta.value='';render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
