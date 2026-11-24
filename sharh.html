@@ -33,17 +33,13 @@ body{margin:0;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#EAF6FB;min-h
 .state{text-align:center;font-size:17px;line-height:2.1;padding:38px 12px;color:rgba(230,243,250,.85)}
 .state .big{font-size:40px;display:block;margin-bottom:8px}
 .foot{margin-top:26px;text-align:center;color:rgba(230,243,250,.5);font-size:12.5px;line-height:1.9}
-.foot a{color:#E9C767;text-decoration:none;font-weight:700}
-.paper .body a{color:#B8860B;font-weight:700;text-decoration:underline;word-break:break-all}
+.foot a{color:#2FB9D8;text-decoration:none;font-weight:700}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="brand">
-    <img src="https://muons2002.dpdns.org/royal-sharh.jpg" alt="شعار جنود الخفاء">
-    <div class="crown">👑</div>
-    <h2>جنود الخفاء</h2>
-    <p>حـب الـخـيـر لـلـغـيـر</p>
+    <img src="https://muons2002.dpdns.org/royal-sharh.jpg?v=2" alt="شعار جنود الخفاء">
   </div>
   <div id="box"><div class="state">جارٍ التحميل…</div></div>
   <div class="foot">جنود الخفاء — حب الخير للغير<br><a href="https://muons2002.dpdns.org/">بوابة جنود الخفاء</a></div>
@@ -54,7 +50,6 @@ body{margin:0;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#EAF6FB;min-h
   var id=new URLSearchParams(location.search).get('id')||'';
   var box=document.getElementById('box');
   function esc(s){var d=document.createElement('div');d.textContent=String(s==null?'':s);return d.innerHTML}
-  function linkify(s){return s.replace(/https?:\/\/[^\s<]+/g,function(u){var t=u.replace(/&amp;/g,'&');return '<a href="'+t+'" target="_blank" rel="noopener">'+u+'</a>'})}
   function fmt(ts){var d=new Date(ts);return d.toLocaleDateString('ar-EG')+' — '+d.toLocaleTimeString('ar-EG',{hour:'numeric',minute:'2-digit'})}
   if(!id){ box.innerHTML='<div class="state"><span class="big">🔗</span>الرابط ده ناقص<br>افتح المنشور من اللينك اللي اتنشر في المجموعة.</div>'; return }
   fetch(API+'/get?id='+encodeURIComponent(id)).then(function(r){
@@ -64,7 +59,7 @@ body{margin:0;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#EAF6FB;min-h
     var it=d.item; if(!it) throw 0;
     document.title=it.title+' — جنود الخفاء';
     var h='<div class="paper"><div class="meta"><span class="chip">منشور</span><span class="date">'+fmt(it.ts)+'</span></div>';
-    h+='<h1>'+esc(it.title)+'</h1><div class="body">'+linkify(esc(it.body))+'</div>';
+    h+='<h1>'+esc(it.title)+'</h1><div class="body">'+esc(it.body)+'</div>';
     h+='<div class="row"><button class="btn" id="cp" type="button">📋 نسخ النص</button></div></div>';
     box.innerHTML=h;
     document.getElementById('cp').addEventListener('click',function(){
