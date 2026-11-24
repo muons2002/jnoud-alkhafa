@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="color-scheme" content="light dark"/>
+<link rel="icon" href="data:,"/>
+<title>لوحة أبرز المساهمين</title>
+<style>
+:root{
+  --bg:#f4f1ea; --surface:#fffdf8; --surface2:#efe9db; --ink:#1c2434; --muted:#5d6577;
+  --navy:#0e2242; --navy2:#16305c; --gold:#b8860b; --gold-bright:#e9b949; --gold-soft:#f7ead0;
+  --line:#ddd3bd; --good:#1e7a4f; --shadow:0 10px 28px rgba(20,30,60,.10);
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#0b1220; --surface:#131c30; --surface2:#1a2742; --ink:#eef1f8; --muted:#a7b0c4;
+  --navy:#0e2242; --gold:#e9b949; --gold-soft:#2a2413; --line:#2c3a5c; --shadow:0 10px 28px rgba(0,0,0,.4); }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.65}
+button,[role="button"],select,input{min-height:2.25rem}
+.wrap{max-width:1060px;margin:0 auto;padding:18px 14px 48px}
+header.hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:18px;padding:26px 22px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+header.hero::after{content:"";position:absolute;inset-inline-end:-70px;top:-70px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(233,185,73,.35),transparent 70%)}
+header.hero h1{margin:0 0 6px;font-size:clamp(1.5rem,4.5vw,2.2rem);font-weight:800}
+header.hero h1 .gold{color:var(--gold-bright)}
+header.hero p{margin:0;color:#d7deee;max-width:640px}
+.period{display:inline-block;margin-top:12px;background:rgba(233,185,73,.16);border:1px solid rgba(233,185,73,.5);color:#ffe9ad;padding:4px 14px;border-radius:999px;font-size:.9rem;font-weight:700}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:16px 0}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.kpi b{display:block;font-size:1.45rem;color:var(--navy)}
+@media (prefers-color-scheme:dark){.kpi b{color:var(--gold-bright)}}
+.kpi span{color:var(--muted);font-size:.85rem}
+section.panel{display:block;margin-top:18px}
+.podium{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:12px;align-items:end;margin:8px 0 18px}
+@media(max-width:640px){.podium{grid-template-columns:1fr;align-items:stretch}.podium .p1{order:-1}}
+.pod{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 14px;text-align:center;box-shadow:var(--shadow)}
+.pod .medal{font-size:2rem}
+.pod .name{font-weight:800;font-size:1.1rem;margin:4px 0}
+.pod .score{font-size:1.6rem;font-weight:800;color:var(--gold)}
+.pod small{color:var(--muted);display:block}
+.pod.p1{border:2px solid var(--gold-bright);background:linear-gradient(180deg,var(--gold-soft),var(--surface))}
+.pod.p1 .score{font-size:2rem}
+.row{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:9px;box-shadow:var(--shadow)}
+.rank{flex:0 0 44px;width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.05rem}
+.rank.gold{background:var(--gold);color:#fff}
+.row .who{flex:1;min-width:0}
+.row .who b{font-size:1.02rem}
+.row .who small{color:var(--muted);display:block}
+.bar{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-bright))}
+.row .num{text-align:center;min-width:64px}
+.row .num b{display:block;font-size:1.05rem}
+.row .num span{color:var(--muted);font-size:.75rem}
+@media(max-width:560px){.row .num.hideS{display:none}}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.actions button{background:var(--gold);color:#231a00;border:none;border-radius:12px;padding:10px 18px;font-weight:800;cursor:pointer;font-size:1rem;min-height:44px}
+.actions button.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.note{background:var(--gold-soft);border:1px solid var(--line);border-radius:14px;padding:12px 16px;font-size:.92rem;margin-top:16px}
+footer{color:var(--muted);font-size:.85rem;text-align:center;margin-top:26px}
+#toast{position:fixed;bottom:18px;inset-inline-start:50%;transform:translateX(50%);background:var(--navy);color:#fff;padding:10px 22px;border-radius:999px;opacity:0;pointer-events:none;transition:.3s;z-index:9}
+#toast.show{opacity:1}
+@media print{.actions,#toast{display:none}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <h1>🏆 لوحة <span class="gold">أبرز المساهمين</span></h1>
+  <p>ترتيب أعضاء مجموعة «جنود الخفاء» الأكثر تفاعلاً، محسوب من ملف إحصائيات المجموعة الذي أرسلته: مجموع التعليقات والتفاعلات على منشورات كل عضو ضمن أبرز المنشورات.</p>
+  <span class="period">الفترة: 16 – 22 نوفمبر 2026</span>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><b>233</b><span>منشوراً في الأسبوع</span></div>
+  <div class="kpi"><b>4,309</b><span>تعليقاً في الأسبوع</span></div>
+  <div class="kpi"><b>5,732</b><span>تفاعلاً في الأسبوع</span></div>
+  <div class="kpi"><b>96</b><span>منشوراً مميزاً بالملف</span></div>
+  <div class="kpi"><b>17</b><span>مساهماً في الملف</span></div>
+  <div class="kpi"><b>164,882</b><span>مشاهدة للمنشورات المميزة</span></div>
+</div>
+
+<section class="panel on" id="panel-top10">
+  <div class="podium" id="podium"></div>
+  <div id="top10list"></div>
+  <div class="actions">
+    <button id="copyTop10">📋 نسخ إعلان الأوائل العشرة للنشر في الجروب</button>
+  </div>
+  <div class="note">طريقة الحساب: لكل عضو جمعنا التعليقات + التفاعلات على كل منشوراته الموجودة في ورقة «أبرز المنشورات» بالملف (96 منشوراً)، والترتيب من الأعلى تفاعلاً إلى الأقل، والمشاهدات تُستخدم للفصل عند التساوي.</div>
+</section>
+
+<footer>المصدر: ملف إحصائيات المجموعة (12.xlsx) — الأرقام كما وردت فيه، والترتيب محسوب منها.</footer>
+</div>
+<div id="toast">تم النسخ ✅</div>
+
+<script>
+var DATA={"ranked": [{"member": "محمد يونس", "posts": 54, "comments": 4367, "reactions": 5431, "views": 95371, "total": 9798}, {"member": "Adam Raji", "posts": 9, "comments": 1128, "reactions": 827, "views": 20118, "total": 1955}, {"member": "Mohamed Ghattas", "posts": 8, "comments": 465, "reactions": 626, "views": 3165, "total": 1091}, {"member": "Bouchachia Nabil", "posts": 5, "comments": 495, "reactions": 488, "views": 12108, "total": 983}, {"member": "Ebrahim Moustafa", "posts": 4, "comments": 613, "reactions": 70, "views": 2452, "total": 683}, {"member": "Maged Magdy", "posts": 3, "comments": 209, "reactions": 277, "views": 12830, "total": 486}, {"member": "Sami Dz", "posts": 1, "comments": 174, "reactions": 223, "views": 1601, "total": 397}, {"member": "Mohamed Tarbah", "posts": 2, "comments": 98, "reactions": 298, "views": 4823, "total": 396}, {"member": "ابو القاسم رزق الله", "posts": 2, "comments": 189, "reactions": 172, "views": 1002, "total": 361}, {"member": "Walid Aabbiiddii", "posts": 1, "comments": 83, "reactions": 123, "views": 326, "total": 206}, {"member": "Odai Abdalwahab", "posts": 1, "comments": 66, "reactions": 90, "views": 3136, "total": 156}, {"member": "Imed Kho", "posts": 1, "comments": 45, "reactions": 98, "views": 2011, "total": 143}, {"member": "Mohamed El Filali", "posts": 1, "comments": 57, "reactions": 80, "views": 1520, "total": 137}, {"member": "Jamal Mouhcine", "posts": 1, "comments": 49, "reactions": 78, "views": 572, "total": 127}, {"member": "Oussama Alamdar", "posts": 1, "comments": 60, "reactions": 58, "views": 531, "total": 118}, {"member": "Karim Rx Taza", "posts": 1, "comments": 60, "reactions": 57, "views": 1297, "total": 117}, {"member": "Ziyad Mirâ", "posts": 1, "comments": 56, "reactions": 57, "views": 2019, "total": 113}]};
+var fmt=function(n){return n.toLocaleString('en-US')};
+var ranked=DATA.ranked;
+// podium: order visually 2,1,3 in RTL grid -> build [1st center]
+var pod=document.getElementById('podium');
+var medals=['🥇','🥈','🥉'];
+function podCard(i,cls){
+  var m=ranked[i]; if(!m) return '';
+  return '<div class="pod '+cls+'"><div class="medal">'+medals[i]+'</div><div class="name">'+m.member+'</div>'
+  +'<div class="score">'+fmt(m.total)+'</div><small>نقطة تفاعل</small>'
+  +'<small>'+m.posts+' منشور مميز • '+fmt(m.comments)+' تعليق • '+fmt(m.reactions)+' تفاعل • '+fmt(m.views)+' مشاهدة</small></div>';
+}
+pod.innerHTML=podCard(1,'p2')+podCard(0,'p1')+podCard(2,'p3');
+// rows 4..10
+var max=ranked[0].total;
+var list=document.getElementById('top10list');
+var html='';
+for(var i=3;i<Math.min(10,ranked.length);i++){
+  var m=ranked[i];
+  html+='<div class="row"><div class="rank">'+(i+1)+'</div><div class="who"><b>'+m.member+'</b><small>'+m.posts+' منشور مميز • '+fmt(m.views)+' مشاهدة</small><div class="bar"><i style="width:'+Math.max(3,Math.round(m.total/max*100))+'%"></i></div></div>'
+  +'<div class="num"><b>'+fmt(m.total)+'</b><span>نقطة</span></div>'
+  +'<div class="num hideS"><b>'+fmt(m.comments)+'</b><span>تعليق</span></div>'
+  +'<div class="num hideS"><b>'+fmt(m.reactions)+'</b><span>تفاعل</span></div></div>';
+}
+list.innerHTML=html;
+// copy announcement
+document.getElementById('copyTop10').addEventListener('click',function(){
+  var lines=['🏆 أبرز 10 مساهمين في مجموعة جنود الخفاء (16–22 نوفمبر 2026) 🏆',''];
+  for(var i=0;i<Math.min(10,ranked.length);i++){ var m=ranked[i]; lines.push((i+1)+'. '+m.member+' — '+fmt(m.total)+' نقطة ('+m.posts+' منشور مميز)'); }
+  lines.push('','شكراً لكل من يساهم وينشر الخير ❤️');
+  var txt=lines.join('\n');
+  function done(){ var t=document.getElementById('toast'); t.classList.add('show'); setTimeout(function(){t.classList.remove('show')},2200); }
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done).catch(function(){fallback()}); } else fallback();
+  function fallback(){ var ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); done();}catch(e){} document.body.removeChild(ta); }
+});
+</script>
+</body>
+</html>
