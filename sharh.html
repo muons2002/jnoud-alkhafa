@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منشور — جنود الخفاء</title>
+<meta name="description" content="منشور من الهندسة لأعضاء جنود الخفاء.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="شروحات وأكواد — جنود الخفاء">
+<meta property="og:description" content="شروحات ومسابقات وأكواد من الهندسة لأعضاء جنود الخفاء.">
+<meta property="og:image" content="https://muons2002.dpdns.org/og-sharh.jpg">
+<meta property="og:url" content="https://muons2002.dpdns.org/sharh.html">
+<link rel="icon" type="image/png" sizes="32x32" href="https://muons2002.dpdns.org/fav-sharh-32.png">
+<link rel="apple-touch-icon" href="https://muons2002.dpdns.org/fav-sharh-180.png">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#EAF6FB;min-height:100vh;background:radial-gradient(120% 60% at 50% 0%,#12294d 0%,#081426 55%,#050B18 100%)}
+.wrap{max-width:640px;margin:0 auto;padding:18px 14px 36px}
+.brand{text-align:center;margin-bottom:16px}
+.brand img{width:100%;display:block;border-radius:16px;border:2px solid #C9932B;box-shadow:0 0 0 4px rgba(245,196,81,.15),0 14px 34px rgba(0,0,0,.55)}
+.brand .crown{font-size:19px;margin-top:12px}
+.brand h2{margin:2px 0 0;font-size:21px;font-weight:900;background:linear-gradient(180deg,#FFEFAE,#F5C451 55%,#C9932B);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand p{margin:3px 0 0;font-size:12.5px;color:rgba(230,243,250,.65);letter-spacing:.5px}
+.paper{background:linear-gradient(180deg,rgba(245,196,81,.06),rgba(255,255,255,.03));border:2px solid #C9932B;outline:1px solid rgba(245,196,81,.4);outline-offset:4px;border-radius:18px;padding:22px 18px;box-shadow:0 14px 34px rgba(0,0,0,.5)}
+.meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.chip{font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;background:rgba(245,196,81,.16);color:#F5C451;border:1px solid rgba(245,196,81,.45)}
+.date{font-size:12px;color:rgba(230,243,250,.55);margin-inline-start:auto}
+.paper h1{margin:0 0 14px;font-size:23px;line-height:1.55;background:linear-gradient(180deg,#FFEFAE,#F5C451 60%,#E3AC34);-webkit-background-clip:text;background-clip:text;color:transparent}
+.paper .body{font-size:17px;line-height:2.05;white-space:pre-wrap;word-break:break-word}
+.row{display:flex;gap:8px;margin-top:22px}
+.btn{flex:1;padding:13px;border-radius:12px;border:none;background:linear-gradient(135deg,#C9932B,#F5C451);color:#231a04;font-size:15.5px;font-weight:900;font-family:inherit;cursor:pointer;box-shadow:0 6px 18px rgba(201,147,43,.35)}
+.btn:active{transform:scale(.98)}
+.state{text-align:center;font-size:17px;line-height:2.1;padding:38px 12px;color:rgba(230,243,250,.85)}
+.state .big{font-size:40px;display:block;margin-bottom:8px}
+.foot{margin-top:26px;text-align:center;color:rgba(230,243,250,.5);font-size:12.5px;line-height:1.9}
+.foot a{color:#2FB9D8;text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <img src="https://muons2002.dpdns.org/royal-sharh.jpg" alt="شعار جنود الخفاء">
+    <div class="crown">👑</div>
+    <h2>جنود الخفاء</h2>
+    <p>حـب الـخـيـر لـلـغـيـر</p>
+  </div>
+  <div id="box"><div class="state">جارٍ التحميل…</div></div>
+  <div class="foot">جنود الخفاء — حب الخير للغير<br><a href="https://muons2002.dpdns.org/">بوابة جنود الخفاء</a></div>
+</div>
+<script>
+(function(){
+  var API='https://jnoud-notes.m-uons2002.workers.dev';
+  var id=new URLSearchParams(location.search).get('id')||'';
+  var box=document.getElementById('box');
+  function esc(s){var d=document.createElement('div');d.textContent=String(s==null?'':s);return d.innerHTML}
+  function fmt(ts){var d=new Date(ts);return d.toLocaleDateString('ar-EG')+' — '+d.toLocaleTimeString('ar-EG',{hour:'numeric',minute:'2-digit'})}
+  if(!id){ box.innerHTML='<div class="state"><span class="big">🔗</span>الرابط ده ناقص<br>افتح المنشور من اللينك اللي اتنشر في المجموعة.</div>'; return }
+  fetch(API+'/get?id='+encodeURIComponent(id)).then(function(r){
+    if(r.status===410){ box.innerHTML='<div class="state"><span class="big">⏰</span>المنشور ده انتهت مدته واتدمر<br>راجع آخر منشورات المجموعة.</div>'; throw 'exp' }
+    if(!r.ok) throw 0; return r.json()
+  }).then(function(d){
+    var it=d.item; if(!it) throw 0;
+    document.title=it.title+' — جنود الخفاء';
+    var h='<div class="paper"><div class="meta"><span class="chip">منشور</span><span class="date">'+fmt(it.ts)+'</span></div>';
+    h+='<h1>'+esc(it.title)+'</h1><div class="body">'+esc(it.body)+'</div>';
+    h+='<div class="row"><button class="btn" id="cp" type="button">📋 نسخ النص</button></div></div>';
+    box.innerHTML=h;
+    document.getElementById('cp').addEventListener('click',function(){
+      var b=this, txt=it.body;
+      function done(){b.textContent='✅ اتنسخ'; setTimeout(function(){b.textContent='📋 نسخ النص'},1600)}
+      if(navigator.clipboard && navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(function(){fallback()})}else fallback();
+      function fallback(){var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done()}catch(e){}document.body.removeChild(ta)}
+    });
+  }).catch(function(e){
+    if(e==='exp') return;
+    box.innerHTML='<div class="state"><span class="big">⚠️</span>المنشور ده مش موجود أو اتشال<br>راجع آخر منشورات المجموعة.</div>';
+  });
+})();
+</script>
+</body>
+</html>
