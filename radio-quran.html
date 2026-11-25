@@ -41,6 +41,10 @@
   .live-dot { display:inline-block; width:9px; height:9px; border-radius:50%; background:#e53935;
               margin-inline-start:6px; animation:blink 1.2s infinite; vertical-align:middle; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+  .live-badge { display:inline-flex; align-items:center; gap:6px; margin-inline-start:8px; padding:3px 10px;
+                border-radius:999px; background:#c62828; color:#fff; font-size:12px; font-weight:800; vertical-align:middle; }
+  .live-badge .bdot { width:8px; height:8px; border-radius:50%; background:#fff; animation:blink 1.2s infinite; }
+  .x-link { display:block; width:100%; max-width:520px; text-align:center; margin:16px 0 0; padding:12px; border-radius:12px; border:1px solid #2FB9D8; background:linear-gradient(160deg,#0A3A56,#0D2B45); color:#fff; text-decoration:none; font-size:15px; font-weight:700; }
   #playBtn { margin:24px auto 6px; width:84px; height:84px; border-radius:50%; border:none; cursor:pointer;
              background:radial-gradient(circle at 35% 30%, #9fd8ea, #2794B6 65%, #156A87);
              color:#06222e; font-size:36px; display:flex; align-items:center; justify-content:center;
@@ -60,12 +64,14 @@
 
   <div class="card">
     <div class="disc">📻</div>
-    <div class="st-name">إذاعة القرآن الكريم من القاهرة<span class="live-dot"></span></div>
+    <div class="st-name">إذاعة القرآن الكريم من القاهرة<span class="live-badge"><span class="bdot"></span>مباشر</span></div>
     <div class="st-note">تلاوات على مدار الساعة — بث مباشر</div>
     <button id="playBtn" aria-label="تشغيل">▶</button>
     <div id="status">اضغط زر التشغيل للاستماع</div>
     <div class="vol">🔊 <input type="range" id="vol" min="0" max="100" value="90"></div>
   </div>
+
+  <a class="x-link" href="https://muons2002.dpdns.org/quran.html" target="_blank" rel="noopener">🎧 مشغل القرآن الكريم — اختار القارئ والسورة</a>
 
   <div class="foot">
     كل مشاريع جنود الخفاء في صفحة واحدة<br>
