@@ -30,6 +30,11 @@
   .header .logo { font-size: 2.4rem; }
   .header h1 { font-family:'Segoe UI',Tahoma,Arial,sans-serif; font-size: 1.5rem; color: #2FB9D8; margin: 4px 0; }
   .header p { font-size: .9rem; color: #9db4cc; }
+  .live-strip { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; padding: 9px 12px; border-radius: 12px; border: 1px solid #b3392e; background: linear-gradient(160deg,#3a1420,#0D2B45); }
+  .live-strip .dot { width: 10px; height: 10px; border-radius: 50%; background: #ff3b30; flex: none; box-shadow: 0 0 8px #ff3b30; }
+  .live-strip .txt { flex: 1; font-size: .92rem; font-weight: 700; color: #fff; }
+  .live-strip .txt small { display: block; font-size: .75rem; font-weight: 400; color: #9db4cc; }
+  .live-strip button { width: 42px; height: 42px; border-radius: 50%; border: none; background: #2FB9D8; color: #06283d; font-size: 1.05rem; cursor: pointer; flex: none; }
   .label { font-size: .85rem; color: #2FB9D8; margin: 12px 0 6px; }
   select, input[type="search"] {
     width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid #1d4e66;
@@ -91,6 +96,13 @@ option{background:#0D2B45;color:#EAF6FB}select{color-scheme:dark}
       <h1>جنود الخفاء</h1>
       <p>مشغل القرآن الكريم • حب الخير للغير</p>
     </div>
+
+    <div class="live-strip">
+      <span class="dot"></span>
+      <div class="txt">بث مباشر — إذاعة القرآن الكريم من القاهرة<small>تلاوات على مدار الساعة</small></div>
+      <button id="liveBtn" aria-label="تشغيل البث المباشر">▶</button>
+    </div>
+    <audio id="liveAu" preload="none" src="https://radio.xecod.com/station/quran-cairo"></audio>
 
     <div class="label">🎙️ القارئ</div>
     <select id="reciter-select" aria-label="اختيار القارئ"></select>
@@ -532,6 +544,18 @@ if (pendingSeek > 3) {
   statusEl.textContent = "يمكنك المتابعة من حيث توقفت";
 }
 setPlayIcon();
+</script>
+<script>
+  (function () {
+    var liveAu = document.getElementById('liveAu');
+    var liveBtn = document.getElementById('liveBtn');
+    var mainAu = document.getElementById('audio-player');
+    liveBtn.addEventListener('click', function () {
+      if (liveAu.paused) { if (mainAu) mainAu.pause(); liveAu.play(); liveBtn.textContent = '⏸'; }
+      else { liveAu.pause(); liveBtn.textContent = '▶'; }
+    });
+    if (mainAu) mainAu.addEventListener('play', function () { if (!liveAu.paused) { liveAu.pause(); liveBtn.textContent = '▶'; } });
+  })();
 </script>
 </body>
 </html>
