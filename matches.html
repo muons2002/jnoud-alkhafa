@@ -437,6 +437,7 @@
   var LEAGUE_FILTERS = [
     { key:"all", name:"🌍 كل الدوريات" },
     { key:"egy", name:"الدوري المصري", source:"365", comp:552 },
+    { key:"egy2", name:"دوري المحترفين المصري", source:"365", comp:6994 },
     { key:"eng", name:"الدوري الإنجليزي", source:"espn", slug:"eng.1" },
     { key:"esp", name:"الدوري الإسباني", source:"espn", slug:"esp.1" },
     { key:"ucl", name:"دوري أبطال أوروبا", source:"espn", slug:"uefa.champions" },
@@ -449,6 +450,7 @@
   var SCORES365_PARAMS = "appTypeId=5&langId=27&timezoneName=Africa/Cairo&userCountryId=131";
   var LEAGUES_365 = [
     { key:"egy", name:"الدوري المصري", comp:552 },
+    { key:"egy2", name:"دوري المحترفين المصري", comp:6994 },
     { key:"alg", name:"الدوري الجزائري", comp:560 },
     { key:"mar", name:"الدوري المغربي", comp:557 }
   ];
@@ -832,6 +834,11 @@
       '<p>جاري تحميل المباريات…</p></div>';
   }
 
+  function isPostponed(ev){
+    var st = (ev.status && ev.status.type) || {};
+    return /postpon|cancel/i.test((st.shortDetail || "") + " " + (st.detail || ""));
+  }
+
   function render(){
     var slot = currentSlot();
     if(!slot.loaded){
@@ -853,7 +860,17 @@
     if(slot.updatedAt){
       updatedLine.innerHTML = "آخر تحديث: <b>" + esc(clockFmt.format(slot.updatedAt)) + "</b> • بيتم التحديث تلقائياً كل دقيقة";
     }
-    if(!slot.groups || !slot.groups.length){
+    var activeGroups = [];
+    var postponedEvents = [];
+    (slot.groups || []).forEach(function(g){
+      var active = [];
+      (g.events || []).forEach(function(ev){
+        if(isPostponed(ev)) postponedEvents.push({ league: g.league, ev: ev });
+        else active.push(ev);
+      });
+      if(active.length) activeGroups.push({ league: g.league, events: active });
+    });
+    if(!activeGroups.length && !postponedEvents.length){
       var emptyMsg;
       if(state.league !== "all"){
         emptyMsg = '<p><strong>مفيش مباريات في ' + esc(leagueFilterByKey(state.league).name) +
@@ -868,7 +885,7 @@
       return;
     }
     var html = "";
-    slot.groups.forEach(function(g){
+    activeGroups.forEach(function(g){
       html += '<section class="league">';
       html += '<div class="league-head"><span class="ball" aria-hidden="true">⚽</span><h2>' +
               esc(g.league.name) + '</h2><span class="count">' +
@@ -881,6 +898,16 @@
       g.events.forEach(function(ev){ html += matchHTML(ev); });
       html += '</section>';
     });
+    if(postponedEvents.length){
+      html += '<section class="league postponed-section">';
+      html += '<div class="league-head"><span class="ball" aria-hidden="true">⏸️</span><h2>مباريات مؤجلة</h2><span class="count">' +
+              postponedEvents.length + (postponedEvents.length === 1 ? " مباراة" : " مباريات") + '</span></div>';
+      postponedEvents.forEach(function(item){
+        html += '<div class="channel-line"><span class="tv" aria-hidden="true">🏆</span><span>' + esc(item.league.name) + '</span></div>';
+        html += matchHTML(item.ev);
+      });
+      html += '</section>';
+    }
     html += '<button class="manual-refresh" id="refreshBtn">🔄 تحديث النتائج دلوقتي</button>';
     content.innerHTML = html;
     document.getElementById("refreshBtn").addEventListener("click", function(){ reloadCurrent(true); });
