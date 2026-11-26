@@ -51,6 +51,13 @@ h2{margin:22px 0 10px;font-size:17px;color:#d4af37}
 .ch.on .num{color:#d4af37}
 .ch .live{display:none;font-size:11px;color:#d4af37;margin-top:4px}
 .ch.on .live{display:block}
+.ch.soon{opacity:.55;cursor:default}
+.ch.soon:hover{border-color:rgba(14,165,233,.3)}
+.ch.soon .num{color:#8aa5b5}
+.ch.soon .nm{color:#b9cdd9}
+.ch .soon-tag{display:none;font-size:15px;font-weight:bold;color:#d4af37;margin-top:6px}
+.ch.soon .soon-tag{display:block}
+.ch.soon .live{display:none}
 .upd{text-align:center;color:#d4af37;font-size:12.5px;margin-top:14px;line-height:1.8}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:rgba(8,20,38,.97);border:1px solid #d4af37;color:#ffe9a8;border-radius:12px;padding:10px 18px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:50;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -103,15 +110,15 @@ function logoErr(img){
 
 /* القائمة المضمّنة — بديل احتياطي لو فشل جلب bein-channels.json (ملف محلي أو بلا نت) */
 var EMBEDDED_CHANNELS = [
-  { n: 1, name: 'beIN Sports 1 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_1_hd/tracks-v1a1/mono.ts.m3u8' },
-  { n: 2, name: 'beIN Sports 2 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_2_hd/tracks-v1a1/mono.ts.m3u8' },
-  { n: 3, name: 'beIN Sports 3 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_3_hd/tracks-v1a1/mono.ts.m3u8' },
-  { n: 4, name: 'beIN Sports 4 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_4_hd/tracks-v1a1/mono.ts.m3u8' },
-  { n: 5, name: 'beIN Sports 5 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_5_hd/tracks-v1a1/mono.ts.m3u8' },
-  { n: 6, name: 'beIN Sports 6 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_6_hd/tracks-v1a1/mono.ts.m3u8' },
-  { n: 7, name: 'beIN Sports 7 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_7_hd/tracks-v1a1/mono.ts.m3u8' },
-  { n: 8, name: 'beIN Sports 8 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_8_hd/tracks-v1a1/mono.ts.m3u8' },
-  { n: 9, name: 'beIN Sports 9 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_9_hd/tracks-v1a1/mono.ts.m3u8' },
+  { n: 1, name: 'beIN Sports 1 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_1_hd/tracks-v1a1/mono.ts.m3u8', coming_soon: true },
+  { n: 2, name: 'beIN Sports 2 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_2_hd/tracks-v1a1/mono.ts.m3u8', coming_soon: true },
+  { n: 3, name: 'beIN Sports 3 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_3_hd/tracks-v1a1/mono.ts.m3u8', coming_soon: true },
+  { n: 4, name: 'beIN Sports 4 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_4_hd/tracks-v1a1/mono.ts.m3u8', coming_soon: true },
+  { n: 5, name: 'beIN Sports 5 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_5_hd/tracks-v1a1/mono.ts.m3u8', coming_soon: true },
+  { n: 6, name: 'beIN Sports 6 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_6_hd/tracks-v1a1/mono.ts.m3u8', coming_soon: true },
+  { n: 7, name: 'beIN Sports 7 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_7_hd/tracks-v1a1/mono.ts.m3u8', coming_soon: true },
+  { n: 8, name: 'beIN Sports 8 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_8_hd/tracks-v1a1/mono.ts.m3u8', coming_soon: true },
+  { n: 9, name: 'beIN Sports 9 HD', url: 'http://dashclloudflare.ddns.net/live/ar/qa/bein/bein_sport_9_hd/tracks-v1a1/mono.ts.m3u8', coming_soon: true },
   { n: 10, name: 'beIN Sports 1 HD (بديل)', url: 'https://edge22.358598.ir.cdn.ir/hls2/bein1.m3u8' }
 ];
 var CHANNELS = EMBEDDED_CHANNELS.slice();
@@ -146,7 +153,7 @@ function normalizeChannels(data){
     if (!n || !name || !/^https?:\/\//.test(url)) continue;
     var dup = false;
     for (var j = 0; j < out.length; j++) if (out[j].n === n) dup = true;
-    if (!dup) out.push({ n: n, name: name, url: url });
+    if (!dup) out.push({ n: n, name: name, url: url, coming_soon: it.coming_soon === true });
   }
   return out;
 }
@@ -232,6 +239,7 @@ function tryPlay(){
 function loadChannel(n){
   var ch = findChannel(n);
   if (!ch) return;
+  if (ch.coming_soon) { toast('قريبا'); return; }
   current = n;
   try { localStorage.setItem(LS_KEY, String(n)); } catch (e) {}
   markActive(n);
@@ -432,10 +440,14 @@ function buildGrid(){
   CHANNELS.forEach(function(ch){
     var b = document.createElement('button');
     b.type = 'button';
-    b.className = 'ch';
+    b.className = 'ch' + (ch.coming_soon ? ' soon' : '');
     b.dataset.n = ch.n;
-    b.innerHTML = '<div class="num">' + ch.n + '</div><div class="nm">' + ch.name + '</div><div class="live">● يعمل الآن</div>';
-    b.addEventListener('click', function(){ loadChannel(ch.n); });
+    b.innerHTML = '<div class="num">' + ch.n + '</div><div class="nm">' + ch.name + '</div><div class="soon-tag">قريبا</div><div class="live">● يعمل الآن</div>';
+    if (ch.coming_soon) {
+      b.addEventListener('click', function(){ toast('قريبا'); });
+    } else {
+      b.addEventListener('click', function(){ loadChannel(ch.n); });
+    }
     grid.appendChild(b);
   });
   markActive(current);
@@ -446,9 +458,14 @@ function boot(){
   var last = 0;
   try {
     var saved = parseInt(localStorage.getItem(LS_KEY), 10);
-    if (findChannel(saved)) last = saved;
+    var savedCh = findChannel(saved);
+    if (savedCh && !savedCh.coming_soon) last = saved;
   } catch (e) {}
-  if (!last && CHANNELS.length) last = CHANNELS[0].n;
+  if (!last) {
+    for (var i = 0; i < CHANNELS.length; i++) {
+      if (!CHANNELS[i].coming_soon) { last = CHANNELS[i].n; break; }
+    }
+  }
   if (last) loadChannel(last);
 }
 
