@@ -300,8 +300,10 @@
 
           <div class="download-bar">
             <button class="btn gold" id="downloadBtn">⬇️ تحميل الملف النظيف (M3U)</button>
+            <button class="btn" id="copyBtn">📋 نسخ النص النضيف</button>
             <span class="sel-count">المحدد: <b id="selCount">٠</b> قناة من <span id="selTotal">٠</span></span>
           </div>
+          <textarea id="cleanText" class="hidden" readonly style="width:100%;min-height:150px;margin-top:12px;direction:ltr;text-align:left" aria-label="النص النظيف الجاهز للنسخ"></textarea>
           <div class="msg warn" id="dlWarn"></div>
         </div>
       </section>
@@ -388,7 +390,8 @@
       var CORS_BODY = "متقلقش — ده مش معناه إن الحساب أو الرابط واقف. بعض السيرفرات بتمنع المواقع والتطبيقات الخارجية من الاتصال بيها مباشرة (حماية اسمها CORS)، فالمتصفح مقدرش يوصل لها من هنا. جرّب تحمل ملف M3U بتاعك من التطبيق أو اللوحة بتاعتك وارفعه في قسم الفلترة اللي فوق — هيشتغل معاك على طول.";
 
       /* ================= تحليل M3U ================= */
-      var channels = []; // {name, group, logo, extinf, url, selected}
+      var channels = []; // {name, group, logo, extinf, extra, url, selected}
+      var playlistHeader = "#EXTM3U";
 
       function parseM3U(text) {
         var lines = String(text || "").split(/\r?\n/);
@@ -397,6 +400,10 @@
         for (var i = 0; i < lines.length; i++) {
           var line = lines[i].trim();
           if (!line) continue;
+          if (line.indexOf("#EXTM3U") === 0) {
+            playlistHeader = line;
+            continue;
+          }
           if (line.indexOf("#EXTINF") === 0) {
             var attrs = {};
             var re = /([a-zA-Z0-9_-]+)="([^"]*)"/g, m;
@@ -408,11 +415,16 @@
               group: (attrs["group-title"] || "").trim() || "بدون مجموعة",
               logo: attrs["tvg-logo"] || "",
               extinf: line,
+              extra: [],
               url: "",
               selected: true
             };
           } else if (line.charAt(0) === "#") {
-            continue; // سطور وصفية أخرى نتجاهلها
+            if (pending) {
+              if (line.indexOf("#EXTGRP:") === 0) pending.group = line.slice(8).trim() || pending.group;
+              pending.extra.push(line);
+            }
+            continue;
           } else if (pending) {
             pending.url = line;
             out.push(pending);
@@ -458,6 +470,7 @@
         $("selCount").textContent = arNum(sel);
         $("selTotal").textContent = arNum(channels.length);
         $("downloadBtn").disabled = sel === 0;
+        if ($("copyBtn")) $("copyBtn").disabled = sel === 0;
       }
 
       function renderGroups() {
@@ -588,13 +601,28 @@
       });
       $("searchInput").addEventListener("input", renderChannels);
 
-      /* ================= التحميل ================= */
+      /* ================= التحميل والنسخ ================= */
+      function buildCleanText(sel) {
+        var lines = [playlistHeader || "#EXTM3U"];
+        sel.forEach(function (c) {
+          lines.push(c.extinf);
+          (c.extra || []).forEach(function (x) { lines.push(x); });
+          lines.push(c.url);
+        });
+        return "\ufeff" + lines.join("\r\n") + "\r\n";
+      }
+      function showCleanText(out) {
+        var box = $("cleanText");
+        if (!box) return;
+        box.value = out.replace(/^\ufeff/, "");
+        box.classList.remove("hidden");
+      }
       $("downloadBtn").addEventListener("click", function () {
         var sel = channels.filter(function (c) { return c.selected; });
         if (!sel.length) return;
-        var out = "#EXTM3U\n";
-        sel.forEach(function (c) { out += c.extinf + "\n" + c.url + "\n"; });
-        var blob = new Blob([out], { type: "audio/x-mpegurl" });
+        var out = buildCleanText(sel);
+        showCleanText(out);
+        var blob = new Blob([out], { type: "audio/x-mpegurl;charset=utf-8" });
         var a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
         a.download = "jnoud-filtered.m3u";
@@ -603,6 +631,25 @@
         a.remove();
         setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
         toast("تم تحميل " + arNum(sel.length) + " قناة في ملف نظيف ✅");
+      });
+      $("copyBtn").addEventListener("click", function () {
+        var sel = channels.filter(function (c) { return c.selected; });
+        if (!sel.length) return;
+        var out = buildCleanText(sel);
+        showCleanText(out);
+        var plain = out.replace(/^\ufeff/, "");
+        function fallbackCopy() {
+          var box = $("cleanText");
+          box.focus();
+          box.select();
+          try { document.execCommand("copy"); toast("اتنسخ النص النضيف ✅"); }
+          catch (e) { toast("النص جاهز تحت، انسخه يدويًا"); }
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(plain).then(function () { toast("اتنسخ النص النضيف ✅"); }, fallbackCopy);
+        } else {
+          fallbackCopy();
+        }
       });
 
       /* ================= التبويبات وطرق الإدخال ================= */
